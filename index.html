@@ -1,0 +1,2070 @@
+<title>ANS 진행고객</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<style>
+/* Layout: stationery desk — stitched white sidebar, blush ground, gingham hero with taped stat cards; serif titles (Gowun Batang + Fraunces italic) over a clean sans body */
+:root {
+  --bg: #FFF8F9; --surface: #FFFFFF; --surface-2: #FFF5F7; --line: #F6E3E9; --line-2: #FBEEF2; --line-strong: #EFCFDA;
+  --ink: #4A3B42; --ink-h: #3E2F37; --ink-2: #6B5A62; --muted: #9A8790; --faint: #BBA9B1;
+  --primary: #E77E9E; --primary-ink: #C2547A; --primary-soft: #FFE9F0; --primary-line: #F6C3D3; --on-primary: #FFFFFF;
+  --eyebrow: #D07896; --stitch: #F3C9D6;
+  --gingham: rgba(239, 143, 175, .16); --gingham-bg: #FFF1F5;
+  --lav-bg: #F4EDFF; --lav-bd: #E6DAFA; --lav-fg: #8A6CC2;
+  --rose-bg: #FFEAF0; --rose-bd: #F8D3DF; --rose-fg: #C9577C;
+  --cream-bg: #FFF5DA; --cream-bd: #F5E4B4; --cream-fg: #A9842F;
+  --mint-bg: #E7F6EE; --mint-bd: #CDEBDB; --mint-fg: #4B9673;
+  --sky-bg: #E9F1FF; --sky-bd: #D3E1FA; --sky-fg: #5A7FBD;
+  --sand-bg: #FFEFE3; --sand-bd: #F6DCC8; --sand-fg: #B9744A;
+  --red-bg: #FDE6E8; --red-bd: #F6CDD2; --red-fg: #C2475B;
+  --grey-bg: #F5EFF2; --grey-bd: #EADFE4; --grey-fg: #8D7F87;
+  --tape-pink: rgba(247, 176, 199, .72); --tape-butter: rgba(250, 221, 140, .75); --tape-lilac: rgba(201, 178, 245, .7); --tape-mint: rgba(160, 219, 189, .72);
+  --av1: linear-gradient(140deg, #FFDCE7, #F7D6F0); --av1-fg: #B25478;
+  --av2: linear-gradient(140deg, #E5DBFF, #DCE6FF); --av2-fg: #7259B0;
+  --av3: linear-gradient(140deg, #FFE9C9, #FFDCD3); --av3-fg: #A8693B;
+  --av4: linear-gradient(140deg, #D8F2E4, #DDEFF5); --av4-fg: #3F8466;
+  --av5: linear-gradient(140deg, #FFE0EC, #EFDDFB); --av5-fg: #A04C83;
+  --shadow: 0 10px 28px rgba(214, 120, 152, .09);
+  --shadow-sm: 0 3px 10px rgba(214, 120, 152, .07);
+  --shadow-btn: 0 8px 18px rgba(231, 126, 158, .32);
+  --scrim: rgba(74, 46, 60, .28);
+  --f-body: 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif;
+  --f-title: 'Gowun Batang', 'Noto Serif KR', 'Batang', serif;
+  --f-it: 'Fraunces', 'Gowun Batang', Georgia, serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1C1519; --surface: #261D22; --surface-2: #2C2228; --line: #3A2D34; --line-2: #33282E; --line-strong: #4D3A44;
+    --ink: #F4E9EE; --ink-h: #FFF3F7; --ink-2: #D9C6CF; --muted: #AE97A2; --faint: #7F6A74;
+    --primary: #F296B3; --primary-ink: #FFB5CC; --primary-soft: #3A2530; --primary-line: #6A3E52; --on-primary: #2A1520;
+    --eyebrow: #F0A3BD; --stitch: #5A3846;
+    --gingham: rgba(242, 150, 179, .08); --gingham-bg: #241A1F;
+    --lav-bg: #2B2338; --lav-bd: #3D3150; --lav-fg: #C6AEF2;
+    --rose-bg: #38222C; --rose-bd: #4E2F3D; --rose-fg: #F5A4BF;
+    --cream-bg: #322A1A; --cream-bd: #4A3E24; --cream-fg: #E8C877;
+    --mint-bg: #1C2D25; --mint-bd: #294236; --mint-fg: #8FD3B1;
+    --sky-bg: #1D2638; --sky-bd: #2B3851; --sky-fg: #9FBDEE;
+    --sand-bg: #33241B; --sand-bd: #4A3426; --sand-fg: #EBB08A;
+    --red-bg: #3A1F24; --red-bd: #552B33; --red-fg: #F39AA6;
+    --grey-bg: #2D2429; --grey-bd: #3F3339; --grey-fg: #BCA9B2;
+    --tape-pink: rgba(242, 150, 179, .42); --tape-butter: rgba(232, 200, 119, .4); --tape-lilac: rgba(198, 174, 242, .4); --tape-mint: rgba(143, 211, 177, .4);
+    --av1: linear-gradient(140deg, #4A2B39, #432A44); --av1-fg: #FFC3D6;
+    --av2: linear-gradient(140deg, #352D4E, #2D3550); --av2-fg: #D3C3FF;
+    --av3: linear-gradient(140deg, #4A3726, #4A2E2C); --av3-fg: #FFD2A8;
+    --av4: linear-gradient(140deg, #24413A, #26393F); --av4-fg: #A8E6C8;
+    --av5: linear-gradient(140deg, #4A2B3D, #3D2D4B); --av5-fg: #F7BDE0;
+    --shadow: 0 10px 28px rgba(0, 0, 0, .3);
+    --shadow-sm: 0 3px 10px rgba(0, 0, 0, .25);
+    --shadow-btn: 0 8px 18px rgba(0, 0, 0, .35);
+    --scrim: rgba(0, 0, 0, .55);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1C1519; --surface: #261D22; --surface-2: #2C2228; --line: #3A2D34; --line-2: #33282E; --line-strong: #4D3A44;
+  --ink: #F4E9EE; --ink-h: #FFF3F7; --ink-2: #D9C6CF; --muted: #AE97A2; --faint: #7F6A74;
+  --primary: #F296B3; --primary-ink: #FFB5CC; --primary-soft: #3A2530; --primary-line: #6A3E52; --on-primary: #2A1520;
+  --eyebrow: #F0A3BD; --stitch: #5A3846;
+  --gingham: rgba(242, 150, 179, .08); --gingham-bg: #241A1F;
+  --lav-bg: #2B2338; --lav-bd: #3D3150; --lav-fg: #C6AEF2;
+  --rose-bg: #38222C; --rose-bd: #4E2F3D; --rose-fg: #F5A4BF;
+  --cream-bg: #322A1A; --cream-bd: #4A3E24; --cream-fg: #E8C877;
+  --mint-bg: #1C2D25; --mint-bd: #294236; --mint-fg: #8FD3B1;
+  --sky-bg: #1D2638; --sky-bd: #2B3851; --sky-fg: #9FBDEE;
+  --sand-bg: #33241B; --sand-bd: #4A3426; --sand-fg: #EBB08A;
+  --red-bg: #3A1F24; --red-bd: #552B33; --red-fg: #F39AA6;
+  --grey-bg: #2D2429; --grey-bd: #3F3339; --grey-fg: #BCA9B2;
+  --tape-pink: rgba(242, 150, 179, .42); --tape-butter: rgba(232, 200, 119, .4); --tape-lilac: rgba(198, 174, 242, .4); --tape-mint: rgba(143, 211, 177, .4);
+  --av1: linear-gradient(140deg, #4A2B39, #432A44); --av1-fg: #FFC3D6;
+  --av2: linear-gradient(140deg, #352D4E, #2D3550); --av2-fg: #D3C3FF;
+  --av3: linear-gradient(140deg, #4A3726, #4A2E2C); --av3-fg: #FFD2A8;
+  --av4: linear-gradient(140deg, #24413A, #26393F); --av4-fg: #A8E6C8;
+  --av5: linear-gradient(140deg, #4A2B3D, #3D2D4B); --av5-fg: #F7BDE0;
+  --shadow: 0 10px 28px rgba(0, 0, 0, .3);
+  --shadow-sm: 0 3px 10px rgba(0, 0, 0, .25);
+  --shadow-btn: 0 8px 18px rgba(0, 0, 0, .35);
+  --scrim: rgba(0, 0, 0, .55);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body { color: var(--ink); font-family: var(--f-body); font-size: 14px; line-height: 1.6; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; border-radius: 10px; }
+h1, h2, h3 { text-wrap: balance; color: var(--ink-h); }
+.num { font-variant-numeric: tabular-nums lining-nums; }
+.muted { color: var(--muted); }
+svg.ic { width: 18px; height: 18px; flex: none; }
+.it { font-family: var(--f-it); font-style: italic; font-weight: 400; }
+
+/* ---------- shell ---------- */
+.shell { display: grid; grid-template-columns: 248px minmax(0, 1fr); min-height: 100%; }
+.sidebar {
+  position: sticky; top: env(safe-area-inset-top, 0px); height: calc(100vh - env(safe-area-inset-top, 0px));
+  background: var(--surface); border-right: 1.5px dashed var(--stitch);
+  padding: 30px 18px 22px; display: flex; flex-direction: column; gap: 26px; overflow-y: auto;
+}
+.brand { display: flex; align-items: center; gap: 12px; text-decoration: none; padding: 0 6px; }
+.mark { width: 46px; height: 46px; border-radius: 50%; background: var(--primary-soft); border: 1.5px dashed var(--primary-line); display: grid; place-items: center; flex: none; color: var(--primary); }
+.mark svg { width: 30px; height: 22px; }
+.brand b { display: block; font-family: var(--f-it); font-style: italic; font-weight: 500; font-size: 25px; line-height: 1; color: var(--ink-h); letter-spacing: -.01em; }
+.brand small { display: block; font-size: 10px; letter-spacing: .22em; color: var(--eyebrow); font-weight: 500; margin-top: 4px; text-transform: uppercase; }
+.eyebrow { font-family: var(--f-it); font-style: italic; font-size: 14px; color: var(--eyebrow); letter-spacing: 0; }
+.side-sec { display: grid; gap: 8px; }
+.side-sec .eyebrow { padding: 0 12px; }
+.nav { display: grid; gap: 4px; }
+.nav a { position: relative; display: flex; align-items: center; gap: 11px; padding: 11px 14px; border-radius: 999px; text-decoration: none; color: var(--ink-2); font-size: 13.5px; transition: background .15s, color .15s; line-height: 1.35; }
+.nav a svg { color: var(--faint); }
+.nav a:hover { background: var(--surface-2); }
+.nav a[aria-current="page"] { background: var(--primary-soft); color: var(--primary-ink); font-weight: 700; }
+.nav a[aria-current="page"] svg { color: var(--primary); }
+.nav a .cnt { margin-left: auto; font-family: var(--f-it); font-style: italic; font-size: 13px; color: var(--faint); }
+.nav a[aria-current="page"] .cnt { color: var(--primary-ink); }
+.side-foot { margin-top: auto; display: grid; gap: 16px; }
+.help-card {
+  position: relative; border-radius: 20px; padding: 12px;
+  background-color: var(--gingham-bg);
+  background-image: linear-gradient(90deg, var(--gingham) 50%, transparent 50%), linear-gradient(var(--gingham) 50%, transparent 50%);
+  background-size: 18px 18px;
+}
+.help-card .in { background: var(--surface); border-radius: 14px; padding: 16px 14px 14px; display: grid; gap: 4px; box-shadow: var(--shadow-sm); position: relative; }
+.help-card .in::before { content: ""; position: absolute; top: -8px; left: 50%; width: 56px; height: 16px; transform: translateX(-50%) rotate(-4deg); background: var(--tape-pink); clip-path: polygon(0 10%, 4% 0, 96% 0, 100% 12%, 97% 50%, 100% 88%, 96% 100%, 4% 100%, 0 90%, 3% 50%); }
+.help-card b { font-family: var(--f-title); font-size: 14px; color: var(--ink-h); }
+.help-card span { font-size: 12px; color: var(--muted); line-height: 1.55; }
+.help-card .live { margin-top: 6px; }
+.live { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; color: var(--muted); }
+.live i { width: 7px; height: 7px; border-radius: 50%; background: var(--faint); }
+.live.on i { background: var(--mint-fg); box-shadow: 0 0 0 3px var(--mint-bg); }
+.live.local i { background: var(--cream-fg); box-shadow: 0 0 0 3px var(--cream-bg); }
+.profile { display: flex; align-items: center; gap: 10px; padding: 16px 6px 0; border-top: 1.5px dashed var(--line-strong); min-width: 0; }
+.profile img { width: 36px; height: 36px; border-radius: 50%; flex: none; border: 2px solid var(--primary-soft); }
+.profile b { display: block; font-size: 13px; color: var(--ink-h); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.profile small { display: block; font-size: 11.5px; color: var(--faint); }
+
+.main { min-width: 0; display: flex; flex-direction: column; }
+.topbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); display: flex; align-items: center; gap: 16px; padding: 0 36px; min-height: 70px; }
+.gsearch { position: relative; flex: 0 1 400px; min-width: 0; }
+.gsearch svg { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--primary); }
+.gsearch input { width: 100%; height: 42px; border: 1.5px solid var(--line); background: var(--surface); border-radius: 999px; padding: 0 56px 0 42px; outline: none; font-size: 13.5px; box-shadow: var(--shadow-sm); }
+.gsearch input::placeholder { color: var(--faint); }
+.gsearch input:focus { border-color: var(--primary-line); box-shadow: 0 0 0 4px var(--primary-soft); }
+.gsearch kbd { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font: 500 11px var(--f-body); color: var(--muted); background: var(--surface-2); border-radius: 999px; padding: 2px 8px; }
+.top-r { margin-left: auto; display: flex; align-items: center; gap: 14px; }
+.top-date { font-family: var(--f-it); font-style: italic; font-size: 15px; color: var(--ink-2); white-space: nowrap; }
+.top-div { width: 1px; height: 22px; background: var(--line-strong); }
+
+.content { padding: 8px 36px 72px; display: grid; gap: 26px; min-width: 0; max-width: 1480px; width: 100%; }
+.notice { background: var(--cream-bg); border: 1.5px dashed var(--cream-bd); color: var(--ink-2); border-radius: 16px; padding: 11px 16px; font-size: 13px; }
+
+/* ---------- buttons ---------- */
+.btn { display: inline-flex; align-items: center; gap: 7px; height: 42px; padding: 0 18px; border-radius: 999px; border: 1.5px solid var(--line-strong); background: var(--surface); color: var(--ink-2); font-size: 13px; font-weight: 500; white-space: nowrap; transition: transform .12s, background .15s, box-shadow .15s; }
+.btn:hover { background: var(--surface-2); }
+.btn.primary { background: var(--primary); border-color: var(--primary); color: var(--on-primary); font-weight: 700; box-shadow: var(--shadow-btn); }
+.btn.primary:hover { transform: translateY(-1px); background: var(--primary); }
+.btn.soft { background: var(--primary-soft); border-color: transparent; color: var(--primary-ink); font-weight: 700; }
+.btn.danger { color: var(--red-fg); border-color: var(--red-bd); }
+.btn.danger.solid { background: var(--red-fg); border-color: var(--red-fg); color: #fff; }
+.btn svg { width: 16px; height: 16px; }
+.btn.sm { height: 34px; padding: 0 14px; font-size: 12.5px; }
+.icon-btn { width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid var(--line); background: var(--surface); color: var(--primary); display: grid; place-items: center; flex: none; }
+.icon-btn svg { width: 15px; height: 15px; }
+.linkbtn { background: none; border: 0; padding: 0; color: var(--primary-ink); font-size: 12.5px; display: inline-flex; align-items: center; gap: 3px; font-weight: 500; }
+.linkbtn:hover { text-decoration: underline; text-decoration-style: wavy; text-underline-offset: 4px; }
+.linkbtn svg { width: 13px; height: 13px; }
+
+/* ---------- hero (gingham desk) ---------- */
+.hero {
+  position: relative; border-radius: 30px; padding: clamp(18px, 2.6vw, 30px);
+  background-color: var(--gingham-bg);
+  background-image: linear-gradient(90deg, var(--gingham) 50%, transparent 50%), linear-gradient(var(--gingham) 50%, transparent 50%);
+  background-size: 30px 30px;
+  display: grid; gap: 30px;
+}
+.hero-card { position: relative; background: var(--surface); border-radius: 22px; padding: clamp(20px, 2.6vw, 30px) clamp(20px, 3vw, 34px); box-shadow: var(--shadow); display: flex; align-items: flex-end; justify-content: space-between; gap: 22px; flex-wrap: wrap; max-width: 100%; }
+.hero-card .bow { position: absolute; top: -22px; left: 28px; width: 64px; height: 44px; color: var(--primary); filter: drop-shadow(0 4px 6px rgba(214, 120, 152, .25)); }
+.hero h1 { font-family: var(--f-title); font-weight: 700; font-size: clamp(26px, 3vw, 34px); line-height: 1.3; margin: 4px 0 6px; letter-spacing: -.02em; }
+.hero h1 .it { color: var(--primary); font-size: .9em; letter-spacing: 0; margin-left: 4px; }
+.hero p { margin: 0; color: var(--ink-2); font-size: 14px; max-width: 62ch; }
+.hero p b { color: var(--primary-ink); font-weight: 700; }
+.hero-acts { display: flex; gap: 8px; flex-wrap: wrap; }
+.spark { position: absolute; color: var(--cream-fg); pointer-events: none; }
+.spark.s1 { top: 18px; right: 30px; width: 20px; height: 20px; }
+.spark.s2 { top: 44px; right: 58px; width: 11px; height: 11px; color: var(--primary); }
+
+.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+.stat { position: relative; border-radius: 20px; padding: 24px 22px 20px; border: 0; background: var(--surface); display: grid; gap: 2px; text-align: left; box-shadow: var(--shadow-sm); transition: transform .18s; color: inherit; }
+.stat:nth-child(odd) { transform: rotate(-.6deg); }
+.stat:nth-child(even) { transform: rotate(.6deg); }
+.stat:hover { transform: translateY(-3px) rotate(0); }
+.stat::before { content: ""; position: absolute; top: -10px; left: 50%; width: 84px; height: 22px; transform: translateX(-50%) rotate(-3deg); background: var(--tape); clip-path: polygon(0 10%, 4% 0, 96% 0, 100% 12%, 97% 50%, 100% 88%, 96% 100%, 4% 100%, 0 90%, 3% 50%); }
+.stat:nth-child(even)::before { transform: translateX(-50%) rotate(4deg); }
+.stat .lbl { font-size: 13px; color: var(--ink-2); display: flex; align-items: center; gap: 7px; }
+.stat .lbl svg { width: 16px; height: 16px; color: var(--fg); }
+.stat strong { font-family: var(--f-it); font-weight: 500; font-size: 44px; line-height: 1.1; color: var(--ink-h); font-variant-numeric: lining-nums; }
+.stat strong small { font-family: var(--f-body); font-size: 14px; color: var(--muted); margin-left: 3px; font-weight: 400; }
+.stat .sub { font-size: 12px; color: var(--fg); font-weight: 500; }
+.stat.rose  { --tape: var(--tape-pink);   --fg: var(--rose-fg); }
+.stat.cream { --tape: var(--tape-butter); --fg: var(--cream-fg); }
+.stat.lav   { --tape: var(--tape-lilac);  --fg: var(--lav-fg); }
+.stat.mint  { --tape: var(--tape-mint);   --fg: var(--mint-fg); }
+
+/* ---------- panels ---------- */
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 24px; box-shadow: var(--shadow); min-width: 0; }
+.panel-h { display: flex; align-items: flex-start; gap: 10px; padding: 22px 24px 14px; }
+.panel-h h2 { font-family: var(--f-title); font-size: 17px; font-weight: 700; margin: 0; letter-spacing: -.01em; }
+.panel-h p { margin: 2px 0 0; font-size: 12px; color: var(--faint); }
+.panel-h .r { margin-left: auto; display: flex; gap: 10px; align-items: center; }
+.panel-b { padding: 4px 24px 22px; }
+.dash { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 22px; align-items: start; }
+.dash-col { display: grid; gap: 22px; min-width: 0; }
+.dash-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; padding: 0 24px 14px; }
+.tabs button { height: 32px; padding: 0 14px; border-radius: 999px; border: 1.5px solid var(--line); background: var(--surface); color: var(--muted); font-size: 12.5px; }
+.tabs button[aria-pressed="true"] { background: var(--ink-h); border-color: var(--ink-h); color: var(--surface); font-weight: 700; }
+
+/* status pills */
+.pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 11px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; background: var(--pb); color: var(--pf); }
+.pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.t-plan  { --pb: var(--sand-bg);  --pf: var(--sand-fg);  --pd: var(--sand-bd); }
+.t-doing { --pb: var(--rose-bg);  --pf: var(--rose-fg);  --pd: var(--rose-bd); }
+.t-nomi  { --pb: var(--lav-bg);   --pf: var(--lav-fg);   --pd: var(--lav-bd); }
+.t-ready { --pb: var(--cream-bg); --pf: var(--cream-fg); --pd: var(--cream-bd); }
+.t-visa  { --pb: var(--sky-bg);   --pf: var(--sky-fg);   --pd: var(--sky-bd); }
+.t-done  { --pb: var(--mint-bg);  --pf: var(--mint-fg);  --pd: var(--mint-bd); }
+.t-hold  { --pb: var(--grey-bg);  --pf: var(--grey-fg);  --pd: var(--grey-bd); }
+.t-drop  { --pb: var(--red-bg);   --pf: var(--red-fg);   --pd: var(--red-bd); }
+.st-sel { appearance: none; -webkit-appearance: none; border: 1.5px solid transparent; border-radius: 999px; padding: 4px 28px 4px 12px; font-size: 12px; font-weight: 600; background-color: var(--pb); color: var(--pf);
+  background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position: calc(100% - 14px) 52%, calc(100% - 10px) 52%; background-size: 4px 4px; background-repeat: no-repeat; }
+.st-sel:hover { border-color: var(--pd); }
+.st-sel option { background: var(--surface); color: var(--ink); }
+
+/* avatars + partner tags */
+.av { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; font-family: var(--f-it); font-style: italic; font-weight: 500; font-size: 13px; flex: none; }
+.av1 { background: var(--av1); color: var(--av1-fg); } .av2 { background: var(--av2); color: var(--av2-fg); } .av3 { background: var(--av3); color: var(--av3-fg); }
+.av4 { background: var(--av4); color: var(--av4-fg); } .av5 { background: var(--av5); color: var(--av5-fg); }
+.who { display: flex; align-items: center; gap: 11px; min-width: 0; }
+.who b { display: block; font-weight: 700; color: var(--ink-h); white-space: nowrap; font-size: 13.5px; }
+.who small { display: block; font-size: 12px; color: var(--faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ptag { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; white-space: nowrap; color: var(--pc); background: var(--pcb); border-radius: 999px; padding: 2px 10px 2px 8px; font-weight: 600; }
+.ptag::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.p1 { --pc: var(--rose-fg); --pcb: var(--rose-bg); } .p2 { --pc: var(--lav-fg); --pcb: var(--lav-bg); }
+.p3 { --pc: var(--cream-fg); --pcb: var(--cream-bg); } .p4 { --pc: var(--mint-fg); --pcb: var(--mint-bg); }
+.scope { font-family: var(--f-it); font-style: italic; font-size: 12px; color: var(--muted); white-space: nowrap; }
+
+/* tables */
+.tbl-wrap { overflow-x: auto; }
+.tbl { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; }
+.tbl th { position: sticky; top: 0; z-index: 1; background: var(--surface-2); color: var(--muted); font-weight: 500; font-size: 12px; text-align: left; padding: 10px 14px; border-top: 1px dashed var(--line-strong); border-bottom: 1px dashed var(--line-strong); white-space: nowrap; }
+.tbl th:first-child, .tbl td:first-child { padding-left: 24px; }
+.tbl th:last-child, .tbl td:last-child { padding-right: 24px; }
+.tbl th.r, .tbl td.r { text-align: right; }
+.tbl td { padding: 12px 14px; border-bottom: 1px solid var(--line-2); vertical-align: middle; color: var(--ink-2); }
+.tbl tbody tr { cursor: pointer; transition: background .12s; }
+.tbl tbody tr:hover td { background: var(--surface-2); }
+.tbl tbody tr.is-sel td { background: var(--primary-soft); }
+.tbl tbody tr:last-child td { border-bottom: 0; }
+.tbl th button { background: none; border: 0; padding: 0; color: inherit; font: inherit; display: inline-flex; gap: 4px; align-items: center; }
+.tbl th button[aria-sort="ascending"]::after { content: "↑"; color: var(--primary); }
+.tbl th button[aria-sort="descending"]::after { content: "↓"; color: var(--primary); }
+.tbl .clip { max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tbl .nowrap { white-space: nowrap; }
+.tbl .none { color: var(--faint); }
+.tbl .nm { font-weight: 700; color: var(--ink-h); }
+.tbl .sub { display: block; font-size: 12px; color: var(--faint); font-weight: 400; }
+.row-act { width: 28px; height: 28px; border-radius: 50%; background: var(--surface-2); color: var(--primary); display: grid; place-items: center; }
+.row-act svg { width: 13px; height: 13px; }
+
+/* bars */
+.hbars { display: grid; gap: 11px; }
+.hbar { display: grid; grid-template-columns: 104px minmax(0, 1fr) 34px; gap: 12px; align-items: center; background: none; border: 0; padding: 1px 0; text-align: left; font-size: 13px; color: var(--ink-2); }
+.hbar .n { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hbar .t { height: 10px; background: var(--surface-2); border-radius: 99px; overflow: hidden; }
+.hbar .t i { display: block; height: 100%; border-radius: 99px; background: var(--pf, var(--primary)); opacity: .55; min-width: 5px; }
+.hbar .v { text-align: right; font-family: var(--f-it); font-style: italic; font-size: 16px; color: var(--ink-h); font-variant-numeric: lining-nums; }
+.hbar:hover .n { color: var(--primary-ink); }
+
+.ptable { width: 100%; border-collapse: collapse; font-size: 13px; }
+.ptable th { font-weight: 500; font-size: 11.5px; color: var(--faint); text-align: right; padding: 0 6px 8px; }
+.ptable th:first-child { text-align: left; padding-left: 0; }
+.ptable td { padding: 10px 6px; border-top: 1px dashed var(--line-strong); text-align: right; font-family: var(--f-it); font-style: italic; font-size: 16px; color: var(--ink-h); font-variant-numeric: lining-nums; }
+.ptable td:first-child { text-align: left; font-family: var(--f-body); font-style: normal; font-size: 13px; padding-left: 0; }
+.ptable tbody tr { cursor: pointer; }
+.ptable tbody tr:hover td { background: var(--surface-2); }
+
+/* timeline */
+.timeline { list-style: none; margin: 0; padding: 0; display: grid; }
+.timeline li { display: grid; grid-template-columns: 34px 14px minmax(0, 1fr); gap: 12px; align-items: start; position: relative; }
+.timeline li button { all: unset; display: contents; cursor: pointer; }
+.timeline .n { font-family: var(--f-it); font-style: italic; font-size: 19px; line-height: 1.2; color: var(--ink-h); text-align: right; font-variant-numeric: lining-nums; }
+.timeline .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--surface); border: 2.5px solid var(--pf); margin-top: 6px; position: relative; z-index: 1; justify-self: center; }
+.timeline li:not(:last-child)::after { content: ""; position: absolute; left: calc(34px + 12px + 6px); top: 21px; bottom: -4px; border-left: 1.5px dashed var(--line-strong); }
+.timeline .tx { padding-bottom: 15px; }
+.timeline .tx b { display: block; font-size: 13px; color: var(--ink-h); font-weight: 700; }
+.timeline .tx small { display: block; font-size: 12px; color: var(--faint); }
+.timeline li:hover .tx b { color: var(--primary-ink); }
+
+/* attention */
+.todo { list-style: none; margin: 0; padding: 0; display: grid; }
+.todo li { display: flex; gap: 12px; align-items: flex-start; padding: 11px 0; border-top: 1px dashed var(--line-strong); }
+.todo li:first-child { border-top: 0; }
+.todo .ck { width: 20px; height: 20px; border-radius: 50%; background: var(--rose-bg); flex: none; margin-top: 1px; display: grid; place-items: center; color: var(--rose-fg); font-size: 11px; font-weight: 700; }
+.todo button { background: none; border: 0; padding: 0; text-align: left; font-size: 13px; font-weight: 700; color: var(--ink-h); }
+.todo button:hover { color: var(--primary-ink); }
+.todo small { display: block; font-size: 12px; color: var(--rose-fg); }
+.count-chip { min-width: 28px; height: 28px; padding: 0 8px; border-radius: 999px; background: var(--rose-bg); color: var(--rose-fg); font-family: var(--f-it); font-style: italic; font-size: 15px; display: grid; place-items: center; }
+.feed { list-style: none; margin: 0; padding: 0; display: grid; }
+.feed li { display: flex; gap: 12px; align-items: center; padding: 10px 0; border-top: 1px dashed var(--line-strong); }
+.feed li:first-child { border-top: 0; }
+.feed .meta { margin-left: auto; text-align: right; font-size: 12px; color: var(--faint); white-space: nowrap; }
+.feed button { all: unset; cursor: pointer; display: contents; }
+.empty-state { padding: 36px 18px; text-align: center; color: var(--muted); font-size: 13px; }
+.empty-state b { display: block; color: var(--ink-h); font-size: 16px; margin-bottom: 4px; font-family: var(--f-title); }
+
+/* ---------- page head + toolbars ---------- */
+.pagehead { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 6px 4px 0; }
+.pagehead h1 { font-family: var(--f-title); font-size: 30px; font-weight: 700; margin: 2px 0 4px; letter-spacing: -.02em; }
+.pagehead p { margin: 0; color: var(--muted); max-width: 70ch; }
+.pagehead .acts { display: flex; gap: 8px; flex-wrap: wrap; }
+.toolbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; padding: 18px 24px; }
+.toolbar + .toolbar { padding-top: 0; }
+.search { position: relative; flex: 1 1 240px; min-width: 0; max-width: 340px; }
+.search svg { position: absolute; left: 14px; top: 50%; width: 15px; height: 15px; transform: translateY(-50%); color: var(--primary); }
+.search input { width: 100%; height: 40px; border: 1.5px solid var(--line); border-radius: 999px; background: var(--surface-2); padding: 0 14px 0 38px; outline: none; font-size: 13px; }
+.search input:focus, .selbox:focus { border-color: var(--primary-line); background: var(--surface); box-shadow: 0 0 0 4px var(--primary-soft); }
+.selbox { height: 40px; border: 1.5px solid var(--line); border-radius: 999px; background: var(--surface-2); padding: 0 14px; outline: none; max-width: 100%; font-size: 13px; }
+.checks { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.checks .lbl { font-family: var(--f-it); font-style: italic; font-size: 14px; color: var(--eyebrow); margin-right: 4px; }
+.ck-chip { display: inline-flex; align-items: center; gap: 9px; height: 38px; padding: 0 15px 0 12px; border: 1.5px solid var(--line); border-radius: 999px; background: var(--surface); cursor: pointer; font-size: 13px; color: var(--muted); user-select: none; transition: background .15s, border-color .15s; }
+.ck-chip input { appearance: none; -webkit-appearance: none; width: 18px; height: 18px; margin: 0; border: 1.5px solid var(--line-strong); border-radius: 50%; background: var(--surface); display: grid; place-items: center; cursor: pointer; }
+.ck-chip input::after { content: ""; width: 4px; height: 8px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg) translate(-1px, -1px); opacity: 0; }
+.ck-chip input:checked { background: var(--pc, var(--primary)); border-color: var(--pc, var(--primary)); }
+.ck-chip input:checked::after { opacity: 1; }
+.ck-chip:has(input:checked) { color: var(--ink-h); font-weight: 600; background: var(--pcb, var(--primary-soft)); border-color: transparent; }
+.ck-chip input:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.ck-chip .c { font-family: var(--f-it); font-style: italic; font-size: 13px; color: var(--muted); font-weight: 400; }
+.count-line { font-size: 12.5px; color: var(--muted); margin-left: auto; white-space: nowrap; }
+.count-line b { color: var(--ink-h); font-family: var(--f-it); font-style: italic; font-weight: 500; font-size: 18px; }
+
+/* ---------- pipeline ---------- */
+.board { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(250px, 1fr); gap: 14px; overflow-x: auto; padding: 0 24px 24px; align-items: start; }
+.kcol { background: var(--pb); border: 1.5px dashed var(--pd); border-radius: 22px; min-height: 150px; display: grid; align-content: start; transition: border-color .15s, box-shadow .15s; }
+.kcol.over { border-style: solid; border-color: var(--pf); box-shadow: 0 0 0 4px var(--surface), 0 0 0 6px var(--pd); }
+.kcol-h { padding: 14px 16px 10px; display: grid; gap: 2px; }
+.kcol-h .row { display: flex; align-items: center; gap: 8px; }
+.kcol-h .row .pill { background: var(--surface); }
+.kcol-h .row b { margin-left: auto; font-family: var(--f-it); font-style: italic; font-weight: 500; font-size: 20px; color: var(--pf); }
+.kcol-h small { font-size: 11.5px; color: var(--ink-2); opacity: .75; }
+.kcards { display: grid; gap: 10px; padding: 0 10px 12px; }
+.kcard { background: var(--surface); border-radius: 16px; padding: 13px; display: grid; gap: 8px; cursor: grab; box-shadow: var(--shadow-sm); transition: transform .12s, box-shadow .12s; }
+.kcard:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.kcard.dragging { opacity: .45; }
+.kcard .top { display: flex; align-items: center; gap: 8px; }
+.kcard .top .num { font-family: var(--f-it); font-style: italic; font-size: 12px; color: var(--faint); margin-left: auto; }
+.kcard .rt { font-size: 12px; color: var(--ink-2); overflow-wrap: anywhere; }
+.kcard .rt .none { color: var(--faint); }
+.kcard .nx { font-size: 12px; color: var(--ink-2); background: var(--surface-2); border-radius: 10px; padding: 6px 9px; overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.kcard .ft { display: flex; align-items: center; gap: 8px; }
+.kempty { font-size: 12px; color: var(--ink-2); opacity: .7; padding: 6px 4px 10px; text-align: center; }
+
+/* ---------- companies ---------- */
+.split { display: grid; grid-template-columns: minmax(0, 430px) minmax(0, 1fr); gap: 22px; align-items: start; }
+.split .list { max-height: calc(100vh - 260px); overflow: auto; border-radius: 0 0 24px 24px; }
+.co-mark { width: 36px; height: 36px; border-radius: 12px; display: grid; place-items: center; font-family: var(--f-it); font-style: italic; font-weight: 500; font-size: 13px; flex: none; }
+.tag { font-size: 11px; border-radius: 999px; padding: 2px 9px; white-space: nowrap; font-weight: 600; background: var(--grey-bg); color: var(--grey-fg); }
+.tag.ok { background: var(--mint-bg); color: var(--mint-fg); }
+.tag.warn { background: var(--rose-bg); color: var(--rose-fg); }
+.detail-h { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+.detail-h .co-mark { width: 52px; height: 52px; border-radius: 18px; font-size: 17px; }
+.detail-h h2 { font-family: var(--f-title); font-size: 23px; margin: 0; overflow-wrap: anywhere; }
+.detail-h .r { margin-left: auto; display: flex; gap: 8px; }
+.mini-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.mini-stats div { border-radius: 16px; padding: 12px 14px; background: var(--bgc); }
+.mini-stats span { display: block; font-size: 12px; color: var(--ink-2); }
+.mini-stats b { font-family: var(--f-it); font-style: italic; font-weight: 500; font-size: 26px; color: var(--ink-h); font-variant-numeric: lining-nums; }
+.info-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 24px; margin: 0; padding: 18px 20px; border-radius: 18px; background: var(--surface-2); border: 1.5px dashed var(--line-strong); }
+.info-grid div { min-width: 0; }
+.info-grid dt { font-size: 11.5px; color: var(--eyebrow); }
+.info-grid dd { margin: 2px 0 0; overflow-wrap: anywhere; user-select: text; color: var(--ink-h); font-size: 13.5px; }
+.info-grid dd.empty { color: var(--faint); }
+.info-grid .full { grid-column: 1 / -1; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { display: inline-flex; gap: 6px; align-items: center; border-radius: 999px; padding: 4px 12px; font-size: 12.5px; background: var(--lav-bg); color: var(--lav-fg); font-weight: 600; }
+.chip .num { font-family: var(--f-it); font-style: italic; }
+.sec-t { font-family: var(--f-title); font-size: 15px; font-weight: 700; color: var(--ink-h); margin: 0 0 10px; }
+.stack { display: grid; gap: 18px; }
+
+/* ---------- drawer ---------- */
+.scrim { position: fixed; inset: 0; background: var(--scrim); z-index: 40; backdrop-filter: blur(3px); }
+.drawer { position: fixed; top: 14px; right: 14px; bottom: 14px; width: min(540px, calc(100% - 28px)); z-index: 41; background: var(--surface); border-radius: 28px; box-shadow: 0 30px 70px -20px rgba(120, 50, 80, .35); display: grid; grid-template-rows: auto minmax(0, 1fr) auto; animation: slide .22s ease; overflow: hidden; }
+@keyframes slide { from { transform: translateX(24px); opacity: .5; } }
+.drawer-h {
+  display: flex; align-items: center; gap: 12px; padding: calc(env(safe-area-inset-top, 0px) + 22px) 26px 18px;
+  background-color: var(--gingham-bg);
+  background-image: linear-gradient(90deg, var(--gingham) 50%, transparent 50%), linear-gradient(var(--gingham) 50%, transparent 50%);
+  background-size: 20px 20px;
+}
+.drawer-h .av, .drawer-h .co-mark { width: 46px; height: 46px; font-size: 15px; box-shadow: 0 0 0 3px var(--surface); }
+.drawer-h h2 { margin: 0; font-family: var(--f-title); font-size: 21px; }
+.drawer-h p { margin: 1px 0 0; font-size: 12px; color: var(--ink-2); }
+.drawer-b { overflow-y: auto; padding: 22px 26px; display: grid; gap: 14px; align-content: start; }
+.drawer-f { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; padding: 14px 26px calc(env(safe-area-inset-bottom, 0px) + 14px); border-top: 1.5px dashed var(--line-strong); }
+.drawer-f .grow { flex: 1; }
+.x { margin-left: auto; width: 36px; height: 36px; border-radius: 50%; border: 0; background: var(--surface); color: var(--primary-ink); display: grid; place-items: center; flex: none; box-shadow: var(--shadow-sm); }
+.x svg { width: 14px; height: 14px; }
+.fgrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.full { grid-column: 1 / -1; }
+.field { display: grid; gap: 6px; min-width: 0; }
+.field > label, .field > .fl { font-size: 12.5px; color: var(--ink-2); font-weight: 500; }
+.field input, .field select, .field textarea { width: 100%; border: 1.5px solid var(--line); background: var(--surface-2); border-radius: 14px; padding: 9px 13px; outline: none; font-size: 13.5px; }
+.field textarea { resize: vertical; min-height: 64px; }
+.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--primary-line); background: var(--surface); box-shadow: 0 0 0 4px var(--primary-soft); }
+.field input:disabled, .field select:disabled, .field textarea:disabled { color: var(--ink-2); }
+.req { color: var(--primary); }
+.seg2 { display: inline-flex; gap: 6px; flex-wrap: wrap; }
+.seg2 label { display: inline-flex; align-items: center; padding: 8px 15px; cursor: pointer; font-size: 13px; border: 1.5px solid var(--line); border-radius: 999px; background: var(--surface-2); color: var(--muted); }
+.seg2 input { position: absolute; opacity: 0; pointer-events: none; }
+.seg2 label:has(input:checked) { background: var(--primary-soft); border-color: var(--primary-line); color: var(--primary-ink); font-weight: 700; }
+.seg2 label:has(input:focus-visible) { outline: 2px solid var(--primary); outline-offset: 2px; }
+.confirm { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; border: 1.5px dashed var(--red-bd); background: var(--red-bg); border-radius: 16px; padding: 11px 14px; font-size: 13px; color: var(--ink-2); }
+.confirm span { flex: 1 1 200px; }
+.hint { font-size: 12.5px; color: var(--ink-2); margin: 0; background: var(--lav-bg); border-radius: 14px; padding: 9px 13px; }
+.err { font-size: 13px; color: var(--red-fg); margin: 0; }
+.meta-line { font-size: 12px; color: var(--faint); }
+
+/* click-to-copy + dates */
+.copy { display: inline-flex; align-items: center; gap: 6px; max-width: 250px; border: 1.5px dashed var(--line-strong); background: var(--surface); border-radius: 999px; padding: 3px 11px 3px 9px; font-size: 12.5px; color: var(--ink-2); white-space: nowrap; transition: background .15s, border-color .15s, color .15s; }
+.copy span { overflow: hidden; text-overflow: ellipsis; }
+.copy svg { width: 13px; height: 13px; color: var(--primary); flex: none; }
+.copy:hover { background: var(--primary-soft); border-color: var(--primary-line); color: var(--primary-ink); }
+.copy.done { background: var(--mint-bg); border-color: var(--mint-bd); color: var(--mint-fg); }
+.copy.done svg { color: var(--mint-fg); }
+.kcard .ph { display: flex; min-width: 0; }
+.kcard .ph .copy { max-width: 100%; cursor: pointer; }
+.date { font-family: var(--f-it); font-style: italic; font-size: 13.5px; color: var(--ink-h); white-space: nowrap; font-variant-numeric: lining-nums tabular-nums; }
+.tbl.stick th:first-child, .tbl.stick td:first-child { position: sticky; left: 0; z-index: 2; background: var(--surface); }
+.tbl.stick th:first-child { z-index: 3; background: var(--surface-2); }
+.contact-card { border-radius: 18px; background: var(--surface-2); border: 1.5px dashed var(--line-strong); padding: 14px 16px; display: grid; gap: 12px; }
+.contact-card .cc-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.contact-card .cc-row .none { font-size: 12.5px; color: var(--faint); }
+.dates4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.dates4 div { background: var(--surface); border-radius: 12px; padding: 8px 10px; min-width: 0; }
+.dates4 span { display: block; font-size: 11.5px; color: var(--eyebrow); }
+.dates4 b { font-family: var(--f-it); font-style: italic; font-weight: 500; font-size: 14px; color: var(--ink-h); font-variant-numeric: lining-nums; }
+.dates4 b.empty { color: var(--faint); font-family: var(--f-body); font-style: normal; font-size: 12.5px; font-weight: 400; }
+.sec-label { grid-column: 1 / -1; font-family: var(--f-it); font-style: italic; color: var(--eyebrow); font-size: 14px; border-top: 1.5px dashed var(--line-strong); padding-top: 12px; margin-top: 2px; }
+@media (max-width: 640px) { .dates4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* receivables (수금 관리) */
+.p5 { --pc: var(--sky-fg); --pcb: var(--sky-bg); }
+.amt { font-family: var(--f-it); font-style: italic; font-weight: 500; font-variant-numeric: lining-nums tabular-nums; color: var(--ink-h); white-space: nowrap; }
+.amt.out { color: var(--rose-fg); }
+.amt.zero { color: var(--faint); }
+.bill-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
+.bill { position: relative; text-align: left; border: 1.5px solid var(--line); background: var(--surface); border-radius: 20px; padding: 16px 18px; display: grid; gap: 6px; box-shadow: var(--shadow-sm); transition: transform .15s, border-color .15s, background .15s; color: inherit; }
+.bill:hover { transform: translateY(-2px); }
+.bill[aria-pressed="true"] { border-color: var(--pc); background: var(--pcb); }
+.bill[aria-pressed="false"].dim { opacity: .55; }
+.bill .top { display: flex; align-items: center; gap: 8px; }
+.bill .top .n { margin-left: auto; font-size: 12px; color: var(--muted); }
+.bill strong { font-family: var(--f-it); font-style: italic; font-weight: 500; font-size: 26px; line-height: 1.15; color: var(--ink-h); font-variant-numeric: lining-nums; }
+.bill .bar { height: 6px; border-radius: 99px; background: var(--surface-2); overflow: hidden; }
+.bill .bar i { display: block; height: 100%; background: var(--pc); opacity: .6; border-radius: 99px; }
+.bill small { font-size: 12px; color: var(--muted); }
+.stage-tag { font-family: var(--f-it); font-style: italic; font-size: 12.5px; white-space: nowrap; padding: 2px 10px; border-radius: 999px; background: var(--surface-2); color: var(--ink-2); }
+.stage-tag.first { background: var(--lav-bg); color: var(--lav-fg); }
+.stage-tag.final { background: var(--mint-bg); color: var(--mint-fg); }
+.pay-btn { height: 30px; padding: 0 12px; border-radius: 999px; border: 1.5px solid var(--mint-bd); background: var(--mint-bg); color: var(--mint-fg); font-size: 12px; font-weight: 700; white-space: nowrap; }
+.pay-btn:hover { border-color: var(--mint-fg); }
+.tbl tfoot td { padding: 14px; border-top: 1.5px dashed var(--line-strong); background: var(--surface-2); font-weight: 700; color: var(--ink-h); }
+.tbl tfoot td:first-child { padding-left: 24px; }
+.total-box { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: space-between; border-radius: 16px; background: var(--rose-bg); padding: 12px 16px; }
+.total-box span { font-size: 12.5px; color: var(--ink-2); }
+.total-box b { font-family: var(--f-it); font-style: italic; font-weight: 500; font-size: 22px; color: var(--rose-fg); }
+.recv-list { list-style: none; margin: 0; padding: 0; display: grid; }
+.recv-list li { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-top: 1px dashed var(--line-strong); }
+.recv-list li:first-child { border-top: 0; }
+.recv-list button { all: unset; cursor: pointer; display: contents; }
+.recv-list .amt { margin-left: auto; }
+.inv-total { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; border-radius: 14px; background: var(--surface-2); border: 1.5px dashed var(--line-strong); padding: 10px 14px; font-size: 13px; color: var(--ink-2); }
+.inv-total b { font-family: var(--f-it); font-style: italic; font-weight: 500; font-size: 20px; color: var(--ink-h); }
+.ck-line { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-2); cursor: pointer; height: 40px; }
+.ck-line input { accent-color: var(--primary); width: 16px; height: 16px; margin: 0; }
+@media (max-width: 1280px) { .bill-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 760px) { .bill-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+.toast { position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 22px); transform: translateX(-50%); z-index: 60; background: var(--ink-h); color: var(--surface); border-radius: 999px; padding: 10px 20px; font-size: 13px; box-shadow: var(--shadow-btn); max-width: calc(100% - 32px); }
+
+/* ---------- responsive ---------- */
+@media (max-width: 1280px) {
+  .dash { grid-template-columns: minmax(0, 1fr); }
+  .dash-side { grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+}
+@media (max-width: 1100px) {
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 26px; }
+  .split { grid-template-columns: minmax(0, 1fr); }
+  .split .list { max-height: 420px; }
+}
+@media (max-width: 960px) {
+  .shell { grid-template-columns: minmax(0, 1fr); }
+  .sidebar { position: static; height: auto; flex-direction: row; flex-wrap: wrap; align-items: center; padding: 16px 16px 0; gap: 12px 16px; border-right: 0; border-bottom: 1.5px dashed var(--stitch); overflow: visible; }
+  .side-sec { flex: 1 0 100%; }
+  .side-sec .eyebrow, .side-foot { display: none; }
+  .nav { display: flex; overflow-x: auto; scrollbar-width: none; gap: 4px; padding-bottom: 12px; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a { white-space: nowrap; padding: 8px 14px; }
+  .nav a .cnt { margin-left: 4px; }
+  .topbar { padding: 0 16px; position: static; }
+  .top-date, .top-div { display: none; }
+  .content { padding: 8px 16px 56px; }
+  .dash-2 { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 640px) {
+  .stats { grid-template-columns: minmax(0, 1fr); }
+  .fgrid, .info-grid { grid-template-columns: minmax(0, 1fr); }
+  .mini-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .gsearch kbd { display: none; }
+  .count-line { margin-left: 0; }
+  .search { max-width: none; }
+  .drawer { top: 0; right: 0; bottom: 0; width: 100%; border-radius: 0; }
+  .hero-card .bow { left: auto; right: 22px; }
+}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } .stat { transform: none !important; } }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 20l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-coin" viewBox="0 0 24 24"><rect x="3.5" y="6" width="17" height="12" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="2.6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M6.5 9.5v5M17.5 9.5v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8.5" y="8.5" width="11" height="11" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M15.5 8.5V6a1.5 1.5 0 0 0-1.5-1.5H6A1.5 1.5 0 0 0 4.5 6v8A1.5 1.5 0 0 0 6 15.5h2.5" fill="none" stroke="currentColor" stroke-width="1.9"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4zM13.5 6.5l4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="i-board" viewBox="0 0 24 24"><rect x="3.5" y="4" width="5" height="16" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="10" y="4" width="5" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="16.5" y="4" width="4" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-building" viewBox="0 0 24 24"><path d="M5 20V5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v15M15 9h3a1 1 0 0 1 1 1v10M3 20h18M8.5 8h3M8.5 12h3M8.5 16h3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-brief" viewBox="0 0 24 24"><rect x="3.5" y="7" width="17" height="12.5" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7M3.5 12.5h17" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8.5" r="3.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3 19.5c.6-3.2 3-5 6-5s5.4 1.8 6 5M15.5 5.2a3.4 3.4 0 0 1 0 6.6M17.5 14.6c1.8.6 3 2.2 3.4 4.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M7 3.5h7l4 4V20a.5.5 0 0 1-.5.5h-10A.5.5 0 0 1 7 20z" transform="translate(-1 0)" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 12h6M9 16h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v4.5l3 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8.5 12.2l2.4 2.4 4.6-4.8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 19s-7-4.4-7-9.3A3.8 3.8 0 0 1 12 7.6a3.8 3.8 0 0 1 7 2.1C19 14.6 12 19 12 19z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="bow" viewBox="0 0 120 80">
+      <path d="M58 36C46 16 22 6 12 16S10 46 28 48c12 1 22-4 30-10z" fill="currentColor"/>
+      <path d="M62 36c12-20 36-30 46-20s2 30-16 32c-12 1-22-4-30-10z" fill="currentColor"/>
+      <path d="M52 30C42 20 28 16 22 21" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="3" stroke-linecap="round"/>
+      <path d="M68 30c10-10 24-14 30-9" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="3" stroke-linecap="round"/>
+      <path d="M55 42 42 76l10-4 6 6 4-34z" fill="currentColor" opacity=".85"/>
+      <path d="M65 42l13 34-10-4-6 6-4-34z" fill="currentColor" opacity=".85"/>
+      <rect x="51" y="29" width="18" height="18" rx="7" fill="currentColor"/>
+      <rect x="51" y="29" width="18" height="18" rx="7" fill="#fff" fill-opacity=".22"/>
+    </symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 2c.7 5.2 4.8 9.3 10 10-5.2.7-9.3 4.8-10 10-.7-5.2-4.8-9.3-10-10 5.2-.7 9.3-4.8 10-10z" fill="currentColor"/></symbol>
+  </defs>
+</svg>
+
+<div class="shell">
+  <aside class="sidebar">
+    <a class="brand" href="#dashboard" data-route="dashboard">
+      <span class="mark"><svg aria-hidden="true"><use href="#bow"/></svg></span>
+      <span><b>ANS</b><small>Visa Desk</small></span>
+    </a>
+    <div class="side-sec">
+      <div class="eyebrow">Workspace</div>
+      <nav class="nav" id="nav" aria-label="주요 메뉴"></nav>
+    </div>
+    <div class="side-foot">
+      <div class="help-card">
+        <div class="in">
+          <b>함께 쓰는 고객 보드</b>
+          <span>직원 누구든 수정하면 모두의 화면에 바로 반영돼요.</span>
+          <span class="live" id="live"><i></i><span>연결 중</span></span>
+        </div>
+      </div>
+      <div class="profile" id="profile" hidden>
+        <img id="meAvatar" alt="">
+        <div style="min-width:0"><b id="meName">직원</b><small>ANS 팀</small></div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <label class="gsearch">
+        <svg aria-hidden="true"><use href="#i-search"/></svg>
+        <input id="gq" type="search" placeholder="고객명, 직군, 업체로 검색" autocomplete="off" aria-label="전체 고객 검색">
+        <kbd id="kbdHint">Ctrl K</kbd>
+      </label>
+      <div class="top-r">
+        <span class="top-date" id="topDate"></span>
+        <span class="top-div"></span>
+        <button class="btn primary sm" id="addBtn" type="button" hidden><svg aria-hidden="true"><use href="#i-plus"/></svg>고객 등록</button>
+      </div>
+    </header>
+    <main class="content">
+      <div class="notice" id="notice" hidden></div>
+      <div id="view" style="display:grid;gap:22px;min-width:0"></div>
+    </main>
+  </div>
+</div>
+
+<!-- 고객 등록/수정 -->
+<div class="scrim" id="clientScrim" hidden></div>
+<form class="drawer" id="clientForm" hidden novalidate role="dialog" aria-modal="true" aria-labelledby="cfTitle">
+  <div class="drawer-h">
+    <span class="av av1" id="cfAv">+</span>
+    <div style="min-width:0">
+      <h2 id="cfTitle">고객 등록</h2>
+      <p id="cfSub"></p>
+    </div>
+    <button class="x" type="button" data-close="client" aria-label="닫기"><svg><use href="#i-x"/></svg></button>
+  </div>
+  <div class="drawer-b">
+    <div class="contact-card" id="cfContact" hidden></div>
+    <div class="fgrid">
+      <div class="field">
+        <label for="f-name">고객명 <span class="req">*</span></label>
+        <input id="f-name" placeholder="예: KIM, Minji" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="f-no">원본 No.</label>
+        <input id="f-no" type="number" min="1" inputmode="numeric">
+      </div>
+      <div class="field">
+        <label for="f-job">직군</label>
+        <input id="f-job" list="dl-job" placeholder="예: Chef" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="f-partner">담당</label>
+        <select id="f-partner"></select>
+      </div>
+      <div class="field">
+        <label for="f-ohla">OHLA Company</label>
+        <input id="f-ohla" list="dl-ohla" placeholder="예: ICBM" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="f-host">Host Company</label>
+        <input id="f-host" list="dl-host" placeholder="예: Solidbase" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="f-status">진행 상태</label>
+        <select id="f-status"></select>
+      </div>
+      <div class="field">
+        <span class="fl" id="scopeLbl">진행범위</span>
+        <div class="seg2" role="radiogroup" aria-labelledby="scopeLbl">
+          <label><input type="radio" name="scope" id="f-scope-n" value="NOMI">NOMI</label>
+          <label><input type="radio" name="scope" id="f-scope-v" value="NOMI + VISA" checked>NOMI + VISA</label>
+        </div>
+      </div>
+      <div class="sec-label">Contact</div>
+      <div class="field">
+        <label for="f-phone">전화번호</label>
+        <input id="f-phone" type="tel" autocomplete="off" placeholder="예: 0412 345 678">
+      </div>
+      <div class="field">
+        <label for="f-email">이메일</label>
+        <input id="f-email" type="email" autocomplete="off" placeholder="예: name@gmail.com">
+      </div>
+      <div class="sec-label">Dates</div>
+      <div class="field">
+        <label for="f-nomiApplied">노미 신청일</label>
+        <input id="f-nomiApplied" type="date">
+      </div>
+      <div class="field">
+        <label for="f-nomiGranted">노미 승인일</label>
+        <input id="f-nomiGranted" type="date">
+      </div>
+      <div class="field">
+        <label for="f-visaApplied">비자 신청일</label>
+        <input id="f-visaApplied" type="date">
+      </div>
+      <div class="field">
+        <label for="f-visaGranted">비자 승인일</label>
+        <input id="f-visaGranted" type="date">
+      </div>
+      <div class="sec-label">Notes</div>
+      <div class="field full">
+        <label for="f-memo">현재 메모</label>
+        <textarea id="f-memo" rows="2"></textarea>
+      </div>
+      <div class="field full">
+        <label for="f-next">다음 액션</label>
+        <textarea id="f-next" rows="2"></textarea>
+      </div>
+      <div class="field full">
+        <label for="f-check">확인 메모</label>
+        <textarea id="f-check" rows="2"></textarea>
+      </div>
+    </div>
+    <div class="confirm" id="cfConfirm" hidden>
+      <span>이 고객을 삭제할까요? 삭제하면 되돌릴 수 없어요.</span>
+      <button class="btn sm" type="button" id="cfConfirmNo">취소</button>
+      <button class="btn sm danger solid" type="button" id="cfConfirmYes">삭제</button>
+    </div>
+    <p class="err" id="cfErr" hidden></p>
+  </div>
+  <div class="drawer-f">
+    <button class="btn danger sm" type="button" id="cfDel" hidden>삭제</button>
+    <span class="meta-line grow" id="cfMeta"></span>
+    <button class="btn sm" type="button" data-close="client">취소</button>
+    <button class="btn primary sm" type="submit" id="cfSave">저장</button>
+  </div>
+</form>
+
+<!-- 업체 정보 -->
+<div class="scrim" id="compScrim" hidden></div>
+<form class="drawer" id="compForm" hidden novalidate role="dialog" aria-modal="true" aria-labelledby="pfTitle">
+  <div class="drawer-h">
+    <span class="co-mark av2" id="pfMark">+</span>
+    <div style="min-width:0">
+      <h2 id="pfTitle">업체 등록</h2>
+      <p id="pfSub"></p>
+    </div>
+    <button class="x" type="button" data-close="comp" aria-label="닫기"><svg><use href="#i-x"/></svg></button>
+  </div>
+  <div class="drawer-b">
+    <div class="fgrid">
+      <div class="field full">
+        <label for="c-name">업체명 <span class="req">*</span></label>
+        <input id="c-name" autocomplete="off">
+      </div>
+      <div class="field" data-host-only>
+        <label for="c-abn">ABN</label>
+        <input id="c-abn" inputmode="numeric" placeholder="11자리" autocomplete="off">
+      </div>
+      <div class="field" data-host-only>
+        <label for="c-industry">업종</label>
+        <input id="c-industry" placeholder="예: 건설, 요식업, Aged care" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="c-contact">담당자</label>
+        <input id="c-contact" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="c-phone">연락처</label>
+        <input id="c-phone" type="tel" autocomplete="off">
+      </div>
+      <div class="field full">
+        <label for="c-email">이메일</label>
+        <input id="c-email" type="email" autocomplete="off">
+      </div>
+      <div class="field full">
+        <label for="c-address">주소</label>
+        <input id="c-address" autocomplete="off">
+      </div>
+      <div class="field full">
+        <label for="c-memo">메모</label>
+        <textarea id="c-memo" rows="3" placeholder="계약 조건, 수수료, 특이사항 등"></textarea>
+      </div>
+    </div>
+    <p class="hint" id="pfHint" hidden></p>
+    <div class="confirm" id="pfConfirm" hidden>
+      <span id="pfConfirmText"></span>
+      <button class="btn sm" type="button" id="pfConfirmNo">취소</button>
+      <button class="btn sm danger solid" type="button" id="pfConfirmYes">삭제</button>
+    </div>
+    <p class="err" id="pfErr" hidden></p>
+  </div>
+  <div class="drawer-f">
+    <button class="btn danger sm" type="button" id="pfDel" hidden>정보 삭제</button>
+    <span class="meta-line grow" id="pfMeta"></span>
+    <button class="btn sm" type="button" data-close="comp">취소</button>
+    <button class="btn primary sm" type="submit" id="pfSave">저장</button>
+  </div>
+</form>
+
+<!-- 인보이스 -->
+<div class="scrim" id="invScrim" hidden></div>
+<form class="drawer" id="invForm" hidden novalidate role="dialog" aria-modal="true" aria-labelledby="ivTitle">
+  <div class="drawer-h">
+    <span class="co-mark av3" id="ivMark">$</span>
+    <div style="min-width:0">
+      <h2 id="ivTitle">인보이스 등록</h2>
+      <p id="ivSub"></p>
+    </div>
+    <button class="x" type="button" data-close="inv" aria-label="닫기"><svg><use href="#i-x"/></svg></button>
+  </div>
+  <div class="drawer-b">
+    <div class="fgrid">
+      <div class="field full">
+        <label for="iv-client">고객 <span class="req">*</span></label>
+        <input id="iv-client" list="dl-clients" placeholder="고객명을 입력하면 목록에서 고를 수 있어요" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="iv-biller">청구처</label>
+        <select id="iv-biller"></select>
+      </div>
+      <div class="field">
+        <span class="fl" id="ivStageLbl">결제 단계</span>
+        <div class="seg2" role="radiogroup" aria-labelledby="ivStageLbl">
+          <label><input type="radio" name="ivstage" id="iv-stage-first" value="first">First</label>
+          <label><input type="radio" name="ivstage" id="iv-stage-final" value="final">Final</label>
+          <label><input type="radio" name="ivstage" id="iv-stage-none" value="" checked>미지정</label>
+        </div>
+      </div>
+      <div class="field">
+        <label for="iv-amount">공급가액 (AUD) <span class="req">*</span></label>
+        <input id="iv-amount" type="number" min="0" step="0.01" inputmode="decimal" placeholder="10000">
+      </div>
+      <div class="field">
+        <span class="fl">GST</span>
+        <label class="ck-line"><input type="checkbox" id="iv-gst" checked> GST 10% 별도 청구</label>
+      </div>
+      <div class="inv-total"><span>청구 금액</span><b id="ivTotal">$0</b></div>
+      <div class="field">
+        <label for="iv-issued">발행일</label>
+        <input id="iv-issued" type="date">
+      </div>
+      <div class="field">
+        <label for="iv-due">입금 예정일</label>
+        <input id="iv-due" type="date">
+      </div>
+      <div class="field">
+        <label for="iv-status">상태</label>
+        <select id="iv-status"></select>
+      </div>
+      <div class="field">
+        <label for="iv-paid">입금된 금액 (AUD)</label>
+        <input id="iv-paid" type="number" min="0" step="0.01" inputmode="decimal" placeholder="부분 입금일 때만">
+      </div>
+      <div class="field">
+        <label for="iv-paidDate">입금일</label>
+        <input id="iv-paidDate" type="date">
+      </div>
+      <div class="field full">
+        <label for="iv-memo">메모</label>
+        <textarea id="iv-memo" rows="2" placeholder="인보이스 번호, 입금 약속, 특이사항 등"></textarea>
+      </div>
+    </div>
+    <div class="confirm" id="ivConfirm" hidden>
+      <span>이 인보이스 기록을 삭제할까요? 되돌릴 수 없어요.</span>
+      <button class="btn sm" type="button" id="ivConfirmNo">취소</button>
+      <button class="btn sm danger solid" type="button" id="ivConfirmYes">삭제</button>
+    </div>
+    <p class="err" id="ivErr" hidden></p>
+  </div>
+  <div class="drawer-f">
+    <button class="btn danger sm" type="button" id="ivDel" hidden>삭제</button>
+    <button class="linkbtn" type="button" id="ivOpenClient" hidden>고객 정보 보기</button>
+    <span class="meta-line grow" id="ivMeta"></span>
+    <button class="btn sm" type="button" data-close="inv">취소</button>
+    <button class="btn primary sm" type="submit" id="ivSave">저장</button>
+  </div>
+</form>
+<datalist id="dl-clients"></datalist>
+<datalist id="dl-job"></datalist>
+<datalist id="dl-ohla"></datalist>
+<datalist id="dl-host"></datalist>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>
+(() => {
+  /* ================= constants ================= */
+  const STATUS = [
+    { k: '진행 예정',     c: 't-plan',  g: 'active', d: '계약·서류 준비 전' },
+    { k: '진행 중',       c: 't-doing', g: 'active', d: 'Host 매칭·서류 준비' },
+    { k: '노미승인대기',   c: 't-nomi',  g: 'active', d: '노미네이션 접수, 심사 중' },
+    { k: '482신청대기',    c: 't-ready', g: 'active', d: '노미 승인, 482 접수 전' },
+    { k: '482대기',       c: 't-visa',  g: 'active', d: '482 비자 심사 중' },
+    { k: '진행완료',       c: 't-done',  g: 'done',   d: '업무 완료' },
+    { k: '보류',          c: 't-hold',  g: 'hold',   d: '진행 일시 중단' },
+    { k: '482철회',       c: 't-drop',  g: 'drop',   d: '482 신청 철회' },
+    { k: '노미네이션철회',  c: 't-drop',  g: 'drop',   d: '노미네이션 철회' },
+  ];
+  const SM = Object.fromEntries(STATUS.map((s, i) => [s.k, { ...s, i }]));
+  const PARTNERS = ['ANS', '다니엘', '멜리사', '스실'];
+  const PLABEL = { ANS: 'ANS 고객', '다니엘': '다니엘 고객', '멜리사': '멜리사 고객', '스실': '스실 고객' };
+  const PCLS = { ANS: 'p1', '다니엘': 'p2', '멜리사': 'p3', '스실': 'p4' };
+  const NOMI_OK = new Set(['482신청대기', '482대기', '진행완료', '482철회']);
+  const VISA = 'NOMI + VISA';
+  const ROUTES = [
+    ['dashboard', '대시보드', 'i-home'],
+    ['pipeline', '진행고객 관리', 'i-board'],
+    ['ohla', 'OHLA 업체 관리', 'i-building'],
+    ['hosts', 'Host Company 관리 및 정보', 'i-brief'],
+    ['clients', '총 고객', 'i-users'],
+    ['money', '수금 관리', 'i-coin'],
+  ];
+  const KIND = {
+    ohla:  { col: 'ohla',  field: 'ohla', other: 'host', label: 'OHLA 업체',    none: 'OHLA 미확인', otherLabel: 'Host Company' },
+    hosts: { col: 'hosts', field: 'host', other: 'ohla', label: 'Host Company', none: 'Host 미정',   otherLabel: 'OHLA 업체' },
+  };
+  const NONE_KEY = '__none__';
+  const LOCAL_KEY = 'ans-portal-local-v2';
+  const PREF_KEY = 'ans-portal-prefs-v3';
+
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const keyOf = (s) => String(s || '').trim().toLowerCase().replace(/\s+/g, ' ');
+  const icon = (id, cls = 'ic') => `<svg class="${cls}" aria-hidden="true"><use href="#${id}"/></svg>`;
+
+  /* ================= state ================= */
+  const state = {
+    clients: [], ohla: [], hosts: [], invoices: [],
+    money: { biller: 'all', view: 'open', q: '' },
+    editInv: null,
+    mode: 'loading', canWrite: true,
+    route: 'dashboard',
+    dashTab: 'all',
+    roster: { partners: [...PARTNERS], q: '', status: 'all', ohla: 'all', sortKey: 'no', sortDir: 1 },
+    pipe: { q: '', partners: [...PARTNERS], showClosed: false },
+    comp: { ohla: { q: '', sel: null }, hosts: { q: '', sel: null } },
+    editClient: null, editComp: null,
+  };
+  try {
+    const p = JSON.parse(localStorage.getItem(PREF_KEY) || '{}');
+    if (p.roster) Object.assign(state.roster, p.roster);
+    if (p.pipe) Object.assign(state.pipe, p.pipe);
+  } catch (e) {}
+  const savePrefs = () => { try { localStorage.setItem(PREF_KEY, JSON.stringify({ roster: state.roster, pipe: state.pipe })); } catch (e) {} };
+
+  let db = null, user = null, downloads = null, myId = null, myName = '';
+
+  /* ================= derived ================= */
+  const grp = (c) => (SM[c.status] || {}).g || 'active';
+  const isNomi = (c) => NOMI_OK.has(c.status);
+  const isVisa = (c) => c.status === '진행완료' && c.scope === VISA;
+  const partnerOf = (c) => (PARTNERS.includes(c.partner) ? c.partner : 'ANS');
+  function stats(list) {
+    const s = { total: list.length, active: 0, done: 0, hold: 0, drop: 0, nomi: 0, visa: 0 };
+    list.forEach((c) => { s[grp(c)]++; if (isNomi(c)) s.nomi++; if (isVisa(c)) s.visa++; });
+    return s;
+  }
+  const countBy = (list, k) => list.filter((c) => c.status === k).length;
+  function companies(kind) {
+    const { field } = KIND[kind];
+    const map = new Map();
+    for (const d of state[kind]) { const k = keyOf(d.name); if (k && !map.has(k)) map.set(k, { key: k, name: d.name, doc: d, clients: [] }); }
+    for (const c of state.clients) {
+      const v = (c[field] || '').trim(); if (!v) continue;
+      const k = keyOf(v);
+      if (!map.has(k)) map.set(k, { key: k, name: v, doc: null, clients: [] });
+      map.get(k).clients.push(c);
+    }
+    return [...map.values()].sort((a, b) => b.clients.length - a.clients.length || a.name.localeCompare(b.name));
+  }
+
+  /* ================= small renderers ================= */
+  const hash = (s) => { let h = 0; for (const ch of String(s)) h = (h * 31 + ch.charCodeAt(0)) | 0; return Math.abs(h); };
+  function initials(name) {
+    const n = String(name || '').trim();
+    if (!n) return '?';
+    if (/[가-힣]/.test(n)) return n.length >= 3 ? n.slice(1, 3) : n.slice(0, 2);
+    const [sur, given = ''] = n.split(',');
+    const a = (sur.trim()[0] || ''), b = (given.trim()[0] || sur.trim()[1] || '');
+    return (a + b).toUpperCase();
+  }
+  const avatar = (name) => `<span class="av av${(hash(name) % 5) + 1}" aria-hidden="true">${esc(initials(name))}</span>`;
+  const coMark = (name) => `<span class="co-mark av${(hash(name) % 5) + 1}" aria-hidden="true">${esc(String(name || '?').replace(/[^A-Za-z0-9가-힣]/g, '').slice(0, 2).toUpperCase() || '?')}</span>`;
+  const pill = (status) => { const s = SM[status]; return `<span class="pill ${s ? s.c : 't-plan'}">${esc(status || '미정')}</span>`; };
+  const ptag = (p) => `<span class="ptag ${PCLS[p] || 'p1'}">${esc(p)}</span>`;
+  const dash = (v, none) => (v ? esc(v) : `<span class="none">${esc(none || '—')}</span>`);
+  function timeAgo(iso) {
+    const t = Date.parse(iso); if (!t) return '';
+    const d = (Date.now() - t) / 1000;
+    if (d < 60) return '방금';
+    if (d < 3600) return Math.floor(d / 60) + '분 전';
+    if (d < 86400) return Math.floor(d / 3600) + '시간 전';
+    if (d < 86400 * 7) return Math.floor(d / 86400) + '일 전';
+    const x = new Date(t); return `${x.getFullYear()}. ${String(x.getMonth() + 1).padStart(2, '0')}. ${String(x.getDate()).padStart(2, '0')}`;
+  }
+  const touched = (c) => !!c.updatedBy || c.source !== 'excel';
+  const who = (c) => (c.updatedBy ? `<span data-uid="${esc(c.updatedBy)}">직원</span>` : '');
+  const statusOptions = (cur) => STATUS.map((s) => `<option value="${esc(s.k)}"${s.k === cur ? ' selected' : ''}>${esc(s.k)}</option>`).join('');
+  const statusSelect = (c) => {
+    const s = SM[c.status];
+    return state.canWrite
+      ? `<select class="st-sel ${s ? s.c : 't-plan'}" id="st-${esc(c.id)}" data-status-of="${esc(c.id)}" aria-label="${esc(c.name)} 진행 상태">${statusOptions(c.status)}</select>`
+      : pill(c.status);
+  };
+  const fmtDate = (iso) => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso || '')); return m ? `${m[1]}.${m[2]}.${m[3]}` : ''; };
+  const dateCell = (iso) => (fmtDate(iso) ? `<span class="date">${fmtDate(iso)}</span>` : '<span class="none">—</span>');
+  const copyBtn = (v, label) => (v
+    ? `<button type="button" class="copy" data-copy="${esc(v)}" data-copy-label="${esc(label)}" title="클릭해서 ${esc(label)} 복사">${icon('i-copy', '')}<span>${esc(v)}</span></button>`
+    : '<span class="none">—</span>');
+  const DATE_FIELDS = [['nomiApplied', '노미 신청'], ['nomiGranted', '노미 승인'], ['visaApplied', '비자 신청'], ['visaGranted', '비자 승인']];
+  const whoCell = (c) => `<div class="who">${avatar(c.name)}<div style="min-width:0"><b>${esc(c.name)}</b><small>${esc(c.job || '직군 미입력')}</small></div></div>`;
+
+  async function fillNames() {
+    if (!user) return;
+    const els = [...document.querySelectorAll('[data-uid]')];
+    if (!els.length) return;
+    const ps = await user.profiles([...new Set(els.map((e) => e.dataset.uid))]);
+    els.forEach((e) => { const p = ps[e.dataset.uid]; e.textContent = (p && p.name) || '직원'; });
+  }
+
+  /* ================= chrome ================= */
+  function renderChrome() {
+    const all = state.clients;
+    const counts = { pipeline: stats(all).active, clients: all.length, ohla: companies('ohla').length, hosts: companies('hosts').length, money: state.invoices.filter(isOpen).length };
+    $('nav').innerHTML = ROUTES.map(([r, label, ic]) => `<a href="#${r}" data-route="${r}"${state.route === r ? ' aria-current="page"' : ''}>${icon(ic)}<span>${label}</span>${state.mode !== 'loading' && counts[r] ? `<span class="cnt">${counts[r]}</span>` : ''}</a>`).join('');
+    const live = $('live');
+    live.className = 'live' + (state.mode === 'live' ? ' on' : state.mode === 'local' ? ' local' : '');
+    live.lastElementChild.textContent = state.mode === 'live' ? (state.canWrite ? '실시간 동기화 중' : '보기 전용') : state.mode === 'local' ? '로컬 미리보기' : '연결 중';
+    $('addBtn').hidden = !state.canWrite || state.mode === 'loading';
+    const now = new Date();
+    $('topDate').textContent = `${now.getMonth() + 1}월 ${now.getDate()}일 ${'일월화수목금토'[now.getDay()]}요일`;
+  }
+
+  /* ================= views ================= */
+  const V = {};
+
+  /* ---------- dashboard ---------- */
+  V.dashboard = {
+    mount() {
+      return `
+      <section class="hero" aria-labelledby="heroTitle">
+        <div class="hero-card">
+          <svg class="bow" aria-hidden="true"><use href="#bow"/></svg>
+          <svg class="spark s1" aria-hidden="true"><use href="#i-spark"/></svg>
+          <svg class="spark s2" aria-hidden="true"><use href="#i-spark"/></svg>
+          <div style="min-width:0">
+            <div class="eyebrow" id="heroEyebrow">Visa progress board</div>
+            <h1 id="heroTitle">비자 진행고객 현황</h1>
+            <p id="heroText">고객 데이터를 불러오는 중이에요.</p>
+          </div>
+          <div class="hero-acts">
+            <button class="btn" type="button" data-go="pipeline">진행고객 관리</button>
+            <button class="btn primary" type="button" data-act="add-client" id="heroAdd">${icon('i-plus')}새 고객 등록</button>
+          </div>
+        </div>
+        <div class="stats" id="dStats"></div>
+      </section>
+      <div class="dash">
+        <div class="dash-col">
+          <section class="panel">
+            <div class="panel-h"><div><h2>최근 비자 진행 현황</h2><p>최근 수정된 순서로 보여드려요</p></div>
+              <div class="r"><button class="linkbtn" type="button" data-go="clients">전체보기 ${icon('i-chev')}</button></div></div>
+            <div class="tabs" id="dTabs"></div>
+            <div class="tbl-wrap"><table class="tbl" id="dRecent"></table></div>
+          </section>
+          <div class="dash-2">
+            <section class="panel">
+              <div class="panel-h"><div><h2>진행 상태별 분포</h2><p>누르면 해당 고객 목록으로 이동해요</p></div></div>
+              <div class="panel-b"><div class="hbars" id="dStatus"></div></div>
+            </section>
+            <section class="panel">
+              <div class="panel-h"><div><h2>담당별 현황</h2><p>노미승인 = 노미 승인 이후 단계</p></div></div>
+              <div class="panel-b"><table class="ptable" id="dPartner"></table></div>
+            </section>
+          </div>
+          <div class="dash-2">
+            <section class="panel">
+              <div class="panel-h"><div><h2>OHLA 업체별</h2><p>업체별 고객 수</p></div><div class="r"><button class="linkbtn" type="button" data-go="ohla">관리 ${icon('i-chev')}</button></div></div>
+              <div class="panel-b"><div class="hbars" id="dOhla"></div></div>
+            </section>
+            <section class="panel">
+              <div class="panel-h"><div><h2>Host Company 상위</h2><p>고객이 많은 순서</p></div><div class="r"><button class="linkbtn" type="button" data-go="hosts">전체보기 ${icon('i-chev')}</button></div></div>
+              <div class="panel-b"><div class="hbars" id="dHost"></div></div>
+            </section>
+          </div>
+        </div>
+        <div class="dash-col dash-side" style="display:grid;gap:20px">
+          <section class="panel">
+            <div class="panel-h"><div><h2>수금 현황</h2><p>발행 후 아직 입금되지 않은 금액</p></div><div class="r"><button class="icon-btn" type="button" data-go="money" aria-label="수금 관리로 이동">${icon('i-chev')}</button></div></div>
+            <div class="panel-b" style="display:grid;gap:12px"><div class="total-box"><span id="dRecvN">미수금</span><b id="dRecvSum">$0</b></div><ul class="recv-list" id="dRecv"></ul></div>
+          </section>
+          <section class="panel">
+            <div class="panel-h"><div><h2>단계별 진행</h2><p>노미네이션부터 482 승인까지</p></div><div class="r"><button class="icon-btn" type="button" data-go="pipeline" aria-label="진행고객 관리로 이동">${icon('i-chev')}</button></div></div>
+            <div class="panel-b"><ol class="timeline" id="dStages"></ol></div>
+          </section>
+          <section class="panel">
+            <div class="panel-h"><div><h2>놓치면 안 돼요!</h2><p>정보가 비어 있는 진행 중 고객</p></div><div class="r"><span class="count-chip" id="dAttnN">0</span></div></div>
+            <div class="panel-b"><ul class="todo" id="dAttn"></ul></div>
+          </section>
+          <section class="panel">
+            <div class="panel-h"><div><h2>최근 업데이트</h2><p>직원이 수정한 내역</p></div></div>
+            <div class="panel-b"><ul class="feed" id="dFeed"></ul></div>
+          </section>
+        </div>
+      </div>`;
+    },
+    update() {
+      const all = state.clients, s = stats(all);
+      const now = new Date();
+      $('heroEyebrow').textContent = `Visa progress board · ${now.getFullYear()}. ${String(now.getMonth() + 1).padStart(2, '0')}. ${String(now.getDate()).padStart(2, '0')}`;
+      $('heroAdd').hidden = !state.canWrite || state.mode === 'loading';
+      if (state.mode === 'loading') { $('dStats').innerHTML = ''; return; }
+      $('heroText').innerHTML = all.length
+        ? `진행 중인 고객 <b>${s.active}명</b> · 노미 심사 <b>${countBy(all, '노미승인대기')}명</b> · 482 심사 <b>${countBy(all, '482대기')}명</b> · 482 신청 대기 <b>${countBy(all, '482신청대기')}명</b>`
+        : '아직 등록된 고객이 없어요. 새 고객 등록으로 시작해 보세요.';
+
+      const ansN = all.filter((c) => partnerOf(c) === 'ANS').length;
+      $('dStats').innerHTML = [
+        ['rose', 'i-users', '전체 고객', s.total, `ANS ${ansN} · 파트너 ${s.total - ansN}`, 'all'],
+        ['cream', 'i-file', '진행 중·대기', s.active, `482 신청 대기 ${countBy(all, '482신청대기')}명`, 'g:active'],
+        ['lav', 'i-clock', '노미 승인', s.nomi, '노미 승인 이후 단계 누계', 'nomi'],
+        ['mint', 'i-check', '482 승인', s.visa, `진행완료 ${s.done}명 중`, 'visa'],
+      ].map(([cls, ic, l, v, sub, f]) => `<button class="stat ${cls}" type="button" data-roster-status="${f}">
+        <span class="lbl">${icon(ic)}${l}</span><strong>${v}<small>명</small></strong><span class="sub">${esc(sub)}</span></button>`).join('');
+
+      // recent table with tabs
+      const tabs = [['all', '전체'], ['노미승인대기', '노미승인대기'], ['482신청대기', '482신청대기'], ['482대기', '482대기'], ['진행완료', '진행완료']];
+      $('dTabs').innerHTML = tabs.map(([k, l]) => `<button type="button" data-dtab="${esc(k)}" aria-pressed="${state.dashTab === k}">${l}</button>`).join('');
+      const recent = all.filter((c) => state.dashTab === 'all' || c.status === state.dashTab)
+        .sort((a, b) => String(b.updatedAt || '').localeCompare(String(a.updatedAt || '')) || (b.no || 0) - (a.no || 0)).slice(0, 6);
+      $('dRecent').innerHTML = `<thead><tr><th>고객명</th><th>담당</th><th>OHLA → Host</th><th>진행 상태</th><th>최근 수정</th><th></th></tr></thead><tbody>` +
+        (recent.length ? recent.map((c) => `<tr data-open-client="${esc(c.id)}" tabindex="0"><td>${whoCell(c)}</td><td>${ptag(partnerOf(c))}</td>
+          <td class="clip" style="max-width:240px">${dash(c.ohla, '미확인')} → ${dash(c.host, '미정')}</td><td>${pill(c.status)}</td>
+          <td class="nowrap muted">${touched(c) ? esc(timeAgo(c.updatedAt)) : '엑셀 원본'}</td><td class="r"><span class="row-act">${icon('i-chev', '')}</span></td></tr>`).join('')
+          : `<tr><td colspan="6"><div class="empty-state">해당 상태의 고객이 없어요.</div></td></tr>`) + '</tbody>';
+
+      const max = Math.max(1, ...STATUS.map((x) => countBy(all, x.k)));
+      $('dStatus').innerHTML = STATUS.map((x) => {
+        const n = countBy(all, x.k);
+        return `<button class="hbar ${x.c}" type="button" data-roster-status="${esc(x.k)}"><span class="n">${esc(x.k)}</span><span class="t"><i style="width:${(n / max) * 100}%"></i></span><span class="v">${n}</span></button>`;
+      }).join('');
+
+      $('dPartner').innerHTML = `<thead><tr><th>담당</th><th>총</th><th>진행</th><th>노미승인</th><th>482승인</th></tr></thead><tbody>` +
+        PARTNERS.map((p) => { const t = stats(all.filter((c) => partnerOf(c) === p));
+          return `<tr data-roster-partner="${p}"><td>${ptag(PLABEL[p])}</td><td>${t.total}</td><td>${t.active}</td><td>${t.nomi}</td><td>${t.visa}</td></tr>`;
+        }).join('') + '</tbody>';
+
+      const bars = (kind, limit, el, tone) => {
+        const list = companies(kind).filter((x) => x.clients.length).slice(0, limit);
+        const none = all.filter((c) => !(c[KIND[kind].field] || '').trim()).length;
+        const m = Math.max(1, none, ...list.map((x) => x.clients.length));
+        let h = list.map((x) => `<button class="hbar ${tone}" type="button" data-open-comp="${kind}" data-key="${esc(x.key)}"><span class="n" title="${esc(x.name)}">${esc(x.name)}</span>
+          <span class="t"><i style="width:${(x.clients.length / m) * 100}%"></i></span><span class="v">${x.clients.length}</span></button>`).join('');
+        if (none) h += `<button class="hbar t-hold" type="button" data-open-comp="${kind}" data-key="${NONE_KEY}"><span class="n muted">${KIND[kind].none}</span>
+          <span class="t"><i style="width:${(none / m) * 100}%"></i></span><span class="v">${none}</span></button>`;
+        $(el).innerHTML = h || '<div class="muted">데이터가 없어요.</div>';
+      };
+      bars('ohla', 5, 'dOhla', 't-nomi');
+      bars('hosts', 6, 'dHost', 't-visa');
+
+      const stageKeys = ['진행 예정', '진행 중', '노미승인대기', '482신청대기', '482대기', '진행완료'];
+      $('dStages').innerHTML = stageKeys.map((k) => `<li class="${SM[k].c}"><button type="button" data-roster-status="${esc(k)}"><span class="n">${countBy(all, k)}</span><span class="dot"></span><span class="tx"><b>${esc(k)}</b><small>${esc(SM[k].d)}</small></span></button></li>`).join('');
+
+      const attn = all.filter((c) => grp(c) === 'active').map((c) => {
+        const why = [];
+        if (!c.ohla) why.push('OHLA 미확인');
+        if (!c.host) why.push('Host 미정');
+        if (c.check) why.push('확인 메모 있음');
+        return { c, why };
+      }).filter((x) => x.why.length).sort((a, b) => b.why.length - a.why.length || (a.c.no || 0) - (b.c.no || 0));
+      $('dAttnN').textContent = attn.length;
+      $('dAttn').innerHTML = attn.length ? attn.slice(0, 6).map(({ c, why }) => `<li><span class="ck">!</span><div style="min-width:0"><button type="button" data-open-client="${esc(c.id)}">${esc(c.name)}님 ${esc(why[0])}</button>
+        <small>${esc(c.status)}${why.length > 1 ? ' · ' + esc(why.slice(1).join(', ')) : ''}</small></div></li>`).join('')
+        : '<li class="muted" style="border:0">진행 중인 고객 정보가 모두 채워져 있어요.</li>';
+
+      const openList = state.invoices.filter(isOpen);
+      $('dRecvN').textContent = `미수금 ${openList.length}건 · GST 포함`;
+      $('dRecvSum').textContent = money(openList.reduce((s, i) => s + invOut(i), 0));
+      $('dRecv').innerHTML = BILLERS.map((b) => {
+        const l = openList.filter((i) => i.biller === b.k);
+        return l.length ? `<li><button type="button" data-go-biller="${esc(b.k)}">${billerTag(b.k)}<span class="muted" style="font-size:12px">${l.length}건</span><span class="amt">${money(l.reduce((s, i) => s + invOut(i), 0))}</span></button></li>` : '';
+      }).join('') || '<li class="muted" style="border:0">미수금이 없어요.</li>';
+
+      const feed = all.filter(touched).sort((a, b) => String(b.updatedAt || '').localeCompare(String(a.updatedAt || ''))).slice(0, 6);
+      $('dFeed').innerHTML = feed.length ? feed.map((c) => `<li><button type="button" data-open-client="${esc(c.id)}">${avatar(c.name)}<span style="min-width:0"><b style="display:block;font-size:13px;color:var(--ink-h)">${esc(c.name)}</b>${pill(c.status)}</span>
+        <span class="meta">${esc(timeAgo(c.updatedAt))}<br>${who(c)}</span></button></li>`).join('')
+        : '<li class="muted" style="border:0">아직 수정 내역이 없어요. 직원이 고객 정보를 저장하면 여기에 쌓여요.</li>';
+    },
+  };
+
+  /* ---------- pipeline ---------- */
+  V.pipeline = {
+    mount() {
+      return `
+      <div class="pagehead">
+        <div><div class="eyebrow">Pipeline</div><h1>진행고객 관리</h1><p>카드를 다른 단계로 끌어다 놓으면 진행 상태가 바뀌어요. 카드를 누르면 상세 정보를 수정할 수 있어요.</p></div>
+        <div class="acts"><button class="btn primary" type="button" data-act="add-client" id="pipeAdd">${icon('i-plus')}새 고객 등록</button></div>
+      </div>
+      <section class="panel">
+        <div class="toolbar">
+          <div class="search">${icon('i-search')}<input id="pipeQ" type="search" placeholder="고객명, 직군, 업체, 메모 검색" autocomplete="off" aria-label="고객 검색"></div>
+          <div class="checks" id="pipePartners"></div>
+          <label class="ck-chip"><input type="checkbox" id="pipeClosed"> 완료·보류·철회 표시</label>
+          <span class="count-line" id="pipeCount"></span>
+        </div>
+        <div class="board" id="pipeBoard"></div>
+      </section>`;
+    },
+    afterMount() { $('pipeQ').value = state.pipe.q; $('pipeClosed').checked = state.pipe.showClosed; },
+    update() {
+      const f = state.pipe;
+      $('pipeAdd').hidden = !state.canWrite || state.mode === 'loading';
+      const base = state.clients.filter((c) => matchText(c, f.q));
+      $('pipePartners').innerHTML = partnerChecks('pipe', f.partners, base);
+      const shown = base.filter((c) => f.partners.includes(partnerOf(c)));
+      const cols = STATUS.filter((s) => f.showClosed || s.g === 'active');
+      $('pipeCount').innerHTML = `<b>${shown.filter((c) => cols.some((s) => s.k === c.status)).length}</b>명 표시`;
+      if (state.mode === 'loading') { $('pipeBoard').innerHTML = '<div class="empty-state">불러오는 중이에요.</div>'; return; }
+      $('pipeBoard').innerHTML = cols.map((s) => {
+        const list = shown.filter((c) => c.status === s.k).sort((a, b) => (a.no || 9999) - (b.no || 9999));
+        return `<div class="kcol ${s.c}" data-drop="${esc(s.k)}">
+          <div class="kcol-h"><div class="row">${pill(s.k)}<b>${list.length}</b></div><small>${esc(s.d)}</small></div>
+          <div class="kcards">${list.map((c) => `<article class="kcard" draggable="${state.canWrite}" data-card="${esc(c.id)}" tabindex="0" aria-label="${esc(c.name)} 상세 보기">
+            <div class="top">${whoCell(c)}<span class="num">No.${esc(c.no ?? '–')}</span></div>
+            <div class="rt">${dash(c.ohla, 'OHLA 미확인')} → ${dash(c.host, 'Host 미정')}</div>
+            ${c.next ? `<div class="nx">${esc(c.next)}</div>` : ''}
+            ${c.phone ? `<div class="ph">${copyBtn(c.phone, '전화번호')}</div>` : ''}
+            <div class="ft">${ptag(partnerOf(c))}<span class="scope" style="margin-left:auto">${c.scope === 'NOMI' ? 'NOMI' : 'NOMI + VISA'}</span></div>
+          </article>`).join('') || '<div class="kempty">해당 고객이 없어요</div>'}</div>
+        </div>`;
+      }).join('');
+    },
+  };
+
+  /* ---------- companies ---------- */
+  function companyView(kind) {
+    const K = KIND[kind];
+    const isHost = kind === 'hosts';
+    return {
+      mount() {
+        return `
+        <div class="pagehead">
+          <div><div class="eyebrow">${isHost ? 'Host Company' : 'OHLA'}</div><h1>${isHost ? 'Host Company 관리 및 정보' : 'OHLA 업체 관리'}</h1>
+            <p>${isHost ? '고객이 실제로 근무하는 Host Company의 정보와 연결된 고객을 관리해요.' : '노미네이션을 진행하는 OHLA 업체의 정보와 업체별 고객 현황을 관리해요.'}</p></div>
+          <div class="acts"><button class="btn primary" type="button" data-act="add-comp" data-kind="${kind}" id="${kind}Add">${icon('i-plus')}업체 등록</button></div>
+        </div>
+        <div class="split">
+          <section class="panel">
+            <div class="toolbar">
+              <div class="search" style="max-width:none">${icon('i-search')}<input id="${kind}Q" type="search" placeholder="업체명, 담당자 검색" autocomplete="off" aria-label="업체 검색"></div>
+              <span class="count-line" id="${kind}Count"></span>
+            </div>
+            <div class="list tbl-wrap"><table class="tbl" id="${kind}List"></table></div>
+          </section>
+          <section class="panel" id="${kind}Detail"></section>
+        </div>`;
+      },
+      afterMount() { $(kind + 'Q').value = state.comp[kind].q; },
+      update() {
+        const cs = state.comp[kind];
+        $(kind + 'Add').hidden = !state.canWrite || state.mode === 'loading';
+        const all = companies(kind);
+        const none = state.clients.filter((c) => !(c[K.field] || '').trim());
+        const q = keyOf(cs.q);
+        const list = all.filter((x) => !q || x.key.includes(q) || keyOf((x.doc && x.doc.contact) || '').includes(q));
+        if (!cs.sel || (cs.sel !== NONE_KEY && !all.some((x) => x.key === cs.sel))) cs.sel = all.length ? all[0].key : (none.length ? NONE_KEY : null);
+        $(kind + 'Count').innerHTML = `<b>${all.length}</b>곳`;
+        $(kind + 'List').innerHTML = `<thead><tr><th>업체명</th><th class="r">고객</th><th class="r">진행</th><th>정보</th></tr></thead><tbody>` +
+          list.map((x) => { const t = stats(x.clients);
+            return `<tr data-sel-comp="${kind}" data-key="${esc(x.key)}" class="${cs.sel === x.key ? 'is-sel' : ''}"><td><div class="who">${coMark(x.name)}<div style="min-width:0"><b style="white-space:normal">${esc(x.name)}</b><small>${esc((x.doc && (x.doc.contact || x.doc.industry)) || (isHost ? 'Host Company' : 'OHLA'))}</small></div></div></td>
+              <td class="r nm">${t.total}</td><td class="r">${t.active}</td><td>${x.doc ? '<span class="tag ok">등록됨</span>' : '<span class="tag">미등록</span>'}</td></tr>`;
+          }).join('') +
+          (none.length && !q ? `<tr data-sel-comp="${kind}" data-key="${NONE_KEY}" class="${cs.sel === NONE_KEY ? 'is-sel' : ''}"><td><div class="who"><span class="co-mark" style="background:var(--grey-bg);color:var(--grey-fg)">?</span><div><b>${K.none}</b><small>업체가 지정되지 않은 고객</small></div></div></td><td class="r nm">${none.length}</td><td class="r">${stats(none).active}</td><td><span class="tag warn">확인 필요</span></td></tr>` : '') +
+          (!list.length && !(none.length && !q) ? `<tr><td colspan="4" class="muted">${state.mode === 'loading' ? '불러오는 중이에요.' : '검색 결과가 없어요.'}</td></tr>` : '') +
+          '</tbody>';
+        renderDetail();
+      },
+    };
+    function renderDetail() {
+      const el = $(kind + 'Detail');
+      const sel = state.comp[kind].sel;
+      if (!sel) { el.innerHTML = `<div class="empty-state"><b>등록된 ${K.label}가 없어요</b>업체 등록 버튼으로 추가해 주세요.</div>`; return; }
+      let name, doc = null, clients;
+      if (sel === NONE_KEY) { name = K.none; clients = state.clients.filter((c) => !(c[K.field] || '').trim()); }
+      else { const x = companies(kind).find((y) => y.key === sel); if (!x) return; name = x.name; doc = x.doc; clients = x.clients; }
+      const t = stats(clients);
+      const rel = {};
+      clients.forEach((c) => { const v = (c[K.other] || '').trim(); if (v) rel[v] = (rel[v] || 0) + 1; });
+      const relKeys = Object.keys(rel).sort((a, b) => rel[b] - rel[a]);
+      const d = doc || {};
+      const row = (label, v, full) => `<div class="${full ? 'full' : ''}"><dt>${label}</dt><dd class="${v ? '' : 'empty'}">${v ? esc(v) : '미입력'}</dd></div>`;
+      el.innerHTML = `<div class="panel-b stack" style="padding-top:22px">
+        <div class="detail-h">
+          ${sel === NONE_KEY ? '<span class="co-mark" style="background:var(--grey-bg);color:var(--grey-fg);width:48px;height:48px;border-radius:15px 15px 15px 6px">?</span>' : coMark(name)}
+          <div style="min-width:0"><h2>${esc(name)}</h2>
+            <div class="meta-line">${sel === NONE_KEY ? '고객 정보에서 업체를 지정해 주세요.' : doc ? `정보 등록됨${doc.updatedAt ? ' · ' + esc(timeAgo(doc.updatedAt)) + ' 수정' : ''}${doc.updatedBy ? ' · ' + who(doc) : ''}` : '업체 정보가 아직 등록되지 않았어요.'}</div></div>
+          ${sel !== NONE_KEY && state.canWrite ? `<div class="r"><button class="btn soft sm" type="button" data-edit-comp="${kind}" data-key="${esc(sel)}">${icon('i-edit')}${doc ? '정보 수정' : '정보 등록'}</button></div>` : ''}
+        </div>
+        <div class="mini-stats">
+          <div style="--bgc:var(--lav-bg);--bd:var(--lav-bd)"><span>총 고객</span><b>${t.total}</b></div>
+          <div style="--bgc:var(--rose-bg);--bd:var(--rose-bd)"><span>진행 중</span><b>${t.active}</b></div>
+          <div style="--bgc:var(--cream-bg);--bd:var(--cream-bd)"><span>노미승인</span><b>${t.nomi}</b></div>
+          <div style="--bgc:var(--mint-bg);--bd:var(--mint-bd)"><span>482승인</span><b>${t.visa}</b></div>
+        </div>
+        ${sel !== NONE_KEY ? `<dl class="info-grid">
+          ${isHost ? row('ABN', d.abn) + row('업종', d.industry) : ''}
+          ${row('담당자', d.contact)}${row('연락처', d.phone)}${row('이메일', d.email, true)}${row('주소', d.address, true)}${row('메모', d.memo, true)}
+        </dl>` : ''}
+        ${relKeys.length ? `<div><h3 class="sec-t">함께 진행한 ${K.otherLabel}</h3><div class="chips">${relKeys.map((r) => `<span class="chip">${esc(r)} <span class="num">${rel[r]}</span></span>`).join('')}</div></div>` : ''}
+        <h3 class="sec-t" style="margin:0">연결된 고객 ${clients.length}명</h3>
+      </div>
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>고객명</th><th>담당</th><th>${K.otherLabel}</th><th>진행 상태</th><th>다음 액션</th></tr></thead>
+        <tbody>${clients.sort((a, b) => (a.no || 9999) - (b.no || 9999)).map((c) => `<tr data-open-client="${esc(c.id)}" tabindex="0">
+          <td>${whoCell(c)}</td><td>${ptag(partnerOf(c))}</td>
+          <td class="clip" style="max-width:200px">${dash(c[K.other], '미정')}</td><td>${pill(c.status)}</td><td class="clip">${dash(c.next)}</td></tr>`).join('') || '<tr><td colspan="5" class="muted">연결된 고객이 없어요.</td></tr>'}</tbody>
+      </table></div>`;
+      fillNames();
+    }
+  }
+  /* ---------- receivables (수금 관리) ---------- */
+  const BILLERS = [
+    { k: '다니엘', l: '다니엘', c: 'p2' },
+    { k: '멜리사', l: '멜리사', c: 'p3' },
+    { k: 'ANS', l: 'ANS 직접', c: 'p1' },
+    { k: '토마스앤앰코', l: '토마스앤앰코', c: 'p5' },
+    { k: '스실', l: '스실', c: 'p4' },
+  ];
+  const BM = Object.fromEntries(BILLERS.map((b) => [b.k, b]));
+  const INV_ST = {
+    unpaid:  { l: '미수',      c: 't-doing' },
+    partial: { l: '부분 입금',  c: 't-ready' },
+    check:   { l: '확인 필요',  c: 't-nomi' },
+    paid:    { l: '입금 완료',  c: 't-done' },
+  };
+  const STAGE_L = { first: 'First payment', final: 'Final payment' };
+  const AUD = new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD', minimumFractionDigits: 0, maximumFractionDigits: 2 });
+  const money = (n) => AUD.format(Math.round((Number(n) || 0) * 100) / 100);
+  function invTotal(i) { return (Number(i.amount) || 0) * (i.gst ? 1.1 : 1); }
+  function invOut(i) { return i.status === 'paid' ? 0 : Math.max(0, invTotal(i) - (Number(i.paid) || 0)); }
+  function isOpen(i) { return i.status !== 'paid'; }
+  const invClient = (i) => (i.clientId && state.clients.find((c) => c.id === i.clientId)) || null;
+  const invName = (i) => { const c = invClient(i); return c ? c.name : (i.clientName || '고객 미지정'); };
+  const billerTag = (k) => { const b = BM[k]; return `<span class="ptag ${b ? b.c : 'p1'}">${esc(b ? b.l : (k || '미지정'))}</span>`; };
+  const stageTag = (s) => (STAGE_L[s] ? `<span class="stage-tag ${s}">${STAGE_L[s]}</span>` : '<span class="stage-tag">미지정</span>');
+  const invPill = (s) => { const x = INV_ST[s] || INV_ST.unpaid; return `<span class="pill ${x.c}">${x.l}</span>`; };
+  const todayIso = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
+  const daysUntil = (iso) => { const t = Date.parse(iso || ''); if (!t) return null; return Math.round((t - Date.parse(todayIso())) / 86400000); };
+
+  V.money = {
+    mount() {
+      return `
+      <div class="pagehead">
+        <div><div class="eyebrow">Accounts Receivable</div><h1>수금 관리</h1>
+          <p>발행한 인보이스 중 아직 입금되지 않은 금액이에요. First·Final payment 단계별로 기록하고, 청구처를 누르면 해당 고객만 볼 수 있어요.</p></div>
+        <div class="acts">
+          <button class="btn" type="button" id="invExport" hidden>${icon('i-down')}CSV 내보내기</button>
+          <button class="btn primary" type="button" data-act="add-inv" id="invAdd">${icon('i-plus')}인보이스 등록</button>
+        </div>
+      </div>
+      <div class="stats" id="mStats" style="padding-top:10px"></div>
+      <div class="bill-grid" id="mBillers"></div>
+      <section class="panel">
+        <div class="toolbar">
+          <div class="tabs" id="mTabs" style="padding:0"></div>
+          <div class="search">${icon('i-search')}<input id="moneyQ" type="search" placeholder="고객명, 메모 검색" autocomplete="off" aria-label="인보이스 검색"></div>
+          <button class="linkbtn" type="button" id="mReset" hidden>청구처 전체 보기</button>
+          <span class="count-line" id="mCount"></span>
+        </div>
+        <div class="tbl-wrap"><table class="tbl stick" id="mTable"></table></div>
+      </section>`;
+    },
+    afterMount() { $('moneyQ').value = state.money.q; },
+    update() {
+      const f = state.money;
+      $('invAdd').hidden = !state.canWrite || state.mode === 'loading';
+      const inv = state.invoices;
+      const open = inv.filter(isOpen);
+      const outAll = open.reduce((s, i) => s + invOut(i), 0);
+      const soon = open.filter((i) => { const d = daysUntil(i.due); return d !== null && d <= 7; });
+      const checkN = open.filter((i) => i.status === 'check').length;
+      const firstOut = open.filter((i) => i.stage === 'first').reduce((s, i) => s + invOut(i), 0);
+      const finalOut = open.filter((i) => i.stage === 'final').reduce((s, i) => s + invOut(i), 0);
+      $('mStats').innerHTML = state.mode === 'loading' ? '' : [
+        ['rose', 'i-coin', '미수금 총액', money(outAll), `GST 포함 · ${open.length}건`],
+        ['cream', 'i-clock', '7일 내 입금 예정', money(soon.reduce((s, i) => s + invOut(i), 0)), `${soon.length}건 · 지난 예정일 포함`],
+        ['lav', 'i-file', '결제 단계 미지정', `${open.filter((i) => !STAGE_L[i.stage]).length}건`, `미수 중 First ${money(firstOut)} · Final ${money(finalOut)}`],
+        ['mint', 'i-check', '확인 필요', `${checkN}건`, '금액·입금 여부를 확인해 주세요'],
+      ].map(([cls, ic, l, v, sub]) => `<div class="stat ${cls}"><span class="lbl">${icon(ic)}${l}</span><strong style="font-size:${String(v).length > 9 ? 32 : 40}px">${v}</strong><span class="sub">${esc(sub)}</span></div>`).join('');
+
+      const maxB = Math.max(1, ...BILLERS.map((b) => open.filter((i) => i.biller === b.k).reduce((s, i) => s + invOut(i), 0)));
+      $('mBillers').innerHTML = BILLERS.map((b) => {
+        const list = open.filter((i) => i.biller === b.k);
+        const sum = list.reduce((s, i) => s + invOut(i), 0);
+        const people = new Set(list.map((i) => i.clientId || i.clientName)).size;
+        const on = f.biller === b.k;
+        return `<button class="bill ${b.c}${f.biller !== 'all' && !on ? ' dim' : ''}" type="button" data-biller="${esc(b.k)}" aria-pressed="${on}">
+          <span class="top">${billerTag(b.k)}<span class="n">${people}명 · ${list.length}건</span></span>
+          <strong>${money(sum)}</strong>
+          <span class="bar"><i style="width:${(sum / maxB) * 100}%"></i></span>
+          <small>${on ? '선택됨 · 다시 누르면 전체' : '누르면 이 청구처 고객만 보기'}</small></button>`;
+      }).join('');
+
+      const tabs = [['open', `미수 ${open.length}`], ['paid', `입금 완료 ${inv.length - open.length}`], ['all', `전체 ${inv.length}`]];
+      $('mTabs').innerHTML = tabs.map(([k, l]) => `<button type="button" data-mtab="${k}" aria-pressed="${f.view === k}">${l}</button>`).join('');
+      $('mReset').hidden = f.biller === 'all';
+
+      const q = f.q.trim().toLowerCase();
+      const shown = inv.filter((i) => (f.view === 'all' || (f.view === 'open' ? isOpen(i) : !isOpen(i)))
+        && (f.biller === 'all' || i.biller === f.biller)
+        && (!q || [invName(i), i.memo, i.clientName, (BM[i.biller] || {}).l].join(' ').toLowerCase().includes(q)))
+        .sort((a, b) => BILLERS.findIndex((x) => x.k === a.biller) - BILLERS.findIndex((x) => x.k === b.biller) || String(a.due || '9').localeCompare(String(b.due || '9')) || invName(a).localeCompare(invName(b)));
+      V.money.shown = shown;
+      const sumTotal = shown.reduce((s, i) => s + invTotal(i), 0), sumOut = shown.reduce((s, i) => s + invOut(i), 0);
+      $('mCount').innerHTML = `<b>${shown.length}</b>건 · 미수 <b>${money(sumOut)}</b>`;
+      $('invExport').hidden = !downloads || !shown.length;
+      const head = `<thead><tr><th>고객</th><th>청구처</th><th>결제 단계</th><th class="r">공급가액</th><th class="r">GST</th><th class="r">청구 금액</th><th class="r">미수 잔액</th><th>발행일</th><th>입금 예정일</th><th>상태</th><th>메모</th><th></th></tr></thead>`;
+      let body;
+      if (state.mode === 'loading') body = `<tr><td colspan="12" class="muted">불러오는 중이에요.</td></tr>`;
+      else if (!shown.length) body = `<tr><td colspan="12"><div class="empty-state"><b>${inv.length ? '조건에 맞는 인보이스가 없어요' : '등록된 인보이스가 없어요'}</b>${inv.length ? '탭이나 청구처 선택을 바꿔 보세요.' : '인보이스 등록으로 발행한 청구 건을 추가해 주세요.'}</div></td></tr>`;
+      else body = shown.map((i) => {
+        const c = invClient(i);
+        const d = daysUntil(i.due);
+        const dueTxt = i.due ? `${dateCell(i.due)}${isOpen(i) && d !== null ? `<span class="sub" style="color:${d < 0 ? 'var(--red-fg)' : 'var(--faint)'}">${d < 0 ? `${-d}일 지남` : d === 0 ? '오늘' : `${d}일 남음`}</span>` : ''}` : '<span class="none">—</span>';
+        return `<tr data-open-inv="${esc(i.id)}" tabindex="0">
+          <td>${c ? whoCell(c) : `<div class="who">${avatar(invName(i))}<div><b>${esc(invName(i))}</b><small>사이트 고객과 연결 안 됨</small></div></div>`}</td>
+          <td>${billerTag(i.biller)}</td>
+          <td>${stageTag(i.stage)}</td>
+          <td class="r"><span class="amt">${money(i.amount)}</span></td>
+          <td class="r">${i.gst ? `<span class="amt" style="font-size:12.5px;color:var(--muted)">${money((Number(i.amount) || 0) * 0.1)}</span>` : '<span class="none">제외</span>'}</td>
+          <td class="r"><span class="amt">${money(invTotal(i))}</span></td>
+          <td class="r"><span class="amt ${invOut(i) ? 'out' : 'zero'}">${money(invOut(i))}</span></td>
+          <td>${dateCell(i.issued)}</td>
+          <td>${dueTxt}</td>
+          <td>${invPill(i.status)}</td>
+          <td class="clip" style="max-width:240px" title="${esc(i.memo)}">${dash(i.memo)}</td>
+          <td class="r">${state.canWrite && isOpen(i) ? `<button class="pay-btn" type="button" data-pay="${esc(i.id)}">입금 완료</button>` : ''}</td>
+        </tr>`;
+      }).join('');
+      const foot = shown.length ? `<tfoot><tr><td colspan="5">합계 ${shown.length}건</td><td class="r"><span class="amt">${money(sumTotal)}</span></td><td class="r"><span class="amt out">${money(sumOut)}</span></td><td colspan="5"></td></tr></tfoot>` : '';
+      $('mTable').innerHTML = head + `<tbody>${body}</tbody>` + foot;
+    },
+  };
+
+  V.ohla = companyView('ohla');
+  V.hosts = companyView('hosts');
+
+  /* ---------- roster (총 고객) ---------- */
+  const COLS = [
+    ['name', '고객명'], ['no', 'No.'], ['partner', '담당'], ['phone', '전화번호'], ['email', '이메일'], ['status', '진행 상태'],
+    ['nomiApplied', '노미 신청'], ['nomiGranted', '노미 승인'], ['visaApplied', '비자 신청'], ['visaGranted', '비자 승인'],
+    ['ohla', 'OHLA → Host'], ['next', '다음 액션'], ['updatedAt', '최근 수정'],
+  ];
+  V.clients = {
+    mount() {
+      return `
+      <div class="pagehead">
+        <div><div class="eyebrow">All Clients</div><h1>총 고객</h1><p>등록된 모든 고객이에요. 담당 체크박스로 ANS·다니엘·멜리사·스실 고객만 골라 볼 수 있어요.</p></div>
+        <div class="acts">
+          <button class="btn" type="button" id="exportBtn" hidden>${icon('i-down')}CSV 내보내기</button>
+          <button class="btn primary" type="button" data-act="add-client" id="rosterAdd">${icon('i-plus')}새 고객 등록</button>
+        </div>
+      </div>
+      <section class="panel">
+        <div class="toolbar"><div class="checks" id="rosterPartners"></div></div>
+        <div class="toolbar">
+          <div class="search">${icon('i-search')}<input id="rosterQ" type="search" placeholder="고객명, 직군, 업체, 메모 검색" autocomplete="off" aria-label="고객 검색"></div>
+          <select class="selbox" id="rosterStatus" aria-label="진행 상태 필터"></select>
+          <select class="selbox" id="rosterOhla" aria-label="OHLA 업체 필터"></select>
+          <button class="linkbtn" type="button" id="rosterReset" hidden>필터 초기화</button>
+          <span class="count-line" id="rosterCount"></span>
+        </div>
+        <div class="tbl-wrap"><table class="tbl stick" id="rosterTable"></table></div>
+      </section>`;
+    },
+    afterMount() { $('rosterQ').value = state.roster.q; },
+    update() {
+      const f = state.roster;
+      $('rosterAdd').hidden = !state.canWrite || state.mode === 'loading';
+      const base = state.clients.filter((c) => matchText(c, f.q) && matchStatus(c, f.status) && matchOhla(c, f.ohla));
+      $('rosterPartners').innerHTML = partnerChecks('roster', f.partners, base, true);
+      $('rosterStatus').innerHTML = [['all', '진행 상태 전체'], ['g:active', '진행 중·대기 전체'], ['closed', '보류·철회'], ['nomi', '노미 승인 (누계)'], ['visa', '482 승인']]
+        .map(([v, l]) => `<option value="${v}">${l}</option>`).join('') + STATUS.map((s) => `<option value="${esc(s.k)}">${esc(s.k)}</option>`).join('');
+      $('rosterStatus').value = f.status;
+      $('rosterOhla').innerHTML = `<option value="all">OHLA 전체</option>` + companies('ohla').filter((x) => x.clients.length).map((x) => `<option value="${esc(x.key)}">${esc(x.name)}</option>`).join('') + `<option value="${NONE_KEY}">OHLA 미확인</option>`;
+      $('rosterOhla').value = f.ohla;
+      const shown = base.filter((c) => f.partners.includes(partnerOf(c)));
+      const dir = f.sortDir;
+      const val = (c, k) => k === 'status' ? ((SM[c.status] || {}).i ?? 99) : k === 'no' ? (c.no ?? 9999) : k === 'partner' ? PARTNERS.indexOf(partnerOf(c)) : String(c[k] || '');
+      shown.sort((a, b) => {
+        const x = val(a, f.sortKey), y = val(b, f.sortKey);
+        const r = typeof x === 'number' && typeof y === 'number' ? x - y : String(x).localeCompare(String(y), 'ko');
+        return (r || (a.no ?? 9999) - (b.no ?? 9999)) * dir;
+      });
+      $('rosterReset').hidden = !(f.q || f.status !== 'all' || f.ohla !== 'all' || f.partners.length !== PARTNERS.length);
+      $('rosterCount').innerHTML = `<b>${shown.length}</b> / ${state.clients.length}명`;
+      $('exportBtn').hidden = !downloads || !shown.length;
+      V.clients.shown = shown;
+      const head = `<thead><tr>${COLS.map(([k, l]) => `<th><button type="button" data-sort="${k}" aria-sort="${f.sortKey === k ? (dir > 0 ? 'ascending' : 'descending') : 'none'}">${l}</button></th>`).join('')}</tr></thead>`;
+      let body;
+      if (state.mode === 'loading') body = `<tr><td colspan="${COLS.length}" class="muted">불러오는 중이에요.</td></tr>`;
+      else if (!state.clients.length) body = `<tr><td colspan="${COLS.length}"><div class="empty-state"><b>등록된 고객이 없어요</b>새 고객 등록으로 첫 고객을 추가해 주세요.</div></td></tr>`;
+      else if (!shown.length) body = `<tr><td colspan="${COLS.length}"><div class="empty-state"><b>조건에 맞는 고객이 없어요</b>${f.partners.length ? '검색어나 필터를 바꿔 보세요.' : '담당을 하나 이상 체크해 주세요.'}</div></td></tr>`;
+      else body = shown.map((c) => `<tr data-open-client="${esc(c.id)}" tabindex="0">
+          <td>${whoCell(c)}</td>
+          <td class="muted num">${esc(c.no ?? '–')}</td>
+          <td>${ptag(partnerOf(c))}</td>
+          <td>${copyBtn(c.phone, '전화번호')}</td>
+          <td>${copyBtn(c.email, '이메일')}</td>
+          <td>${statusSelect(c)}</td>
+          <td>${dateCell(c.nomiApplied)}</td>
+          <td>${dateCell(c.nomiGranted)}</td>
+          <td>${dateCell(c.visaApplied)}</td>
+          <td>${dateCell(c.visaGranted)}</td>
+          <td class="clip" style="max-width:220px" title="${esc([c.ohla, c.host].filter(Boolean).join(' → '))}">${dash(c.ohla, '미확인')} → ${dash(c.host, '미정')}</td>
+          <td class="clip" title="${esc(c.next)}">${dash(c.next)}</td>
+          <td class="nowrap muted">${touched(c) ? esc(timeAgo(c.updatedAt)) + (c.updatedBy ? ' · ' : '') + who(c) : '엑셀 원본'}</td>
+        </tr>`).join('');
+      $('rosterTable').innerHTML = head + `<tbody>${body}</tbody>`;
+      fillNames();
+    },
+  };
+
+  /* ---------- filter helpers ---------- */
+  function matchText(c, q) {
+    if (!q) return true;
+    const hay = [c.no, c.name, c.job, c.ohla, c.host, c.status, c.scope, c.partner, c.memo, c.next, c.check, c.phone, c.email].join(' ').toLowerCase();
+    return q.toLowerCase().split(/\s+/).filter(Boolean).every((w) => hay.includes(w));
+  }
+  function matchStatus(c, s) {
+    if (s === 'all') return true;
+    if (s === 'nomi') return isNomi(c);
+    if (s === 'visa') return isVisa(c);
+    if (s === 'closed') return grp(c) === 'hold' || grp(c) === 'drop';
+    if (s.startsWith('g:')) return grp(c) === s.slice(2);
+    return c.status === s;
+  }
+  function matchOhla(c, o) {
+    if (o === 'all') return true;
+    if (o === NONE_KEY) return !(c.ohla || '').trim();
+    return keyOf(c.ohla) === o;
+  }
+  function partnerChecks(scope, sel, base, withAll) {
+    return `<span class="lbl">담당</span>` + PARTNERS.map((p) => `<label class="ck-chip ${PCLS[p]}"><input type="checkbox" id="${scope}-p-${PCLS[p]}" data-pcheck="${scope}" value="${p}"${sel.includes(p) ? ' checked' : ''}>${PLABEL[p]} <span class="c">${base.filter((c) => partnerOf(c) === p).length}</span></label>`).join('') +
+      (withAll ? `<button class="linkbtn" type="button" data-pall="${scope}" style="margin-left:4px">${sel.length === PARTNERS.length ? '모두 해제' : '모두 선택'}</button>` : '');
+  }
+
+  /* ================= router ================= */
+  let mounted = null;
+  function go(route) {
+    if (!V[route]) route = 'dashboard';
+    state.route = route;
+    try { history.replaceState(null, '', '#' + route); } catch (e) {}
+    mounted = null;
+    refresh();
+    window.scrollTo(0, 0);
+  }
+  function refresh() {
+    renderChrome();
+    const v = V[state.route];
+    if (mounted !== state.route) { $('view').innerHTML = v.mount(); mounted = state.route; if (v.afterMount) v.afterMount(); }
+    v.update();
+    fillNames();
+  }
+
+  /* ================= data writes ================= */
+  function persistLocal() { try { localStorage.setItem(LOCAL_KEY, JSON.stringify({ clients: state.clients, ohla: state.ohla, hosts: state.hosts, invoices: state.invoices })); } catch (e) {} }
+  async function retryOnce(fn) {
+    try { return await fn(); }
+    catch (e) {
+      if (e && e.code === 'unavailable') { await new Promise((r) => setTimeout(r, 400 + Math.random() * 600)); return fn(); }
+      throw e;
+    }
+  }
+  const store = {
+    newId(col) { return state.mode === 'live' ? db.collection(col).doc().id : 'l' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); },
+    async set(col, id, data) {
+      if (state.mode === 'local') { state[col] = [...state[col].filter((x) => x.id !== id), { id, ...data }]; persistLocal(); refresh(); return; }
+      await retryOnce(() => db.doc(col + '/' + id).set(data));
+    },
+    async update(col, id, data) {
+      if (state.mode === 'local') { state[col] = state[col].map((x) => (x.id === id ? { ...x, ...data } : x)); persistLocal(); refresh(); return; }
+      await retryOnce(() => db.doc(col + '/' + id).update(data));
+    },
+    async del(col, id) {
+      if (state.mode === 'local') { state[col] = state[col].filter((x) => x.id !== id); persistLocal(); refresh(); return; }
+      await retryOnce(() => db.doc(col + '/' + id).delete());
+    },
+  };
+  const stamp = () => ({ updatedAt: new Date().toISOString(), updatedBy: myId || null });
+  function writeFailed(e) {
+    const code = e && e.code;
+    if (code === 'invalid_argument') { state.canWrite = false; refresh(); return '수정 권한이 없어요. 포털 관리자에게 편집 권한(Contributor 이상)을 요청해 주세요.'; }
+    if (code === 'quota_exceeded') return '저장 공간이 가득 찼어요. 사용하지 않는 항목을 삭제한 뒤 다시 시도해 주세요.';
+    if (code === 'resource_exhausted') return '요청이 너무 많아요. 잠시 후 다시 저장해 주세요.';
+    return '저장하지 못했어요. 인터넷 연결을 확인하고 다시 시도해 주세요.';
+  }
+  let toastT = 0;
+  function toast(msg) { const t = $('toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { t.hidden = true; }, 2600); }
+  async function setStatus(id, status) {
+    const c = state.clients.find((x) => x.id === id);
+    if (!c || c.status === status) return;
+    try { await store.update('clients', id, { status, ...stamp() }); toast(`${c.name}님 → ${status}`); }
+    catch (e) { toast(writeFailed(e)); refresh(); }
+  }
+
+  /* ================= client drawer ================= */
+  $('f-partner').innerHTML = PARTNERS.map((p) => `<option value="${p}">${p === 'ANS' ? 'ANS (직접)' : p}</option>`).join('');
+  $('f-status').innerHTML = statusOptions('');
+  let lastFocus = null;
+  function fillDatalists() {
+    const uniq = (k) => [...new Set(state.clients.map((c) => (c[k] || '').trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b));
+    $('dl-job').innerHTML = uniq('job').map((v) => `<option value="${esc(v)}">`).join('');
+    $('dl-ohla').innerHTML = companies('ohla').map((x) => `<option value="${esc(x.name)}">`).join('');
+    $('dl-host').innerHTML = companies('hosts').map((x) => `<option value="${esc(x.name)}">`).join('');
+  }
+  function openClient(id) {
+    const c = id ? state.clients.find((x) => x.id === id) : null;
+    if (id && !c) return;
+    closeComp(true); closeInv(true);
+    state.editClient = id || '';
+    lastFocus = document.activeElement;
+    fillDatalists();
+    const nextNo = Math.max(0, ...state.clients.map((x) => Number(x.no) || 0)) + 1;
+    const v = c || { partner: 'ANS', status: '진행 예정', scope: VISA, no: nextNo };
+    const av = $('cfAv');
+    av.className = c ? `av av${(hash(c.name) % 5) + 1}` : 'av av1';
+    av.textContent = c ? initials(c.name) : '+';
+    $('cfTitle').textContent = c ? c.name : '새 고객 등록';
+    $('cfSub').textContent = c ? `No.${c.no ?? '–'} · ${PLABEL[partnerOf(c)]}` : '고객명만 입력하면 저장할 수 있어요.';
+    $('f-name').value = v.name || '';
+    $('f-no').value = v.no ?? '';
+    $('f-job').value = v.job || '';
+    $('f-partner').value = partnerOf(v);
+    $('f-ohla').value = v.ohla || '';
+    $('f-host').value = v.host || '';
+    $('f-status').value = SM[v.status] ? v.status : '진행 예정';
+    (v.scope === 'NOMI' ? $('f-scope-n') : $('f-scope-v')).checked = true;
+    $('f-memo').value = v.memo || '';
+    $('f-next').value = v.next || '';
+    $('f-check').value = v.check || '';
+    $('f-phone').value = v.phone || '';
+    $('f-email').value = v.email || '';
+    DATE_FIELDS.forEach(([k]) => { $('f-' + k).value = /^\d{4}-\d{2}-\d{2}$/.test(v[k] || '') ? v[k] : ''; });
+    const cc = $('cfContact');
+    cc.hidden = !c;
+    if (c) {
+      cc.innerHTML = `<div class="cc-row">${c.phone || c.email ? copyBtn(c.phone, '전화번호') + copyBtn(c.email, '이메일') : '<span class="none">등록된 연락처가 없어요</span>'}</div>
+        <div class="dates4">${DATE_FIELDS.map(([k, l]) => `<div><span>${l}</span>${fmtDate(c[k]) ? `<b>${fmtDate(c[k])}</b>` : '<b class="empty">미입력</b>'}</div>`).join('')}</div>`;
+      const owed = state.invoices.filter((i) => i.clientId === c.id && isOpen(i));
+      if (owed.length) {
+        cc.innerHTML += `<div class="total-box"><span>미수금 ${owed.length}건 · ${owed.map((i) => esc((BM[i.biller] || {}).l || i.biller) + ' 청구').filter((v, n, a) => a.indexOf(v) === n).join(', ')}</span><b>${money(owed.reduce((s, i) => s + invOut(i), 0))}</b></div>`;
+      }
+    }
+    $('cfDel').hidden = !c || !state.canWrite;
+    $('cfSave').hidden = !state.canWrite;
+    $('cfConfirm').hidden = true; $('cfErr').hidden = true;
+    $('clientForm').querySelectorAll('.drawer-b input, .drawer-b select, .drawer-b textarea').forEach((el) => { el.disabled = !state.canWrite; });
+    $('cfMeta').innerHTML = c ? (touched(c) ? `${esc(timeAgo(c.updatedAt))} 수정${c.updatedBy ? ' · ' + who(c) : ''}` : '엑셀 원본 데이터') : '';
+    $('clientScrim').hidden = false; $('clientForm').hidden = false;
+    fillNames();
+    setTimeout(() => (state.canWrite ? $('f-name') : $('clientForm').querySelector('.x')).focus(), 30);
+  }
+  function closeClient(silent) {
+    if (state.editClient === null) return;
+    state.editClient = null;
+    $('clientScrim').hidden = true; $('clientForm').hidden = true;
+    if (!silent && lastFocus && document.contains(lastFocus)) lastFocus.focus();
+  }
+  $('clientForm').addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    if (!state.canWrite) return;
+    const noV = $('f-no').value.trim();
+    const data = {
+      name: $('f-name').value.trim(), job: $('f-job').value.trim(), partner: $('f-partner').value,
+      ohla: $('f-ohla').value.trim(), host: $('f-host').value.trim(), status: $('f-status').value,
+      scope: $('f-scope-n').checked ? 'NOMI' : VISA, no: noV ? Number(noV) : null,
+      memo: $('f-memo').value.trim(), next: $('f-next').value.trim(), check: $('f-check').value.trim(),
+      phone: $('f-phone').value.trim(), email: $('f-email').value.trim(),
+    };
+    DATE_FIELDS.forEach(([k]) => { data[k] = $('f-' + k).value || ''; });
+    if (!data.name) { $('cfErr').textContent = '고객명을 입력해 주세요.'; $('cfErr').hidden = false; $('f-name').focus(); return; }
+    const id = state.editClient || null;
+    const btn = $('cfSave'); btn.disabled = true; btn.textContent = '저장 중…';
+    try {
+      if (id) await store.update('clients', id, { ...data, ...stamp() });
+      else await store.set('clients', store.newId('clients'), { ...data, ...stamp(), createdAt: new Date().toISOString(), source: 'portal' });
+      closeClient();
+      toast(id ? `${data.name}님 정보를 저장했어요` : `${data.name}님을 새 고객으로 등록했어요`);
+    } catch (e) { $('cfErr').textContent = writeFailed(e); $('cfErr').hidden = false; }
+    finally { btn.disabled = false; btn.textContent = '저장'; }
+  });
+  $('cfDel').addEventListener('click', () => { $('cfConfirm').hidden = false; $('cfConfirmNo').focus(); });
+  $('cfConfirmNo').addEventListener('click', () => { $('cfConfirm').hidden = true; });
+  $('cfConfirmYes').addEventListener('click', async () => {
+    const id = state.editClient; if (!id) return;
+    const c = state.clients.find((x) => x.id === id);
+    try { await store.del('clients', id); closeClient(); toast(`${c ? c.name : '고객'}님을 삭제했어요`); }
+    catch (e) { $('cfErr').textContent = writeFailed(e); $('cfErr').hidden = false; }
+  });
+
+  /* ================= company drawer ================= */
+  let compCtx = null;
+  function openComp(kind, key) {
+    if (!state.canWrite) return;
+    const K = KIND[kind];
+    const x = key ? companies(kind).find((y) => y.key === key) : null;
+    closeClient(true); closeInv(true);
+    compCtx = { kind, docId: x && x.doc ? x.doc.id : null, oldName: x ? x.name : null, linked: x ? x.clients.length : 0 };
+    state.editComp = kind;
+    lastFocus = document.activeElement;
+    const d = (x && x.doc) || {};
+    const mk = $('pfMark');
+    mk.className = `co-mark av${x ? (hash(x.name) % 5) + 1 : 2}`;
+    mk.textContent = x ? (x.name.replace(/[^A-Za-z0-9가-힣]/g, '').slice(0, 2).toUpperCase() || '?') : '+';
+    $('pfTitle').textContent = x ? x.name : `${K.label} 등록`;
+    $('pfSub').textContent = x ? `${K.label} · 연결된 고객 ${x.clients.length}명` : `새 ${K.label} 정보를 등록해요.`;
+    $('c-name').value = x ? x.name : '';
+    ['contact', 'phone', 'email', 'address', 'abn', 'industry', 'memo'].forEach((f) => { $('c-' + f).value = d[f] || ''; });
+    document.querySelectorAll('[data-host-only]').forEach((el) => { el.hidden = kind !== 'hosts'; });
+    $('pfHint').hidden = !(x && x.clients.length);
+    $('pfHint').textContent = x && x.clients.length ? `업체명을 바꾸면 연결된 고객 ${x.clients.length}명의 ${K.label} 이름도 함께 바뀌어요.` : '';
+    $('pfDel').hidden = !(x && x.doc);
+    $('pfConfirm').hidden = true; $('pfErr').hidden = true;
+    $('pfMeta').innerHTML = x && x.doc && x.doc.updatedAt ? `${esc(timeAgo(x.doc.updatedAt))} 수정${x.doc.updatedBy ? ' · ' + who(x.doc) : ''}` : '';
+    $('compScrim').hidden = false; $('compForm').hidden = false;
+    fillNames();
+    setTimeout(() => $('c-name').focus(), 30);
+  }
+  function closeComp(silent) {
+    if (state.editComp === null) return;
+    state.editComp = null; compCtx = null;
+    $('compScrim').hidden = true; $('compForm').hidden = true;
+    if (!silent && lastFocus && document.contains(lastFocus)) lastFocus.focus();
+  }
+  $('compForm').addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    if (!compCtx) return;
+    const { kind, docId, oldName } = compCtx;
+    const K = KIND[kind];
+    const data = { name: $('c-name').value.trim() };
+    ['contact', 'phone', 'email', 'address', 'memo'].concat(kind === 'hosts' ? ['abn', 'industry'] : []).forEach((f) => { data[f] = $('c-' + f).value.trim(); });
+    const err = (m) => { $('pfErr').textContent = m; $('pfErr').hidden = false; };
+    if (!data.name) { err('업체명을 입력해 주세요.'); $('c-name').focus(); return; }
+    const clash = companies(kind).find((x) => x.key === keyOf(data.name) && keyOf(oldName) !== x.key);
+    if (clash) { err(`'${clash.name}' 업체가 이미 있어요. 목록에서 해당 업체를 선택해 정보를 수정해 주세요.`); return; }
+    const btn = $('pfSave'); btn.disabled = true; btn.textContent = '저장 중…';
+    try {
+      if (docId) await store.update(K.col, docId, { ...data, ...stamp() });
+      else await store.set(K.col, store.newId(K.col), { ...data, ...stamp(), createdAt: new Date().toISOString() });
+      let moved = 0;
+      if (oldName && oldName !== data.name) {
+        const linked = state.clients.filter((c) => keyOf(c[K.field]) === keyOf(oldName) && c[K.field] !== data.name);
+        for (const c of linked) { await store.update('clients', c.id, { [K.field]: data.name, ...stamp() }); moved++; }
+      }
+      state.comp[kind].sel = keyOf(data.name);
+      closeComp();
+      toast(moved ? `${data.name} 저장 · 고객 ${moved}명 업체명 변경` : `${data.name} 정보를 저장했어요`);
+    } catch (e) { err(writeFailed(e)); }
+    finally { btn.disabled = false; btn.textContent = '저장'; }
+  });
+  $('pfDel').addEventListener('click', () => {
+    if (!compCtx) return;
+    $('pfConfirmText').textContent = compCtx.linked ? `등록된 업체 정보만 삭제돼요. 연결된 고객 ${compCtx.linked}명은 그대로 유지돼요.` : '이 업체 정보를 삭제할까요?';
+    $('pfConfirm').hidden = false; $('pfConfirmNo').focus();
+  });
+  $('pfConfirmNo').addEventListener('click', () => { $('pfConfirm').hidden = true; });
+  $('pfConfirmYes').addEventListener('click', async () => {
+    if (!compCtx || !compCtx.docId) return;
+    try { await store.del(KIND[compCtx.kind].col, compCtx.docId); closeComp(); toast('업체 정보를 삭제했어요'); }
+    catch (e) { $('pfErr').textContent = writeFailed(e); $('pfErr').hidden = false; }
+  });
+
+  /* ================= invoice drawer ================= */
+  $('iv-biller').innerHTML = BILLERS.map((b) => `<option value="${esc(b.k)}">${esc(b.l)}</option>`).join('');
+  $('iv-status').innerHTML = Object.entries(INV_ST).map(([k, v]) => `<option value="${k}">${v.l}</option>`).join('');
+  const clientByName = (name) => { const k = keyOf(name); return k ? state.clients.find((c) => keyOf(c.name) === k) || null : null; };
+  function ivRecalc() {
+    const amt = Number($('iv-amount').value) || 0;
+    $('ivTotal').textContent = money(amt * ($('iv-gst').checked ? 1.1 : 1)) + ($('iv-gst').checked ? ' (GST 포함)' : '');
+  }
+  ['iv-amount', 'iv-gst'].forEach((id) => $(id).addEventListener('input', ivRecalc));
+  $('iv-gst').addEventListener('change', ivRecalc);
+  $('iv-client').addEventListener('change', () => {
+    if (state.editInv) return;
+    const c = clientByName($('iv-client').value);
+    if (c && BM[partnerOf(c)]) $('iv-biller').value = partnerOf(c);
+  });
+  function openInv(id, preset) {
+    if (!state.canWrite && !id) return;
+    const i = id ? state.invoices.find((x) => x.id === id) : null;
+    if (id && !i) return;
+    closeClient(true); closeComp(true);
+    state.editInv = id || '';
+    lastFocus = document.activeElement;
+    $('dl-clients').innerHTML = [...state.clients].sort((a, b) => String(a.name).localeCompare(String(b.name))).map((c) => `<option value="${esc(c.name)}">`).join('');
+    const v = i || { biller: 'ANS', stage: '', amount: '', gst: true, status: 'unpaid', issued: todayIso(), ...(preset || {}) };
+    $('ivTitle').textContent = i ? invName(i) : '인보이스 등록';
+    $('ivSub').textContent = i ? `${(BM[i.biller] || {}).l || '청구처 미지정'} 청구 · ${STAGE_L[i.stage] || '단계 미지정'}` : '발행한 인보이스를 기록해 두면 미수금이 자동으로 집계돼요.';
+    $('iv-client').value = i ? invName(i) : (v.clientName || '');
+    $('iv-biller').value = BM[v.biller] ? v.biller : 'ANS';
+    ($('iv-stage-' + (v.stage || 'none')) || $('iv-stage-none')).checked = true;
+    $('iv-amount').value = v.amount ?? '';
+    $('iv-gst').checked = !!v.gst;
+    $('iv-issued').value = v.issued || '';
+    $('iv-due').value = v.due || '';
+    $('iv-status').value = INV_ST[v.status] ? v.status : 'unpaid';
+    $('iv-paid').value = v.paid || '';
+    $('iv-paidDate').value = v.paidDate || '';
+    $('iv-memo').value = v.memo || '';
+    ivRecalc();
+    $('ivDel').hidden = !i || !state.canWrite;
+    $('ivSave').hidden = !state.canWrite;
+    $('ivOpenClient').hidden = !(i && invClient(i));
+    $('ivConfirm').hidden = true; $('ivErr').hidden = true;
+    $('invForm').querySelectorAll('.drawer-b input, .drawer-b select, .drawer-b textarea').forEach((el) => { el.disabled = !state.canWrite; });
+    $('ivMeta').innerHTML = i && i.updatedAt && i.updatedBy ? `${esc(timeAgo(i.updatedAt))} 수정 · ${who(i)}` : '';
+    $('invScrim').hidden = false; $('invForm').hidden = false;
+    fillNames();
+    setTimeout(() => (state.canWrite ? $(i ? 'iv-amount' : 'iv-client') : $('invForm').querySelector('.x')).focus(), 30);
+  }
+  function closeInv(silent) {
+    if (state.editInv === null) return;
+    state.editInv = null;
+    $('invScrim').hidden = true; $('invForm').hidden = true;
+    if (!silent && lastFocus && document.contains(lastFocus)) lastFocus.focus();
+  }
+  $('invForm').addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    if (!state.canWrite) return;
+    const err = (m) => { $('ivErr').textContent = m; $('ivErr').hidden = false; };
+    const name = $('iv-client').value.trim();
+    if (!name) { err('고객명을 입력해 주세요.'); $('iv-client').focus(); return; }
+    const amount = Number($('iv-amount').value);
+    if (!(amount > 0)) { err('공급가액을 입력해 주세요.'); $('iv-amount').focus(); return; }
+    const c = clientByName(name);
+    const stageEl = document.querySelector('input[name="ivstage"]:checked');
+    const data = {
+      clientId: c ? c.id : null, clientName: c ? c.name : name,
+      biller: $('iv-biller').value, stage: stageEl ? stageEl.value : '',
+      amount, gst: $('iv-gst').checked,
+      issued: $('iv-issued').value || '', due: $('iv-due').value || '',
+      status: $('iv-status').value, paid: Number($('iv-paid').value) || 0, paidDate: $('iv-paidDate').value || '',
+      memo: $('iv-memo').value.trim(),
+    };
+    if (data.status === 'paid') { data.paid = data.paid || Math.round(invTotal(data) * 100) / 100; data.paidDate = data.paidDate || todayIso(); }
+    const id = state.editInv || null;
+    const btn = $('ivSave'); btn.disabled = true; btn.textContent = '저장 중…';
+    try {
+      if (id) await store.update('invoices', id, { ...data, ...stamp() });
+      else await store.set('invoices', store.newId('invoices'), { ...data, ...stamp(), createdAt: new Date().toISOString() });
+      closeInv();
+      toast(id ? `${data.clientName} 인보이스를 저장했어요` : `${data.clientName} 인보이스를 등록했어요`);
+    } catch (e) { err(writeFailed(e)); }
+    finally { btn.disabled = false; btn.textContent = '저장'; }
+  });
+  $('ivDel').addEventListener('click', () => { $('ivConfirm').hidden = false; $('ivConfirmNo').focus(); });
+  $('ivConfirmNo').addEventListener('click', () => { $('ivConfirm').hidden = true; });
+  $('ivConfirmYes').addEventListener('click', async () => {
+    const id = state.editInv; if (!id) return;
+    try { await store.del('invoices', id); closeInv(); toast('인보이스 기록을 삭제했어요'); }
+    catch (e) { $('ivErr').textContent = writeFailed(e); $('ivErr').hidden = false; }
+  });
+  $('ivOpenClient').addEventListener('click', () => {
+    const i = state.invoices.find((x) => x.id === state.editInv);
+    const c = i && invClient(i);
+    if (c) { closeInv(true); openClient(c.id); }
+  });
+  async function markPaid(id) {
+    const i = state.invoices.find((x) => x.id === id);
+    if (!i || !isOpen(i)) return;
+    try {
+      await store.update('invoices', id, { status: 'paid', paid: Math.round(invTotal(i) * 100) / 100, paidDate: todayIso(), ...stamp() });
+      toast(`${invName(i)} · ${money(invTotal(i))} 입금 완료로 표시했어요`);
+    } catch (e) { toast(writeFailed(e)); }
+  }
+  async function exportInvCsv() {
+    if (!downloads) return;
+    const shown = V.money.shown || [];
+    const head = ['고객명', '청구처', '결제 단계', '공급가액', 'GST', '청구 금액', '미수 잔액', '발행일', '입금 예정일', '상태', '입금액', '입금일', '메모'];
+    const cell = (v) => { const s = String(v ?? ''); return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+    const r2 = (n) => (Math.round((Number(n) || 0) * 100) / 100).toFixed(2);
+    const lines = [head, ...shown.map((i) => [invName(i), (BM[i.biller] || {}).l || i.biller, STAGE_L[i.stage] || '미지정', r2(i.amount), i.gst ? r2(i.amount * 0.1) : '0.00', r2(invTotal(i)), r2(invOut(i)), i.issued, i.due, (INV_ST[i.status] || {}).l, r2(i.paid), i.paidDate, i.memo])].map((r) => r.map(cell).join(','));
+    const d = new Date(); const ymd = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    try { await downloads.save({ filename: `ANS_수금현황_${ymd}.csv`, data: '﻿' + lines.join('\r\n') }); toast('CSV 파일을 저장했어요'); }
+    catch (e) { if (e && e.code !== 'declined') toast('파일을 저장하지 못했어요. 잠시 후 다시 시도해 주세요.'); }
+  }
+
+  /* ================= events ================= */
+  function copyText(text, label, el) {
+    const done = (ok) => {
+      if (!ok) {
+        try { const sp = el && el.querySelector('span'); if (sp) window.getSelection().selectAllChildren(sp); } catch (e) {}
+        toast('글자를 선택해 두었어요. Ctrl+C(⌘C)로 복사해 주세요.'); return;
+      }
+      toast(`${label} 복사했어요 · ${text}`);
+      if (el) { el.classList.add('done'); setTimeout(() => el.classList.remove('done'), 1200); }
+    };
+    const fallback = () => {
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select();
+        const ok = document.execCommand('copy'); ta.remove(); return ok;
+      } catch (e) { return false; }
+    };
+    try { navigator.clipboard.writeText(text).then(() => done(true), () => done(fallback())); }
+    catch (e) { done(fallback()); }
+  }
+  document.addEventListener('click', (ev) => {
+    const t = ev.target;
+    if (!(t instanceof Element)) return;
+    const cp = t.closest('[data-copy]');
+    if (cp) { ev.preventDefault(); copyText(cp.dataset.copy, cp.dataset.copyLabel || '', cp); return; }
+    const r = t.closest('[data-route]');
+    if (r) { ev.preventDefault(); go(r.dataset.route); return; }
+    const g = t.closest('[data-go]');
+    if (g) { go(g.dataset.go); return; }
+    const cl = t.closest('[data-close]');
+    if (cl) { cl.dataset.close === 'client' ? closeClient() : cl.dataset.close === 'inv' ? closeInv() : closeComp(); return; }
+    if (t.closest('#invScrim')) { closeInv(); return; }
+    if (t.closest('[data-act="add-inv"]')) { openInv(null); return; }
+    const pay = t.closest('[data-pay]');
+    if (pay) { markPaid(pay.dataset.pay); return; }
+    const bl = t.closest('[data-biller]');
+    if (bl) { state.money.biller = state.money.biller === bl.dataset.biller ? 'all' : bl.dataset.biller; refresh(); return; }
+    const mt = t.closest('[data-mtab]');
+    if (mt) { state.money.view = mt.dataset.mtab; refresh(); return; }
+    if (t.closest('#mReset')) { state.money.biller = 'all'; refresh(); return; }
+    if (t.closest('#invExport')) { exportInvCsv(); return; }
+    const gb = t.closest('[data-go-biller]');
+    if (gb) { state.money.biller = gb.dataset.goBiller; state.money.view = 'open'; go('money'); return; }
+    const oi = t.closest('[data-open-inv]');
+    if (oi && !t.closest('select')) { openInv(oi.dataset.openInv); return; }
+    if (t.closest('#clientScrim')) { closeClient(); return; }
+    if (t.closest('#compScrim')) { closeComp(); return; }
+    if (t.closest('#addBtn') || t.closest('[data-act="add-client"]')) { openClient(null); return; }
+    const ac = t.closest('[data-act="add-comp"]');
+    if (ac) { openComp(ac.dataset.kind, null); return; }
+    const ec = t.closest('[data-edit-comp]');
+    if (ec) { openComp(ec.dataset.editComp, ec.dataset.key); return; }
+    const dt = t.closest('[data-dtab]');
+    if (dt) { state.dashTab = dt.dataset.dtab; V.dashboard.update(); return; }
+    const rs = t.closest('[data-roster-status]');
+    if (rs) { Object.assign(state.roster, { status: rs.dataset.rosterStatus, q: '', ohla: 'all', partners: [...PARTNERS] }); savePrefs(); go('clients'); return; }
+    const rp = t.closest('[data-roster-partner]');
+    if (rp) { Object.assign(state.roster, { partners: [rp.dataset.rosterPartner], status: 'all', q: '', ohla: 'all' }); savePrefs(); go('clients'); return; }
+    const oc = t.closest('[data-open-comp]');
+    if (oc) { state.comp[oc.dataset.openComp].sel = oc.dataset.key; state.comp[oc.dataset.openComp].q = ''; go(oc.dataset.openComp); return; }
+    const sc = t.closest('[data-sel-comp]');
+    if (sc) { state.comp[sc.dataset.selComp].sel = sc.dataset.key; V[state.route].update(); return; }
+    const so = t.closest('[data-sort]');
+    if (so) { const k = so.dataset.sort; if (state.roster.sortKey === k) state.roster.sortDir *= -1; else { state.roster.sortKey = k; state.roster.sortDir = k === 'updatedAt' ? -1 : 1; } savePrefs(); refresh(); return; }
+    const pa = t.closest('[data-pall]');
+    if (pa) { const f = state[pa.dataset.pall]; f.partners = f.partners.length === PARTNERS.length ? [] : [...PARTNERS]; savePrefs(); refresh(); return; }
+    if (t.closest('#rosterReset')) { Object.assign(state.roster, { q: '', status: 'all', ohla: 'all', partners: [...PARTNERS] }); $('rosterQ').value = ''; savePrefs(); refresh(); return; }
+    if (t.closest('#exportBtn')) { exportCsv(); return; }
+    if (t.closest('select')) return;
+    const oc2 = t.closest('[data-open-client]');
+    if (oc2) { openClient(oc2.dataset.openClient); return; }
+    const kc = t.closest('[data-card]');
+    if (kc) { openClient(kc.dataset.card); return; }
+  });
+  document.addEventListener('keydown', (ev) => {
+    if ((ev.ctrlKey || ev.metaKey) && ev.key.toLowerCase() === 'k') { ev.preventDefault(); $('gq').focus(); $('gq').select(); return; }
+    if (ev.key === 'Escape') { if (state.editClient !== null) closeClient(); else if (state.editComp !== null) closeComp(); else if (state.editInv !== null) closeInv(); return; }
+    const t = ev.target;
+    if (t === $('gq') && ev.key === 'Enter') {
+      ev.preventDefault();
+      Object.assign(state.roster, { q: t.value.trim(), status: 'all', ohla: 'all', partners: [...PARTNERS] }); savePrefs();
+      go('clients'); t.value = ''; t.blur(); return;
+    }
+    if ((ev.key === 'Enter' || ev.key === ' ') && t instanceof Element && !t.closest('select, input, button, textarea')) {
+      const oi = t.closest('[data-open-inv]');
+      if (oi) { ev.preventDefault(); openInv(oi.dataset.openInv); return; }
+      const o = t.closest('[data-open-client], [data-card]');
+      if (o) { ev.preventDefault(); openClient(o.dataset.openClient || o.dataset.card); }
+    }
+  });
+  document.addEventListener('change', (ev) => {
+    const t = ev.target;
+    if (!(t instanceof HTMLElement)) return;
+    if (t.dataset.statusOf) { setStatus(t.dataset.statusOf, t.value); return; }
+    if (t.dataset.pcheck) {
+      const f = state[t.dataset.pcheck];
+      f.partners = PARTNERS.filter((p) => (p === t.value ? t.checked : f.partners.includes(p)));
+      savePrefs(); refresh(); return;
+    }
+    if (t.id === 'pipeClosed') { state.pipe.showClosed = t.checked; savePrefs(); refresh(); return; }
+    if (t.id === 'rosterStatus') { state.roster.status = t.value; savePrefs(); refresh(); return; }
+    if (t.id === 'rosterOhla') { state.roster.ohla = t.value; savePrefs(); refresh(); return; }
+  });
+  let qT = 0;
+  document.addEventListener('input', (ev) => {
+    const t = ev.target;
+    if (!(t instanceof HTMLInputElement)) return;
+    const map = { pipeQ: () => { state.pipe.q = t.value.trim(); }, rosterQ: () => { state.roster.q = t.value.trim(); }, ohlaQ: () => { state.comp.ohla.q = t.value; }, hostsQ: () => { state.comp.hosts.q = t.value; }, moneyQ: () => { state.money.q = t.value; } };
+    if (!map[t.id]) return;
+    clearTimeout(qT);
+    qT = setTimeout(() => { map[t.id](); savePrefs(); refresh(); }, 120);
+  });
+  try { if (/Mac|iPhone|iPad/.test(navigator.platform)) $('kbdHint').textContent = '⌘ K'; } catch (e) {}
+
+  /* drag & drop */
+  let dragId = null;
+  document.addEventListener('dragstart', (ev) => {
+    const c = ev.target instanceof Element && ev.target.closest('[data-card]');
+    if (!c || !state.canWrite) return;
+    dragId = c.dataset.card; c.classList.add('dragging');
+    try { ev.dataTransfer.setData('text/plain', dragId); ev.dataTransfer.effectAllowed = 'move'; } catch (e) {}
+  });
+  document.addEventListener('dragend', () => { dragId = null; document.querySelectorAll('.dragging, .over').forEach((el) => el.classList.remove('dragging', 'over')); });
+  document.addEventListener('dragover', (ev) => {
+    const col = ev.target instanceof Element && ev.target.closest('[data-drop]');
+    if (!col || !dragId) return;
+    ev.preventDefault();
+    document.querySelectorAll('.kcol.over').forEach((el) => { if (el !== col) el.classList.remove('over'); });
+    col.classList.add('over');
+  });
+  document.addEventListener('drop', (ev) => {
+    const col = ev.target instanceof Element && ev.target.closest('[data-drop]');
+    if (!col || !dragId) return;
+    ev.preventDefault();
+    const id = dragId; dragId = null;
+    col.classList.remove('over');
+    setStatus(id, col.dataset.drop);
+  });
+
+  async function exportCsv() {
+    if (!downloads) return;
+    const shown = V.clients.shown || [];
+    const head = ['원본 No.', '고객명', '직군', '담당', '전화번호', '이메일', 'OHLA Company', 'Host Company', '진행 상태', '진행범위', '노미 신청일', '노미 승인일', '비자 신청일', '비자 승인일', '현재 메모', '다음 액션', '확인 메모', '최근 수정'];
+    const cell = (v) => { const s = String(v ?? ''); return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+    const lines = [head, ...shown.map((c) => [c.no ?? '', c.name, c.job, partnerOf(c), c.phone, c.email, c.ohla, c.host, c.status, c.scope, c.nomiApplied, c.nomiGranted, c.visaApplied, c.visaGranted, c.memo, c.next, c.check, (c.updatedAt || '').slice(0, 10)])].map((r) => r.map(cell).join(','));
+    const d = new Date(); const ymd = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    try { await downloads.save({ filename: `ANS_고객목록_${ymd}.csv`, data: '﻿' + lines.join('\r\n') }); toast('CSV 파일을 저장했어요'); }
+    catch (e) { if (e && e.code !== 'declined') toast('파일을 저장하지 못했어요. 잠시 후 다시 시도해 주세요.'); }
+  }
+
+  /* ================= boot ================= */
+  function startLocal() {
+    state.mode = 'local';
+    try { const d = JSON.parse(localStorage.getItem(LOCAL_KEY) || '{}'); state.clients = d.clients || []; state.ohla = d.ohla || []; state.hosts = d.hosts || []; state.invoices = d.invoices || []; } catch (e) {}
+    const n = $('notice');
+    n.textContent = '로컬 미리보기예요. 이 브라우저에만 저장되고, claude.ai에서 포털을 열면 직원 모두와 실시간으로 공유돼요.';
+    n.hidden = false;
+    refresh();
+  }
+  async function boot() {
+    const h = (location.hash || '').slice(1);
+    state.route = V[h] ? h : 'dashboard';
+    refresh();
+    const c = window.claude;
+    if (!c || typeof c.use !== 'function') { startLocal(); return; }
+    [db, user, downloads] = await Promise.all([c.use('db'), c.use('user'), c.use('downloads')]);
+    if (!db) { startLocal(); return; }
+    if (user) {
+      user.can('data.write').then((v) => { if (v === false) { state.canWrite = false; refresh(); } });
+      user.me().then((me) => {
+        myId = me.id; myName = me.name || '';
+        if (me.id) {
+          $('meAvatar').src = me.avatarUrl; $('meName').textContent = me.name || '직원'; $('profile').hidden = false;
+        }
+        if (state.route === 'dashboard' && state.mode !== 'loading') V.dashboard.update();
+      });
+    }
+    let firstClients = false;
+    const sub = (col) => db.collection(col).limit(1000).onSnapshot((snap) => {
+      state[col] = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+      if (col === 'clients') firstClients = true;
+      if (firstClients) state.mode = 'live';
+      if (state.mode === 'live') refreshSoft();
+    }, (err) => {
+      const n = $('notice');
+      n.textContent = err && err.code === 'revoked' ? '이 포털에 접근할 수 없게 되었어요.' : '데이터 연결이 끊겼어요. 페이지를 새로고침해 주세요.';
+      n.hidden = false;
+    });
+    sub('clients'); sub('ohla'); sub('hosts'); sub('invoices');
+  }
+  function refreshSoft() {
+    const a = document.activeElement;
+    if (a && a.tagName === 'SELECT' && a.closest('#view')) { setTimeout(refreshSoft, 800); return; }
+    refresh();
+  }
+  window.addEventListener('hashchange', () => { const h = location.hash.slice(1); if (V[h] && h !== state.route) go(h); });
+  setInterval(() => { if (state.mode !== 'loading' && state.editClient === null && state.editComp === null && state.editInv === null) refreshSoft(); }, 60000);
+  boot();
+})();
+</script>
