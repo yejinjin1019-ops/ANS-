@@ -1336,6 +1336,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
           <p>발행한 인보이스 중 아직 입금되지 않은 금액이에요. First·Final payment 단계별로 기록하고, 청구처를 누르면 해당 고객만 볼 수 있어요.</p></div>
         <div class="acts">
           <button class="btn" type="button" id="invExport" hidden>${icon('i-down')}CSV 내보내기</button>
+          <button class="btn soft" type="button" id="pdfBtn" hidden>${icon('i-file')}<span id="pdfLbl">PDF 리포트</span></button>
           <button class="btn primary" type="button" data-act="add-inv" id="invAdd">${icon('i-plus')}인보이스 등록</button>
         </div>
       </div>
@@ -1395,6 +1396,8 @@ svg.ic { width: 18px; height: 18px; flex: none; }
       const sumTotal = shown.reduce((s, i) => s + invTotal(i), 0), sumOut = shown.reduce((s, i) => s + invOut(i), 0);
       $('mCount').innerHTML = `<b>${shown.length}</b>건 · 미수 <b>${money(sumOut)}</b>`;
       $('invExport').hidden = !downloads || !shown.length;
+      $('pdfBtn').hidden = !downloads || state.mode === 'loading';
+      if (!pdfBusy) $('pdfLbl').textContent = `수금 PDF · ${f.biller === 'all' ? '전체' : (BM[f.biller] || {}).l}`;
       const head = `<thead><tr><th>고객</th><th>청구처</th><th>결제 단계</th><th class="r">공급가액</th><th class="r">GST</th><th class="r">청구 금액</th><th class="r">미수 잔액</th><th>발행일</th><th>입금 예정일</th><th>상태</th><th>메모</th><th></th></tr></thead>`;
       let body;
       if (state.mode === 'loading') body = `<tr><td colspan="12" class="muted">불러오는 중이에요.</td></tr>`;
@@ -1439,6 +1442,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
         <div><div class="eyebrow">All Clients</div><h1>총 고객</h1><p>등록된 모든 고객이에요. 담당 체크박스로 ANS·다니엘·멜리사·스실 고객만 골라 볼 수 있어요.</p></div>
         <div class="acts">
           <button class="btn" type="button" id="exportBtn" hidden>${icon('i-down')}CSV 내보내기</button>
+          <button class="btn soft" type="button" id="rosterPdf" hidden>${icon('i-file')}<span id="rosterPdfLbl">고객·수금 PDF</span></button>
           <button class="btn primary" type="button" data-act="add-client" id="rosterAdd">${icon('i-plus')}새 고객 등록</button>
         </div>
       </div>
@@ -1476,6 +1480,8 @@ svg.ic { width: 18px; height: 18px; flex: none; }
       $('rosterReset').hidden = !(f.q || f.status !== 'all' || f.ohla !== 'all' || f.partners.length !== PARTNERS.length);
       $('rosterCount').innerHTML = `<b>${shown.length}</b> / ${state.clients.length}명`;
       $('exportBtn').hidden = !downloads || !shown.length;
+      $('rosterPdf').hidden = !downloads || state.mode === 'loading' || !f.partners.length;
+      if (!pdfBusy) $('rosterPdfLbl').textContent = `고객·수금 PDF · ${f.partners.length === PARTNERS.length ? '전체' : f.partners.map((x) => PLABEL[x].replace(' 고객', '')).join('·')}`;
       V.clients.shown = shown;
       const head = `<thead><tr>${COLS.map(([k, l]) => `<th><button type="button" data-sort="${k}" aria-sort="${f.sortKey === k ? (dir > 0 ? 'ascending' : 'descending') : 'none'}">${l}</button></th>`).join('')}</tr></thead>`;
       let body;
@@ -1867,6 +1873,123 @@ svg.ic { width: 18px; height: 18px; flex: none; }
     catch (e) { if (e && e.code !== 'declined') toast('파일을 저장하지 못했어요. 잠시 후 다시 시도해 주세요.'); }
   }
 
+  /* ================= PDF agent report ================= */
+  const loadScript = (src) => new Promise((res, rej) => {
+    if (document.querySelector(`script[src="${src}"]`)) { res(); return; }
+    const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = () => rej(new Error('load')); document.head.appendChild(s);
+  });
+  async function pdfLibs() {
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+    return { html2canvas: window.html2canvas, jsPDF: window.jspdf.jsPDF };
+  }
+  const sd = (iso) => { const f = fmtDate(iso); return f ? f.slice(2) : '—'; };
+  function agentRows(k) {
+    const ids = new Set();
+    state.clients.forEach((c) => { if (partnerOf(c) === k) ids.add(c.id); });
+    state.invoices.forEach((i) => { if (i.biller === k && i.clientId) ids.add(i.clientId); });
+    const rows = [...ids].map((id) => state.clients.find((c) => c.id === id)).filter(Boolean).map((c) => {
+      const inv = state.invoices.filter((i) => i.clientId === c.id && i.biller === k);
+      const open = inv.filter(isOpen);
+      return { c, billed: inv.reduce((s, i) => s + invTotal(i), 0), out: open.reduce((s, i) => s + invOut(i), 0),
+        due: open.map((i) => i.due).filter(Boolean).sort()[0] || '', paidAll: inv.length && !open.length, memo: open.map((i) => i.memo).filter(Boolean)[0] || '' };
+    });
+    return rows.sort((a, b) => b.out - a.out || ((SM[a.c.status] || {}).i ?? 99) - ((SM[b.c.status] || {}).i ?? 99) || String(a.c.name).localeCompare(String(b.c.name)));
+  }
+  const R = { ink: '#3E2F37', mute: '#8E7C85', line: '#EFD9E1', pink: '#C9577C', soft: '#FFF1F5', head: '#FBE7EE' };
+  function pageShell(inner, pageNo, total, agentLabel, ymd) {
+    return `<div style="width:794px;height:1123px;box-sizing:border-box;padding:46px 44px 40px;background:#fff;color:${R.ink};font-family:'Noto Sans KR','Malgun Gothic',sans-serif;font-size:11px;display:flex;flex-direction:column;gap:16px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid ${R.pink};padding-bottom:10px">
+        <div><div style="font-family:Fraunces,Georgia,serif;font-style:italic;color:${R.pink};font-size:13px">ANS Visa Desk · ${agentLabel.includes('진행') ? 'Agent report' : 'Accounts receivable'}</div>
+        <div style="font-family:'Gowun Batang',serif;font-size:22px;font-weight:700;margin-top:2px">${esc(agentLabel)}</div></div>
+        <div style="text-align:right;color:${R.mute};font-size:10.5px">기준일 ${ymd}<br>${pageNo} / ${total}</div>
+      </div>${inner}
+      <div style="margin-top:auto;color:${R.mute};font-size:9.5px;border-top:1px solid ${R.line};padding-top:8px">금액은 AUD · 청구 금액은 GST 포함 · 미수 잔액은 아직 입금되지 않은 금액 · 내부용 자료</div></div>`;
+  }
+  function buildPages(keys) {
+    const now = new Date(); const ymd = `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')}`;
+    const sections = [];
+    keys.forEach((k) => {
+      const rows = agentRows(k); if (!rows.length && !state.invoices.some((i) => i.biller === k)) return;
+      const lbl = (BM[k] || {}).l || k;
+      const st = stats(rows.map((r) => r.c));
+      const outLinked = rows.reduce((s, r) => s + r.out, 0), billedLinked = rows.reduce((s, r) => s + r.billed, 0);
+      const loose = state.invoices.filter((i) => i.biller === k && !invClient(i) && isOpen(i));
+      const looseOut = loose.reduce((s, i) => s + invOut(i), 0);
+      const owing = rows.filter((r) => r.out > 0).map((r) => ({ n: r.c.name, out: r.out, due: r.due })).concat(loose.map((i) => ({ n: invName(i), out: invOut(i), due: i.due })));
+      const out = outLinked + looseOut, billed = billedLinked + state.invoices.filter((i) => i.biller === k && !invClient(i)).reduce((s, i) => s + invTotal(i), 0);
+      const summary = `<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+        ${[['담당 고객', `${rows.length}명`], ['진행 중', `${st.active}명`], ['청구 금액 합계', money(billed)], ['미수 잔액', money(out)]].map(([l, v], n) => `<div style="background:${n === 3 ? R.soft : '#FAF7F9'};border-radius:10px;padding:10px 12px"><div style="color:${R.mute};font-size:10px">${l}</div><div style="font-family:Fraunces,Georgia,serif;font-style:italic;font-size:19px;color:${n === 3 ? R.pink : R.ink}">${v}</div></div>`).join('')}
+      </div>
+      ${owing.length ? `<div style="background:${R.soft};border-radius:10px;padding:10px 12px;line-height:1.7"><b style="color:${R.pink}">받아야 할 금액</b> · ${owing.map((r) => `${esc(r.n)} <b>${money(r.out)}</b>${r.due ? ` (${sd(r.due)} 예정)` : ''}`).join(' · ')}</div>` : ''}`;
+      const th = (t, r) => `<th style="background:${R.head};text-align:${r ? 'right' : 'left'};padding:6px 6px;font-weight:500;font-size:9.5px;color:${R.mute};white-space:nowrap">${t}</th>`;
+      const head = `<tr>${th('No.')}${th('고객')}${th('진행 상태')}${th('노미 신청')}${th('노미 승인')}${th('비자 신청')}${th('비자 승인')}${th('청구 금액', 1)}${th('미수 잔액', 1)}${th('입금 예정')}</tr>`;
+      const td = (v, extra = '') => `<td style="padding:6px;border-bottom:1px solid ${R.line};vertical-align:top;${extra}">${v}</td>`;
+      const rowHtml = (r) => `<tr>${td(esc(r.c.no ?? '–'), `color:${R.mute}`)}${td(`<b>${esc(r.c.name)}</b><div style="color:${R.mute};font-size:9.5px">${esc(r.c.job || '')}${r.memo ? ' · ' + esc(r.memo.length > 34 ? r.memo.slice(0, 33) + '…' : r.memo) : ''}</div>`)}${td(esc(r.c.status || ''), 'white-space:nowrap')}${td(sd(r.c.nomiApplied), 'white-space:nowrap')}${td(sd(r.c.nomiGranted), 'white-space:nowrap')}${td(sd(r.c.visaApplied), 'white-space:nowrap')}${td(sd(r.c.visaGranted), 'white-space:nowrap')}${td(r.billed ? money(r.billed) : '—', 'text-align:right;white-space:nowrap')}${td(r.out ? `<b style="color:${R.pink}">${money(r.out)}</b>` : (r.paidAll ? '입금 완료' : '—'), 'text-align:right;white-space:nowrap')}${td(r.out && r.due ? sd(r.due) : '—', 'white-space:nowrap')}</tr>`;
+      const firstN = 12, nextN = 19;
+      const chunks = [rows.slice(0, firstN)];
+      for (let n = firstN; n < rows.length; n += nextN) chunks.push(rows.slice(n, n + nextN));
+      chunks.forEach((ch, n) => sections.push({ lbl: `${lbl} 고객 진행·수금 현황`, inner: `${n === 0 ? summary : ''}<table style="width:100%;border-collapse:collapse">${head}${ch.map(rowHtml).join('')}</table>` }));
+    });
+    return sections.map((s, n) => pageShell(s.inner, n + 1, sections.length, s.lbl, ymd));
+  }
+  function buildInvPages(keys) {
+    const now = new Date(); const ymd = `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')}`;
+    const sections = [];
+    keys.forEach((k) => {
+      const list = state.invoices.filter((i) => i.biller === k && isOpen(i))
+        .sort((a, b) => String(a.due || '9').localeCompare(String(b.due || '9')) || invName(a).localeCompare(invName(b)));
+      if (!list.length) return;
+      const lbl = (BM[k] || {}).l || k;
+      const out = list.reduce((s, i) => s + invOut(i), 0);
+      const fo = list.filter((i) => i.stage === 'first').reduce((s, i) => s + invOut(i), 0);
+      const fi = list.filter((i) => i.stage === 'final').reduce((s, i) => s + invOut(i), 0);
+      const summary = `<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+        ${[['미수 건수', `${list.length}건`], ['First payment', money(fo)], ['Final payment', money(fi)], ['미수 잔액 합계', money(out)]].map(([l, v], n) => `<div style="background:${n === 3 ? R.soft : '#FAF7F9'};border-radius:10px;padding:10px 12px"><div style="color:${R.mute};font-size:10px">${l}</div><div style="font-family:Fraunces,Georgia,serif;font-style:italic;font-size:19px;color:${n === 3 ? R.pink : R.ink}">${v}</div></div>`).join('')}
+      </div>`;
+      const th = (t, r) => `<th style="background:${R.head};text-align:${r ? 'right' : 'left'};padding:6px;font-weight:500;font-size:9.5px;color:${R.mute};white-space:nowrap">${t}</th>`;
+      const head = `<tr>${th('고객')}${th('단계')}${th('공급가액', 1)}${th('GST', 1)}${th('청구 금액', 1)}${th('미수 잔액', 1)}${th('발행일')}${th('입금 예정')}${th('상태')}</tr>`;
+      const td = (v, x = '') => `<td style="padding:6px;border-bottom:1px solid ${R.line};vertical-align:top;${x}">${v}</td>`;
+      const rowHtml = (i) => {
+        const c = invClient(i);
+        const sub = [c && c.status, i.memo && (i.memo.length > 40 ? i.memo.slice(0, 39) + '…' : i.memo)].filter(Boolean).join(' · ');
+        return `<tr>${td(`<b>${esc(invName(i))}</b><div style="color:${R.mute};font-size:9.5px">${esc(sub)}</div>`)}${td(STAGE_L[i.stage] ? STAGE_L[i.stage].replace(' payment', '') : '미지정', 'white-space:nowrap')}${td(money(i.amount), 'text-align:right;white-space:nowrap')}${td(i.gst ? money(i.amount * 0.1) : '제외', 'text-align:right;white-space:nowrap')}${td(money(invTotal(i)), 'text-align:right;white-space:nowrap')}${td(`<b style="color:${R.pink}">${money(invOut(i))}</b>`, 'text-align:right;white-space:nowrap')}${td(sd(i.issued), 'white-space:nowrap')}${td(sd(i.due), 'white-space:nowrap')}${td((INV_ST[i.status] || {}).l || '', 'white-space:nowrap')}</tr>`;
+      };
+      const firstN = 15, nextN = 21;
+      const chunks = [list.slice(0, firstN)];
+      for (let n = firstN; n < list.length; n += nextN) chunks.push(list.slice(n, n + nextN));
+      chunks.forEach((ch, n) => sections.push({ lbl: `${lbl} 수금 현황`, inner: `${n === 0 ? summary : ''}<table style="width:100%;border-collapse:collapse">${head}${ch.map(rowHtml).join('')}</table>` }));
+    });
+    return sections.map((s, n) => pageShell(s.inner, n + 1, sections.length, s.lbl, ymd));
+  }
+  let pdfBusy = false;
+  async function exportPdf(kind, keys, fileLabel, lblId) {
+    if (!downloads || pdfBusy) return;
+    const pages = kind === 'money' ? buildInvPages(keys) : buildPages(keys);
+    if (!pages.length) { toast(kind === 'money' ? '미수 인보이스가 없어요' : '리포트에 넣을 고객이 없어요'); return; }
+    pdfBusy = true; const lbl = $(lblId) || { textContent: '' }; const old = lbl.textContent; lbl.textContent = 'PDF 만드는 중…';
+    toast('최신 데이터로 PDF를 만드는 중이에요…');
+    const host = document.createElement('div');
+    host.style.cssText = 'position:fixed;left:-10000px;top:0;pointer-events:none';
+    document.body.appendChild(host);
+    try {
+      const { html2canvas, jsPDF } = await pdfLibs();
+      try { await document.fonts.ready; } catch (e) {}
+      const pdf = new jsPDF({ unit: 'mm', format: 'a4', compress: true });
+      for (let n = 0; n < pages.length; n++) {
+        host.innerHTML = pages[n];
+        const canvas = await html2canvas(host.firstElementChild, { scale: 2, backgroundColor: '#ffffff', logging: false });
+        if (n) pdf.addPage();
+        pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, 210, 297);
+      }
+      const d = new Date(); const ymd = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      await downloads.save({ filename: `ANS_${fileLabel}_${kind === 'money' ? '수금현황' : '고객진행수금리포트'}_${ymd}.pdf`, data: pdf.output('blob') });
+      toast('PDF를 저장했어요');
+    } catch (e) {
+      if (!(e && e.code === 'declined')) toast('PDF를 만들지 못했어요. 잠시 후 다시 시도해 주세요.');
+    } finally { host.remove(); lbl.textContent = old; pdfBusy = false; }
+  }
+
   /* ================= events ================= */
   function copyText(text, label, el) {
     const done = (ok) => {
@@ -1909,6 +2032,16 @@ svg.ic { width: 18px; height: 18px; flex: none; }
     if (mt) { state.money.view = mt.dataset.mtab; refresh(); return; }
     if (t.closest('#mReset')) { state.money.biller = 'all'; refresh(); return; }
     if (t.closest('#invExport')) { exportInvCsv(); return; }
+    if (t.closest('#pdfBtn')) {
+      const b = state.money.biller;
+      exportPdf('money', b === 'all' ? BILLERS.map((x) => x.k) : [b], b === 'all' ? '전체' : (BM[b] || {}).l.replace(/\s+/g, ''), 'pdfLbl'); return;
+    }
+    if (t.closest('#rosterPdf')) {
+      const ps = state.roster.partners;
+      const all = ps.length === PARTNERS.length;
+      const keys = BILLERS.map((x) => x.k).filter((k) => all || ps.includes(k));
+      exportPdf('full', keys, all ? '전체' : ps.join('_'), 'rosterPdfLbl'); return;
+    }
     const gb = t.closest('[data-go-biller]');
     if (gb) { state.money.biller = gb.dataset.goBiller; state.money.view = 'open'; go('money'); return; }
     const oi = t.closest('[data-open-inv]');
