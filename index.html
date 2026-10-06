@@ -928,8 +928,9 @@ svg.ic { width: 18px; height: 18px; flex: none; }
 
   /* ================= derived ================= */
   const grp = (c) => (SM[c.status] || {}).g || 'active';
-  const isNomi = (c) => NOMI_OK.has(c.status);
-  const isVisa = (c) => c.status === '진행완료' && c.scope === VISA;
+  const isNomi = (c) => !!c.nomiGranted;
+  const isVisa = (c) => !!c.visaGranted;
+  const isDrop = (c) => (SM[c.status] || {}).g === 'drop';
   const partnerOf = (c) => (PARTNERS.includes(c.partner) ? c.partner : 'ANS');
   function stats(list) {
     const s = { total: list.length, active: 0, done: 0, hold: 0, drop: 0, nomi: 0, visa: 0 };
@@ -1050,7 +1051,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
               <div class="panel-b"><div class="hbars" id="dStatus"></div></div>
             </section>
             <section class="panel">
-              <div class="panel-h"><div><h2>담당별 현황</h2><p>노미승인 = 노미 승인 이후 단계</p></div></div>
+              <div class="panel-h"><div><h2>담당별 현황</h2><p>승인 = 승인일이 입력된 고객</p></div></div>
               <div class="panel-b"><table class="ptable" id="dPartner"></table></div>
             </section>
           </div>
@@ -1099,7 +1100,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
       $('dStats').innerHTML = [
         ['rose', 'i-users', '전체 고객', s.total, `ANS ${ansN} · 파트너 ${s.total - ansN}`, 'all'],
         ['cream', 'i-file', '진행 중·대기', s.active, `482 신청 대기 ${countBy(all, '482신청대기')}명`, 'g:active'],
-        ['lav', 'i-clock', '노미 승인', s.nomi, '노미 승인 이후 단계 누계', 'nomi'],
+        ['lav', 'i-clock', '노미 승인', s.nomi, '노미 승인일이 입력된 고객', 'nomi'],
         ['mint', 'i-check', '482 승인', s.visa, `진행완료 ${s.done}명 중`, 'visa'],
       ].map(([cls, ic, l, v, sub, f]) => `<button class="stat ${cls}" type="button" data-roster-status="${f}">
         <span class="lbl">${icon(ic)}${l}</span><strong>${v}<small>명</small></strong><span class="sub">${esc(sub)}</span></button>`).join('');
@@ -1223,7 +1224,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
         <div class="pagehead">
           <div><div class="eyebrow">${isHost ? 'Host Company' : 'OHLA'}</div><h1>${isHost ? 'Host Company 관리 및 정보' : 'OHLA 업체 관리'}</h1>
             <p>${isHost ? '고객이 실제로 근무하는 Host Company의 정보와 연결된 고객을 관리해요.' : '노미네이션을 진행하는 OHLA 업체의 정보와 업체별 고객 현황을 관리해요.'}</p></div>
-          <div class="acts"><button class="btn primary" type="button" data-act="add-comp" data-kind="${kind}" id="${kind}Add">${icon('i-plus')}업체 등록</button></div>
+          <div class="acts"><button class="btn soft" type="button" id="${kind}PdfAll" data-pdf-all="${kind}" hidden>${icon('i-file')}<span id="${kind}PdfAllLbl">${isHost ? '전체 Host Company PDF' : '전체 OHLA PDF'}</span></button><button class="btn primary" type="button" data-act="add-comp" data-kind="${kind}" id="${kind}Add">${icon('i-plus')}업체 등록</button></div>
         </div>
         <div class="split">
           <section class="panel">
@@ -1246,6 +1247,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
         const list = all.filter((x) => !q || x.key.includes(q) || keyOf((x.doc && x.doc.contact) || '').includes(q));
         if (!cs.sel || (cs.sel !== NONE_KEY && !all.some((x) => x.key === cs.sel))) cs.sel = all.length ? all[0].key : (none.length ? NONE_KEY : null);
         $(kind + 'Count').innerHTML = `<b>${all.length}</b>곳`;
+        $(kind + 'PdfAll').hidden = !downloads || state.mode === 'loading';
         $(kind + 'List').innerHTML = `<thead><tr><th>업체명</th><th class="r">고객</th><th class="r">진행</th><th>정보</th></tr></thead><tbody>` +
           list.map((x) => { const t = stats(x.clients);
             return `<tr data-sel-comp="${kind}" data-key="${esc(x.key)}" class="${cs.sel === x.key ? 'is-sel' : ''}"><td><div class="who">${coMark(x.name)}<div style="min-width:0"><b style="white-space:normal">${esc(x.name)}</b><small>${esc((x.doc && (x.doc.contact || x.doc.industry)) || (isHost ? 'Host Company' : 'OHLA'))}</small></div></div></td>
@@ -1275,7 +1277,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
           ${sel === NONE_KEY ? '<span class="co-mark" style="background:var(--grey-bg);color:var(--grey-fg);width:48px;height:48px;border-radius:15px 15px 15px 6px">?</span>' : coMark(name)}
           <div style="min-width:0"><h2>${esc(name)}</h2>
             <div class="meta-line">${sel === NONE_KEY ? '고객 정보에서 업체를 지정해 주세요.' : doc ? `정보 등록됨${doc.updatedAt ? ' · ' + esc(timeAgo(doc.updatedAt)) + ' 수정' : ''}${doc.updatedBy ? ' · ' + who(doc) : ''}` : '업체 정보가 아직 등록되지 않았어요.'}</div></div>
-          ${sel !== NONE_KEY && state.canWrite ? `<div class="r"><button class="btn soft sm" type="button" data-edit-comp="${kind}" data-key="${esc(sel)}">${icon('i-edit')}${doc ? '정보 수정' : '정보 등록'}</button></div>` : ''}
+          <div class="r">${downloads && clients.length ? `<button class="btn sm" type="button" id="${kind}PdfOne" data-pdf-one="${kind}" data-key="${esc(sel)}">${icon('i-file')}<span id="${kind}PdfOneLbl">이 업체 PDF</span></button>` : ''}${sel !== NONE_KEY && state.canWrite ? `<button class="btn soft sm" type="button" data-edit-comp="${kind}" data-key="${esc(sel)}">${icon('i-edit')}${doc ? '정보 수정' : '정보 등록'}</button>` : ''}</div>
         </div>
         <div class="mini-stats">
           <div style="--bgc:var(--lav-bg);--bd:var(--lav-bd)"><span>총 고객</span><b>${t.total}</b></div>
@@ -1464,7 +1466,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
       $('rosterAdd').hidden = !state.canWrite || state.mode === 'loading';
       const base = state.clients.filter((c) => matchText(c, f.q) && matchStatus(c, f.status) && matchOhla(c, f.ohla));
       $('rosterPartners').innerHTML = partnerChecks('roster', f.partners, base, true);
-      $('rosterStatus').innerHTML = [['all', '진행 상태 전체'], ['g:active', '진행 중·대기 전체'], ['closed', '보류·철회'], ['nomi', '노미 승인 (누계)'], ['visa', '482 승인']]
+      $('rosterStatus').innerHTML = [['all', '진행 상태 전체'], ['g:active', '진행 중·대기 전체'], ['closed', '보류·철회'], ['nomi', '노미 승인 (승인일 있음)'], ['visa', '비자 승인 (승인일 있음)'], ['drop', '철회 (482·노미네이션)']]
         .map(([v, l]) => `<option value="${v}">${l}</option>`).join('') + STATUS.map((s) => `<option value="${esc(s.k)}">${esc(s.k)}</option>`).join('');
       $('rosterStatus').value = f.status;
       $('rosterOhla').innerHTML = `<option value="all">OHLA 전체</option>` + companies('ohla').filter((x) => x.clients.length).map((x) => `<option value="${esc(x.key)}">${esc(x.name)}</option>`).join('') + `<option value="${NONE_KEY}">OHLA 미확인</option>`;
@@ -1518,6 +1520,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
     if (s === 'all') return true;
     if (s === 'nomi') return isNomi(c);
     if (s === 'visa') return isVisa(c);
+    if (s === 'drop') return isDrop(c);
     if (s === 'closed') return grp(c) === 'hold' || grp(c) === 'drop';
     if (s.startsWith('g:')) return grp(c) === s.slice(2);
     return c.status === s;
@@ -1900,11 +1903,11 @@ svg.ic { width: 18px; height: 18px; flex: none; }
   function pageShell(inner, pageNo, total, agentLabel, ymd) {
     return `<div style="width:794px;height:1123px;box-sizing:border-box;padding:46px 44px 40px;background:#fff;color:${R.ink};font-family:'Noto Sans KR','Malgun Gothic',sans-serif;font-size:11px;display:flex;flex-direction:column;gap:16px">
       <div style="display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid ${R.pink};padding-bottom:10px">
-        <div><div style="font-family:Fraunces,Georgia,serif;font-style:italic;color:${R.pink};font-size:13px">ANS Visa Desk · ${agentLabel.includes('진행') ? 'Agent report' : 'Accounts receivable'}</div>
+        <div><div style="font-family:Fraunces,Georgia,serif;font-style:italic;color:${R.pink};font-size:13px">ANS Visa Desk · ${agentLabel.includes('배정 고객') ? 'Host company report' : agentLabel.includes('승인 현황') ? 'OHLA report' : agentLabel.includes('진행') ? 'Agent report' : 'Accounts receivable'}</div>
         <div style="font-family:'Gowun Batang',serif;font-size:22px;font-weight:700;margin-top:2px">${esc(agentLabel)}</div></div>
         <div style="text-align:right;color:${R.mute};font-size:10.5px">기준일 ${ymd}<br>${pageNo} / ${total}</div>
       </div>${inner}
-      <div style="margin-top:auto;color:${R.mute};font-size:9.5px;border-top:1px solid ${R.line};padding-top:8px">금액은 AUD · 청구 금액은 GST 포함 · 미수 잔액은 아직 입금되지 않은 금액 · 내부용 자료</div></div>`;
+      <div style="margin-top:auto;color:${R.mute};font-size:9.5px;border-top:1px solid ${R.line};padding-top:8px">${agentLabel.includes('승인 현황') ? '날짜는 YY.MM.DD · 승인일이 있는 고객만 승인으로 집계 · 내부용 자료' : '금액은 AUD · 청구 금액은 GST 포함 · 미수 잔액은 아직 입금되지 않은 금액 · 내부용 자료'}</div></div>`;
   }
   function buildPages(keys) {
     const now = new Date(); const ymd = `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')}`;
@@ -1923,9 +1926,9 @@ svg.ic { width: 18px; height: 18px; flex: none; }
       </div>
       ${owing.length ? `<div style="background:${R.soft};border-radius:10px;padding:10px 12px;line-height:1.7"><b style="color:${R.pink}">받아야 할 금액</b> · ${owing.map((r) => `${esc(r.n)} <b>${money(r.out)}</b>${r.due ? ` (${sd(r.due)} 예정)` : ''}`).join(' · ')}</div>` : ''}`;
       const th = (t, r) => `<th style="background:${R.head};text-align:${r ? 'right' : 'left'};padding:6px 6px;font-weight:500;font-size:9.5px;color:${R.mute};white-space:nowrap">${t}</th>`;
-      const head = `<tr>${th('No.')}${th('고객')}${th('진행 상태')}${th('노미 신청')}${th('노미 승인')}${th('비자 신청')}${th('비자 승인')}${th('청구 금액', 1)}${th('미수 잔액', 1)}${th('입금 예정')}</tr>`;
+      const head = `<tr>${th('No.')}${th('고객')}${th('OHLA / Host Company')}${th('진행 상태')}${th('노미 신청')}${th('노미 승인')}${th('비자 신청')}${th('비자 승인')}${th('청구 금액', 1)}${th('미수 잔액', 1)}${th('입금 예정')}</tr>`;
       const td = (v, extra = '') => `<td style="padding:6px;border-bottom:1px solid ${R.line};vertical-align:top;${extra}">${v}</td>`;
-      const rowHtml = (r) => `<tr>${td(esc(r.c.no ?? '–'), `color:${R.mute}`)}${td(`<b>${esc(r.c.name)}</b><div style="color:${R.mute};font-size:9.5px">${esc(r.c.job || '')}${r.memo ? ' · ' + esc(r.memo.length > 34 ? r.memo.slice(0, 33) + '…' : r.memo) : ''}</div>`)}${td(esc(r.c.status || ''), 'white-space:nowrap')}${td(sd(r.c.nomiApplied), 'white-space:nowrap')}${td(sd(r.c.nomiGranted), 'white-space:nowrap')}${td(sd(r.c.visaApplied), 'white-space:nowrap')}${td(sd(r.c.visaGranted), 'white-space:nowrap')}${td(r.billed ? money(r.billed) : '—', 'text-align:right;white-space:nowrap')}${td(r.out ? `<b style="color:${R.pink}">${money(r.out)}</b>` : (r.paidAll ? '입금 완료' : '—'), 'text-align:right;white-space:nowrap')}${td(r.out && r.due ? sd(r.due) : '—', 'white-space:nowrap')}</tr>`;
+      const rowHtml = (r) => `<tr>${td(esc(r.c.no ?? '–'), `color:${R.mute}`)}${td(`<b>${esc(r.c.name)}</b><div style="color:${R.mute};font-size:9.5px">${esc(r.c.job || '')}${r.memo ? ' · ' + esc(r.memo.length > 34 ? r.memo.slice(0, 33) + '…' : r.memo) : ''}</div>`)}${td(`<div>${r.c.ohla ? esc(r.c.ohla) : `<span style="color:${R.mute}">OHLA 미확인</span>`}</div><div style="color:${R.mute};font-size:9.5px">${r.c.host ? '→ ' + esc(r.c.host) : 'Host 미정'}</div>`, 'max-width:130px')}${td(esc(r.c.status || ''), 'white-space:nowrap')}${td(sd(r.c.nomiApplied), 'white-space:nowrap')}${td(sd(r.c.nomiGranted), 'white-space:nowrap')}${td(sd(r.c.visaApplied), 'white-space:nowrap')}${td(sd(r.c.visaGranted), 'white-space:nowrap')}${td(r.billed ? money(r.billed) : '—', 'text-align:right;white-space:nowrap')}${td(r.out ? `<b style="color:${R.pink}">${money(r.out)}</b>` : (r.paidAll ? '입금 완료' : '—'), 'text-align:right;white-space:nowrap')}${td(r.out && r.due ? sd(r.due) : '—', 'white-space:nowrap')}</tr>`;
       const firstN = 12, nextN = 19;
       const chunks = [rows.slice(0, firstN)];
       for (let n = firstN; n < rows.length; n += nextN) chunks.push(rows.slice(n, n + nextN));
@@ -1962,11 +1965,77 @@ svg.ic { width: 18px; height: 18px; flex: none; }
     });
     return sections.map((s, n) => pageShell(s.inner, n + 1, sections.length, s.lbl, ymd));
   }
+  const nomiDone = (c) => !!c.nomiGranted;
+  const visaDone = (c) => !!c.visaGranted;
+  function buildOhlaPages(keys) {
+    const now = new Date(); const ymd = `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')}`;
+    const all = companies('ohla');
+    const sections = [];
+    keys.forEach((key) => {
+      const x = key === NONE_KEY ? { name: 'OHLA 미확인', clients: state.clients.filter((c) => !(c.ohla || '').trim()) } : all.find((y) => y.key === key);
+      if (!x || !x.clients.length) return;
+      const list = [...x.clients].sort((a, b) => (isDrop(a) - isDrop(b)) || (nomiDone(b) - nomiDone(a)) || (visaDone(b) - visaDone(a)) || ((SM[a.status] || {}).i ?? 99) - ((SM[b.status] || {}).i ?? 99) || (a.no || 999) - (b.no || 999));
+      const nomiN = list.filter(nomiDone).length, visaN = list.filter(visaDone).length;
+      const visaScope = list.filter((c) => c.scope === VISA).length;
+      const waitNomi = list.filter((c) => c.status === '노미승인대기').length, waitVisa = list.filter((c) => c.status === '482대기').length;
+      const drops = list.filter(isDrop);
+      const summary = `<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+        ${[['총 고객', `${list.length}명`], ['노미 승인', `${nomiN}명`], ['비자 승인', `${visaN}명`], ['철회', `${drops.length}명`]].map(([l, v], n) => `<div style="background:${n === 1 || n === 2 ? R.soft : '#FAF7F9'};border-radius:10px;padding:10px 12px"><div style="color:${R.mute};font-size:10px">${l}</div><div style="font-family:Fraunces,Georgia,serif;font-style:italic;font-size:19px;color:${n === 1 || n === 2 ? R.pink : R.ink}">${v}</div></div>`).join('')}
+      </div>
+      <div style="background:#FAF7F9;border-radius:10px;padding:9px 12px;color:${R.mute};font-size:10px;line-height:1.6">노미 승인 = 노미 승인일이 입력된 고객 · 비자 승인 = 비자 승인일이 입력된 고객 · 비자까지 진행하는 고객 ${visaScope}명 · 심사 대기 노미 ${waitNomi}명 · 482 ${waitVisa}명</div>
+      <div style="background:#FAF7F9;border-radius:10px;padding:9px 12px;line-height:1.75;font-size:10.5px"><b>Host Company</b> · ${(() => { const hc = {}; list.forEach((c) => { const h = (c.host || '').trim() || 'Host 미정'; hc[h] = (hc[h] || 0) + 1; }); return Object.entries(hc).sort((a, b) => b[1] - a[1]).map(([h, k]) => `${esc(h)} ${k}명`).join(' · '); })()}</div>
+      ${drops.length ? `<div style="background:#FDE6E8;border-radius:10px;padding:9px 12px;line-height:1.7;font-size:10.5px"><b style="color:#C2475B">철회 ${drops.length}명</b> · ${drops.map((c) => `${esc(c.name)} (${esc(c.status)}${c.next ? ' · ' + esc(c.next.length > 30 ? c.next.slice(0, 29) + '…' : c.next) : ''})`).join(' · ')}</div>` : ''}`;
+      const th = (t) => `<th style="background:${R.head};text-align:left;padding:6px;font-weight:500;font-size:9.5px;color:${R.mute};white-space:nowrap">${t}</th>`;
+      const head = `<tr>${th('No.')}${th('고객')}${th('담당')}${th('Host Company')}${th('진행 상태')}${th('범위')}${th('노미 신청')}${th('노미 승인')}${th('비자 신청')}${th('비자 승인')}</tr>`;
+      const td = (v, x2 = '') => `<td style="padding:6px;border-bottom:1px solid ${R.line};vertical-align:top;${x2}">${v}</td>`;
+      const mark = (ok, iso) => (ok ? `<b style="color:${R.pink}">${sd(iso)}</b>` : '—');
+      const rowHtml = (c) => `<tr style="${isDrop(c) ? 'background:#FFF4F5' : ''}">${td(esc(c.no ?? '–'), `color:${R.mute}`)}${td(`<b${isDrop(c) ? ' style="text-decoration:line-through;color:#A08A93"' : ''}>${esc(c.name)}</b><div style="color:${R.mute};font-size:9.5px">${esc(c.job || '')}</div>`)}${td(esc(partnerOf(c)), 'white-space:nowrap')}${td(esc(c.host || '미정'))}${td(isDrop(c) ? `<b style="color:#C2475B">${esc(c.status)}</b>` : esc(c.status || ''), 'white-space:nowrap')}${td(c.scope === 'NOMI' ? 'NOMI' : 'N+V', 'white-space:nowrap')}${td(sd(c.nomiApplied), 'white-space:nowrap')}${td(mark(nomiDone(c), c.nomiGranted), 'white-space:nowrap')}${td(sd(c.visaApplied), 'white-space:nowrap')}${td(c.scope === 'NOMI' ? '<span style="color:#BBA9B1">해당 없음</span>' : mark(visaDone(c), c.visaGranted), 'white-space:nowrap')}</tr>`;
+      const firstN = 12, nextN = 22;
+      const chunks = [list.slice(0, firstN)];
+      for (let n = firstN; n < list.length; n += nextN) chunks.push(list.slice(n, n + nextN));
+      chunks.forEach((ch, n) => sections.push({ lbl: `${x.name} 노미·비자 승인 현황`, inner: `${n === 0 ? summary : ''}<table style="width:100%;border-collapse:collapse">${head}${ch.map(rowHtml).join('')}</table>` }));
+    });
+    return sections.map((sec, n) => pageShell(sec.inner, n + 1, sections.length, sec.lbl, ymd));
+  }
+  function buildHostPages(keys) {
+    const now = new Date(); const ymd = `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')}`;
+    const all = companies('hosts');
+    const sections = [];
+    keys.forEach((key) => {
+      const x = key === NONE_KEY ? { name: 'Host 미정', doc: null, clients: state.clients.filter((c) => !(c.host || '').trim()) } : all.find((y) => y.key === key);
+      if (!x || !x.clients.length) return;
+      const list = [...x.clients].sort((a, b) => (isDrop(a) - isDrop(b)) || ((SM[a.status] || {}).i ?? 99) - ((SM[b.status] || {}).i ?? 99) || (a.no || 999) - (b.no || 999));
+      const st = stats(list);
+      const nomiN = list.filter(isNomi).length, visaN = list.filter(isVisa).length;
+      const oc = {}; list.forEach((c) => { const o = (c.ohla || '').trim() || 'OHLA 미확인'; oc[o] = (oc[o] || 0) + 1; });
+      const sc = {}; list.forEach((c) => { sc[c.status] = (sc[c.status] || 0) + 1; });
+      const d = x.doc || {};
+      const info = [d.abn && `ABN ${d.abn}`, d.industry, d.contact && `담당 ${d.contact}`, d.phone, d.email].filter(Boolean).map(esc).join(' · ');
+      const summary = `<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+        ${[['들어간 인원', `${list.length}명`], ['진행 중·대기', `${st.active}명`], ['노미 승인', `${nomiN}명`], ['비자 승인', `${visaN}명`]].map(([l, v], n) => `<div style="background:${n === 0 ? R.soft : '#FAF7F9'};border-radius:10px;padding:10px 12px"><div style="color:${R.mute};font-size:10px">${l}</div><div style="font-family:Fraunces,Georgia,serif;font-style:italic;font-size:19px;color:${n === 0 ? R.pink : R.ink}">${v}</div></div>`).join('')}
+      </div>
+      <div style="background:#FAF7F9;border-radius:10px;padding:9px 12px;line-height:1.75;font-size:10.5px">
+        <div><b>OHLA 업체</b> · ${Object.entries(oc).sort((a, b) => b[1] - a[1]).map(([o, n]) => `${esc(o)} ${n}명`).join(' · ')}</div>
+        <div><b>진행 상태</b> · ${STATUS.filter((z) => sc[z.k]).map((z) => `${esc(z.k)} ${sc[z.k]}명`).join(' · ')}</div>
+        ${info ? `<div style="color:${R.mute}">${info}</div>` : ''}
+      </div>`;
+      const th = (t) => `<th style="background:${R.head};text-align:left;padding:6px;font-weight:500;font-size:9.5px;color:${R.mute};white-space:nowrap">${t}</th>`;
+      const head = `<tr>${th('No.')}${th('고객')}${th('담당')}${th('OHLA 업체')}${th('진행 상태')}${th('범위')}${th('노미 신청')}${th('노미 승인')}${th('비자 신청')}${th('비자 승인')}</tr>`;
+      const td = (v, x2 = '') => `<td style="padding:6px;border-bottom:1px solid ${R.line};vertical-align:top;${x2}">${v}</td>`;
+      const dt = (iso, strong) => (iso ? (strong ? `<b style="color:${R.pink}">${sd(iso)}</b>` : sd(iso)) : '—');
+      const rowHtml = (c) => `<tr style="${isDrop(c) ? 'background:#FFF4F5' : ''}">${td(esc(c.no ?? '–'), `color:${R.mute}`)}${td(`<b${isDrop(c) ? ' style="text-decoration:line-through;color:#A08A93"' : ''}>${esc(c.name)}</b><div style="color:${R.mute};font-size:9.5px">${esc(c.job || '')}</div>`)}${td(esc(partnerOf(c)), 'white-space:nowrap')}${td(esc(c.ohla || '미확인'))}${td(isDrop(c) ? `<b style="color:#C2475B">${esc(c.status)}</b>` : esc(c.status || ''), 'white-space:nowrap')}${td(c.scope === 'NOMI' ? 'NOMI' : 'N+V', 'white-space:nowrap')}${td(dt(c.nomiApplied), 'white-space:nowrap')}${td(dt(c.nomiGranted, 1), 'white-space:nowrap')}${td(dt(c.visaApplied), 'white-space:nowrap')}${td(c.scope === 'NOMI' ? '<span style="color:#BBA9B1">해당 없음</span>' : dt(c.visaGranted, 1), 'white-space:nowrap')}</tr>`;
+      const firstN = 14, nextN = 22;
+      const chunks = [list.slice(0, firstN)];
+      for (let n = firstN; n < list.length; n += nextN) chunks.push(list.slice(n, n + nextN));
+      chunks.forEach((ch, n) => sections.push({ lbl: `${x.name} 배정 고객 승인 현황`, inner: `${n === 0 ? summary : ''}<table style="width:100%;border-collapse:collapse">${head}${ch.map(rowHtml).join('')}</table>` }));
+    });
+    return sections.map((sec, n) => pageShell(sec.inner, n + 1, sections.length, sec.lbl, ymd));
+  }
   let pdfBusy = false;
   async function exportPdf(kind, keys, fileLabel, lblId) {
     if (!downloads || pdfBusy) return;
-    const pages = kind === 'money' ? buildInvPages(keys) : buildPages(keys);
-    if (!pages.length) { toast(kind === 'money' ? '미수 인보이스가 없어요' : '리포트에 넣을 고객이 없어요'); return; }
+    const pages = kind === 'money' ? buildInvPages(keys) : kind === 'ohla' ? buildOhlaPages(keys) : kind === 'hosts' ? buildHostPages(keys) : buildPages(keys);
+    if (!pages.length) { toast(kind === 'money' ? '미수 인보이스가 없어요' : (kind === 'ohla' || kind === 'hosts') ? '이 업체에 연결된 고객이 없어요' : '리포트에 넣을 고객이 없어요'); return; }
     pdfBusy = true; const lbl = $(lblId) || { textContent: '' }; const old = lbl.textContent; lbl.textContent = 'PDF 만드는 중…';
     toast('최신 데이터로 PDF를 만드는 중이에요…');
     const host = document.createElement('div');
@@ -1983,7 +2052,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
         pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, 210, 297);
       }
       const d = new Date(); const ymd = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-      await downloads.save({ filename: `ANS_${fileLabel}_${kind === 'money' ? '수금현황' : '고객진행수금리포트'}_${ymd}.pdf`, data: pdf.output('blob') });
+      await downloads.save({ filename: `ANS_${fileLabel}_${kind === 'money' ? '수금현황' : kind === 'ohla' ? 'OHLA_노미비자승인현황' : kind === 'hosts' ? 'HostCompany_배정고객현황' : '고객진행수금리포트'}_${ymd}.pdf`, data: pdf.output('blob') });
       toast('PDF를 저장했어요');
     } catch (e) {
       if (!(e && e.code === 'declined')) toast('PDF를 만들지 못했어요. 잠시 후 다시 시도해 주세요.');
@@ -2035,6 +2104,18 @@ svg.ic { width: 18px; height: 18px; flex: none; }
     if (t.closest('#pdfBtn')) {
       const b = state.money.biller;
       exportPdf('money', b === 'all' ? BILLERS.map((x) => x.k) : [b], b === 'all' ? '전체' : (BM[b] || {}).l.replace(/\s+/g, ''), 'pdfLbl'); return;
+    }
+    const pa1 = t.closest('[data-pdf-all]');
+    if (pa1) {
+      const kd = pa1.dataset.pdfAll;
+      const keys = companies(kd).filter((x) => x.clients.length).map((x) => x.key);
+      if (state.clients.some((c) => !(c[KIND[kd].field] || '').trim())) keys.push(NONE_KEY);
+      exportPdf(kd, keys, kd === 'hosts' ? '전체HostCompany' : '전체OHLA', kd + 'PdfAllLbl'); return;
+    }
+    const op1 = t.closest('[data-pdf-one]');
+    if (op1) {
+      const kd = op1.dataset.pdfOne, k = op1.dataset.key; const x = companies(kd).find((y) => y.key === k);
+      exportPdf(kd, [k], (x ? x.name : KIND[kd].none).replace(/[^A-Za-z0-9가-힣]+/g, ''), kd + 'PdfOneLbl'); return;
     }
     if (t.closest('#rosterPdf')) {
       const ps = state.roster.partners;
