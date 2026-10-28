@@ -876,12 +876,10 @@ svg.ic { width: 18px; height: 18px; flex: none; }
 (() => {
   /* ================= constants ================= */
   const STATUS = [
-    { k: '진행 예정',     c: 't-plan',  g: 'active', d: '계약·서류 준비 전' },
-    { k: '진행 중',       c: 't-doing', g: 'active', d: 'Host 매칭·서류 준비' },
-    { k: '노미승인대기',   c: 't-nomi',  g: 'active', d: '노미네이션 접수, 심사 중' },
-    { k: '482신청대기',    c: 't-ready', g: 'active', d: '노미 승인, 482 접수 전' },
-    { k: '482대기',       c: 't-visa',  g: 'active', d: '482 비자 심사 중' },
-    { k: '진행완료',       c: 't-done',  g: 'done',   d: '업무 완료' },
+    { k: '진행',          c: 't-doing', g: 'active', d: '계약·Host 매칭·서류 준비' },
+    { k: '대기',          c: 't-visa',  g: 'active', d: '노미/비자 신청 후 심사 대기' },
+    { k: '노미승인',       c: 't-nomi',  g: 'active', d: '노미네이션만 승인' },
+    { k: '482비자승인',    c: 't-done',  g: 'done',   d: '노미 + 482 비자 승인 (진행완료)' },
     { k: '보류',          c: 't-hold',  g: 'hold',   d: '진행 일시 중단' },
     { k: '482철회',       c: 't-drop',  g: 'drop',   d: '482 신청 철회' },
     { k: '노미네이션철회',  c: 't-drop',  g: 'drop',   d: '노미네이션 철회' },
@@ -890,7 +888,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
   const PARTNERS = ['ANS', '다니엘', '멜리사', '스실'];
   const PLABEL = { ANS: 'ANS 고객', '다니엘': '다니엘 고객', '멜리사': '멜리사 고객', '스실': '스실 고객' };
   const PCLS = { ANS: 'p1', '다니엘': 'p2', '멜리사': 'p3', '스실': 'p4' };
-  const NOMI_OK = new Set(['482신청대기', '482대기', '진행완료', '482철회']);
+  const NOMI_OK = new Set(['노미승인', '482비자승인', '482철회']);
   const VISA = 'NOMI + VISA';
   const ROUTES = [
     ['dashboard', '대시보드', 'i-home'],
@@ -1104,20 +1102,20 @@ svg.ic { width: 18px; height: 18px; flex: none; }
       $('heroAdd').hidden = !state.canWrite || state.mode === 'loading';
       if (state.mode === 'loading') { $('dStats').innerHTML = ''; return; }
       $('heroText').innerHTML = all.length
-        ? `진행 중인 고객 <b>${s.active}명</b> · 노미 심사 <b>${countBy(all, '노미승인대기')}명</b> · 482 심사 <b>${countBy(all, '482대기')}명</b> · 482 신청 대기 <b>${countBy(all, '482신청대기')}명</b>`
+        ? `진행 <b>${countBy(all, '진행')}명</b> · 대기 <b>${countBy(all, '대기')}명</b> · 노미승인 <b>${countBy(all, '노미승인')}명</b> · 482비자승인 <b>${countBy(all, '482비자승인')}명</b>`
         : '아직 등록된 고객이 없어요. 새 고객 등록으로 시작해 보세요.';
 
       const ansN = all.filter((c) => partnerOf(c) === 'ANS').length;
       $('dStats').innerHTML = [
         ['rose', 'i-users', '전체 고객', s.total, `ANS ${ansN} · 파트너 ${s.total - ansN}`, 'all'],
-        ['cream', 'i-file', '진행 중·대기', s.active, `482 신청 대기 ${countBy(all, '482신청대기')}명`, 'g:active'],
+        ['cream', 'i-file', '진행 중·대기', s.active, `심사 대기 ${countBy(all, '대기')}명`, 'g:active'],
         ['lav', 'i-clock', '노미 승인', s.nomi, '노미 승인일이 입력된 고객', 'nomi'],
-        ['mint', 'i-check', '482 승인', s.visa, `진행완료 ${s.done}명 중`, 'visa'],
+        ['mint', 'i-check', '482 승인', s.visa, `노미 + 482 승인 완료`, 'visa'],
       ].map(([cls, ic, l, v, sub, f]) => `<button class="stat ${cls}" type="button" data-roster-status="${f}">
         <span class="lbl">${icon(ic)}${l}</span><strong>${v}<small>명</small></strong><span class="sub">${esc(sub)}</span></button>`).join('');
 
       // recent table with tabs
-      const tabs = [['all', '전체'], ['노미승인대기', '노미승인대기'], ['482신청대기', '482신청대기'], ['482대기', '482대기'], ['진행완료', '진행완료']];
+      const tabs = [['all', '전체'], ['진행', '진행'], ['대기', '대기'], ['노미승인', '노미승인'], ['482비자승인', '482비자승인']];
       $('dTabs').innerHTML = tabs.map(([k, l]) => `<button type="button" data-dtab="${esc(k)}" aria-pressed="${state.dashTab === k}">${l}</button>`).join('');
       const recent = all.filter((c) => state.dashTab === 'all' || c.status === state.dashTab)
         .sort((a, b) => String(b.updatedAt || '').localeCompare(String(a.updatedAt || '')) || (b.no || 0) - (a.no || 0)).slice(0, 6);
@@ -1151,7 +1149,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
       bars('ohla', 5, 'dOhla', 't-nomi');
       bars('hosts', 6, 'dHost', 't-visa');
 
-      const stageKeys = ['진행 예정', '진행 중', '노미승인대기', '482신청대기', '482대기', '진행완료'];
+      const stageKeys = ['진행', '대기', '노미승인', '482비자승인'];
       $('dStages').innerHTML = stageKeys.map((k) => `<li class="${SM[k].c}"><button type="button" data-roster-status="${esc(k)}"><span class="n">${countBy(all, k)}</span><span class="dot"></span><span class="tx"><b>${esc(k)}</b><small>${esc(SM[k].d)}</small></span></button></li>`).join('');
 
       const attn = all.filter((c) => grp(c) === 'active').map((c) => {
@@ -1716,7 +1714,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
     lastFocus = document.activeElement;
     fillDatalists();
     const nextNo = Math.max(0, ...state.clients.map((x) => Number(x.no) || 0)) + 1;
-    const v = c || { partner: 'ANS', status: '진행 예정', scope: VISA, no: nextNo };
+    const v = c || { partner: 'ANS', status: '진행', scope: VISA, no: nextNo };
     const av = $('cfAv');
     av.className = c ? `av av${(hash(c.name) % 5) + 1}` : 'av av1';
     av.textContent = c ? initials(c.name) : '+';
@@ -1728,7 +1726,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
     $('f-partner').value = partnerOf(v);
     $('f-ohla').value = v.ohla || '';
     $('f-host').value = v.host || '';
-    $('f-status').value = SM[v.status] ? v.status : '진행 예정';
+    $('f-status').value = SM[v.status] ? v.status : '진행';
     (v.scope === 'NOMI' ? $('f-scope-n') : $('f-scope-v')).checked = true;
     $('f-memo').value = v.memo || '';
     $('f-next').value = v.next || '';
@@ -2082,7 +2080,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
       const list = [...x.clients].sort((a, b) => (isDrop(a) - isDrop(b)) || (nomiDone(b) - nomiDone(a)) || (visaDone(b) - visaDone(a)) || ((SM[a.status] || {}).i ?? 99) - ((SM[b.status] || {}).i ?? 99) || (a.no || 999) - (b.no || 999));
       const nomiN = list.filter(nomiDone).length, visaN = list.filter(visaDone).length;
       const visaScope = list.filter((c) => c.scope === VISA).length;
-      const waitNomi = list.filter((c) => c.status === '노미승인대기').length, waitVisa = list.filter((c) => c.status === '482대기').length;
+      const waitNomi = list.filter((c) => c.status === '대기' && !c.nomiGranted).length, waitVisa = list.filter((c) => c.status === '대기' && c.nomiGranted).length;
       const drops = list.filter(isDrop);
       const summary = `<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
         ${[['총 고객', `${list.length}명`], ['노미 승인', `${nomiN}명`], ['비자 승인', `${visaN}명`], ['철회', `${drops.length}명`]].map(([l, v], n) => `<div style="background:${n === 1 || n === 2 ? R.soft : '#FAF7F9'};border-radius:10px;padding:10px 12px"><div style="color:${R.mute};font-size:10px">${l}</div><div style="font-family:Fraunces,Georgia,serif;font-style:italic;font-size:19px;color:${n === 1 || n === 2 ? R.pink : R.ink}">${v}</div></div>`).join('')}
