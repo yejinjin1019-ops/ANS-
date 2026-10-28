@@ -925,7 +925,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
     dashTab: 'all',
     roster: { partners: [...PARTNERS], q: '', status: 'all', ohla: 'all', sortKey: 'no', sortDir: 1 },
     pipe: { q: '', partners: [...PARTNERS], showClosed: false },
-    comp: { ohla: { q: '', sel: null }, hosts: { q: '', sel: null }, partners: { q: '', sel: null, cat: 'all' } },
+    comp: { ohla: { q: '', sel: null }, hosts: { q: '', sel: null }, partners: { q: '', sel: null, cat: 'all', grp: 'all' } },
     editClient: null, editComp: null,
   };
   try {
@@ -1449,6 +1449,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
           <p>함께 일하는 스폰서·파트너 회사 목록이에요. 회사를 누르면 ABN, 주소, 연락처, 대표자 정보를 볼 수 있어요.</p></div>
         <div class="acts"><button class="btn primary" type="button" data-act="add-comp" data-kind="partners" id="partnersAdd">${icon('i-plus')}업체 등록</button></div>
       </div>
+      <div class="tabs" id="pTabs" style="padding:0 0 14px"></div>
       <div class="split">
         <section class="panel">
           <div class="toolbar">
@@ -1465,7 +1466,12 @@ svg.ic { width: 18px; height: 18px; flex: none; }
     update() {
       const cs = state.comp.partners;
       $('partnersAdd').hidden = !state.canWrite || state.mode === 'loading';
-      const all = companies('partners').sort((a, b) => a.name.localeCompare(b.name));
+      const isFO = (x) => !!x.doc.familyOffice || (x.doc.industry || '').trim() === 'Family Office';
+      const every = companies('partners').sort((a, b) => a.name.localeCompare(b.name));
+      const nFO = every.filter(isFO).length;
+      $('pTabs').innerHTML = [['all', '전체', every.length], ['general', '일반 업체', every.length - nFO], ['family', 'Family Office', nFO]]
+        .map(([k, l, n]) => `<button type="button" data-ptab="${k}" aria-pressed="${cs.grp === k}">${l} ${n}</button>`).join('');
+      const all = every.filter((x) => cs.grp === 'all' || (cs.grp === 'family') === isFO(x));
       const cats = [...new Set(all.map((x) => (x.doc.industry || '').trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b));
       if (cs.cat !== 'all' && !cats.includes(cs.cat)) cs.cat = 'all';
       $('partnersCat').innerHTML = `<option value="all">업종 전체</option>` + cats.map((c) => `<option value="${esc(c)}">${esc(c)}</option>`).join('');
@@ -2170,6 +2176,8 @@ svg.ic { width: 18px; height: 18px; flex: none; }
     if (pay) { markPaid(pay.dataset.pay); return; }
     const bl = t.closest('[data-biller]');
     if (bl) { state.money.biller = state.money.biller === bl.dataset.biller ? 'all' : bl.dataset.biller; refresh(); return; }
+    const pt = t.closest('[data-ptab]');
+    if (pt) { state.comp.partners.grp = pt.dataset.ptab; state.comp.partners.sel = null; state.comp.partners.cat = 'all'; refresh(); return; }
     const mt = t.closest('[data-mtab]');
     if (mt) { state.money.view = mt.dataset.mtab; refresh(); return; }
     if (t.closest('#mReset')) { state.money.biller = 'all'; refresh(); return; }
