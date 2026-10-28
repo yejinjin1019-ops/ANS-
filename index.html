@@ -758,6 +758,14 @@ svg.ic { width: 18px; height: 18px; flex: none; }
         <label for="c-address">주소</label>
         <input id="c-address" autocomplete="off">
       </div>
+      <div class="field" data-partner-only>
+        <label for="c-web">웹사이트</label>
+        <input id="c-web" autocomplete="off" placeholder="www.example.com.au">
+      </div>
+      <div class="field" data-partner-only>
+        <label for="c-status">계약 상태</label>
+        <input id="c-status" list="dl-pstatus" autocomplete="off" placeholder="예: progressing, 보류">
+      </div>
       <div class="field full">
         <label for="c-memo">메모</label>
         <textarea id="c-memo" rows="3" placeholder="계약 조건, 수수료, 특이사항 등"></textarea>
@@ -861,6 +869,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
 <datalist id="dl-job"></datalist>
 <datalist id="dl-ohla"></datalist>
 <datalist id="dl-host"></datalist>
+<datalist id="dl-pstatus"><option value="progressing"><option value="starting"><option value="Completed"><option value="리모델링"><option value="보류"></datalist>
 <div class="toast" id="toast" role="status" hidden></div>
 
 <script>
@@ -888,12 +897,14 @@ svg.ic { width: 18px; height: 18px; flex: none; }
     ['pipeline', '진행고객 관리', 'i-board'],
     ['ohla', 'OHLA 업체 관리', 'i-building'],
     ['hosts', 'Host Company 관리 및 정보', 'i-brief'],
+    ['partners', '파트너 업체', 'i-heart'],
     ['clients', '총 고객', 'i-users'],
     ['money', '수금 관리', 'i-coin'],
   ];
   const KIND = {
     ohla:  { col: 'ohla',  field: 'ohla', other: 'host', label: 'OHLA 업체',    none: 'OHLA 미확인', otherLabel: 'Host Company' },
     hosts: { col: 'hosts', field: 'host', other: 'ohla', label: 'Host Company', none: 'Host 미정',   otherLabel: 'OHLA 업체' },
+    partners: { col: 'partners', field: null, label: '파트너 업체' },
   };
   const NONE_KEY = '__none__';
   const LOCAL_KEY = 'ans-portal-local-v2';
@@ -906,7 +917,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
 
   /* ================= state ================= */
   const state = {
-    clients: [], ohla: [], hosts: [], invoices: [],
+    clients: [], ohla: [], hosts: [], partners: [], invoices: [],
     money: { biller: 'all', view: 'open', q: '' },
     editInv: null,
     mode: 'loading', canWrite: true,
@@ -914,7 +925,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
     dashTab: 'all',
     roster: { partners: [...PARTNERS], q: '', status: 'all', ohla: 'all', sortKey: 'no', sortDir: 1 },
     pipe: { q: '', partners: [...PARTNERS], showClosed: false },
-    comp: { ohla: { q: '', sel: null }, hosts: { q: '', sel: null } },
+    comp: { ohla: { q: '', sel: null }, hosts: { q: '', sel: null }, partners: { q: '', sel: null, cat: 'all' } },
     editClient: null, editComp: null,
   };
   try {
@@ -942,7 +953,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
     const { field } = KIND[kind];
     const map = new Map();
     for (const d of state[kind]) { const k = keyOf(d.name); if (k && !map.has(k)) map.set(k, { key: k, name: d.name, doc: d, clients: [] }); }
-    for (const c of state.clients) {
+    for (const c of (field ? state.clients : [])) {
       const v = (c[field] || '').trim(); if (!v) continue;
       const k = keyOf(v);
       if (!map.has(k)) map.set(k, { key: k, name: v, doc: null, clients: [] });
@@ -1003,7 +1014,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
   /* ================= chrome ================= */
   function renderChrome() {
     const all = state.clients;
-    const counts = { pipeline: stats(all).active, clients: all.length, ohla: companies('ohla').length, hosts: companies('hosts').length, money: state.invoices.filter(isOpen).length };
+    const counts = { pipeline: stats(all).active, clients: all.length, ohla: companies('ohla').length, hosts: companies('hosts').length, partners: state.partners.length, money: state.invoices.filter(isOpen).length };
     $('nav').innerHTML = ROUTES.map(([r, label, ic]) => `<a href="#${r}" data-route="${r}"${state.route === r ? ' aria-current="page"' : ''}>${icon(ic)}<span>${label}</span>${state.mode !== 'loading' && counts[r] ? `<span class="cnt">${counts[r]}</span>` : ''}</a>`).join('');
     const live = $('live');
     live.className = 'live' + (state.mode === 'live' ? ' on' : state.mode === 'local' ? ' local' : '');
@@ -1429,6 +1440,67 @@ svg.ic { width: 18px; height: 18px; flex: none; }
   };
 
   V.ohla = companyView('ohla');
+  /* ---------- partners (파트너 업체) ---------- */
+  V.partners = {
+    mount() {
+      return `
+      <div class="pagehead">
+        <div><div class="eyebrow">Sponsor Network</div><h1>파트너 업체</h1>
+          <p>함께 일하는 스폰서·파트너 회사 목록이에요. 회사를 누르면 ABN, 주소, 연락처, 대표자 정보를 볼 수 있어요.</p></div>
+        <div class="acts"><button class="btn primary" type="button" data-act="add-comp" data-kind="partners" id="partnersAdd">${icon('i-plus')}업체 등록</button></div>
+      </div>
+      <div class="split">
+        <section class="panel">
+          <div class="toolbar">
+            <div class="search" style="max-width:none">${icon('i-search')}<input id="partnersQ" type="search" placeholder="회사명, 대표자, ABN, 주소 검색" autocomplete="off" aria-label="파트너 업체 검색"></div>
+            <select class="selbox" id="partnersCat" aria-label="업종 필터"></select>
+            <span class="count-line" id="partnersCount"></span>
+          </div>
+          <div class="list tbl-wrap"><table class="tbl" id="partnersList"></table></div>
+        </section>
+        <section class="panel" id="partnersDetail"></section>
+      </div>`;
+    },
+    afterMount() { $('partnersQ').value = state.comp.partners.q; },
+    update() {
+      const cs = state.comp.partners;
+      $('partnersAdd').hidden = !state.canWrite || state.mode === 'loading';
+      const all = companies('partners').sort((a, b) => a.name.localeCompare(b.name));
+      const cats = [...new Set(all.map((x) => (x.doc.industry || '').trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b));
+      if (cs.cat !== 'all' && !cats.includes(cs.cat)) cs.cat = 'all';
+      $('partnersCat').innerHTML = `<option value="all">업종 전체</option>` + cats.map((c) => `<option value="${esc(c)}">${esc(c)}</option>`).join('');
+      $('partnersCat').value = cs.cat;
+      const q = keyOf(cs.q);
+      const list = all.filter((x) => (cs.cat === 'all' || (x.doc.industry || '').trim() === cs.cat)
+        && (!q || keyOf([x.name, x.doc.contact, x.doc.abn, x.doc.address, x.doc.email, x.doc.phone, x.doc.memo].join(' ')).includes(q)));
+      if (!cs.sel || !all.some((x) => x.key === cs.sel)) cs.sel = list.length ? list[0].key : (all.length ? all[0].key : null);
+      $('partnersCount').innerHTML = `<b>${list.length}</b> / ${all.length}곳`;
+      $('partnersList').innerHTML = `<thead><tr><th>회사명</th><th>업종</th><th>Phone</th></tr></thead><tbody>` +
+        (list.map((x) => `<tr data-sel-comp="partners" data-key="${esc(x.key)}" class="${cs.sel === x.key ? 'is-sel' : ''}"><td><div class="who">${coMark(x.name)}<div style="min-width:0"><b style="white-space:normal">${esc(x.name)}</b><small>${esc(x.doc.contact || '대표자 미입력')}</small></div></div></td>
+          <td>${x.doc.industry ? `<span class="tag">${esc(x.doc.industry)}</span>` : '<span class="none">—</span>'}</td><td class="nowrap">${dash(x.doc.phone)}</td></tr>`).join('')
+          || `<tr><td colspan="3" class="muted">${state.mode === 'loading' ? '불러오는 중이에요.' : all.length ? '검색 결과가 없어요.' : '등록된 파트너 업체가 없어요.'}</td></tr>`) + '</tbody>';
+      const el = $('partnersDetail');
+      const x = all.find((y) => y.key === cs.sel);
+      if (!x) { el.innerHTML = `<div class="empty-state"><b>등록된 파트너 업체가 없어요</b>업체 등록 버튼으로 추가해 주세요.</div>`; return; }
+      const d = x.doc;
+      const row = (label, v, full) => `<div class="${full ? 'full' : ''}"><dt>${label}</dt><dd class="${v ? '' : 'empty'}">${v ? esc(v) : '미입력'}</dd></div>`;
+      const host = companies('hosts').find((h) => h.key === x.key);
+      const hostClients = host ? host.clients : [];
+      el.innerHTML = `<div class="panel-b stack" style="padding-top:22px">
+        <div class="detail-h">${coMark(x.name)}
+          <div style="min-width:0"><h2>${esc(x.name)}</h2>
+            <div class="meta-line">${esc(d.industry || '업종 미입력')}${d.status ? ' · ' + esc(d.status) : ''}${d.updatedAt ? ' · ' + esc(timeAgo(d.updatedAt)) + ' 수정' : ''}${d.updatedBy ? ' · ' + who(d) : ''}</div></div>
+          <div class="r">${state.canWrite ? `<button class="btn soft sm" type="button" data-edit-comp="partners" data-key="${esc(x.key)}">${icon('i-edit')}정보 수정</button>` : ''}</div>
+        </div>
+        <div class="contact-card"><div class="cc-row">${d.phone || d.email || d.abn ? copyBtn(d.phone, '전화번호') + copyBtn(d.email, '이메일') + copyBtn(d.abn, 'ABN') : '<span class="none">등록된 연락처가 없어요</span>'}</div></div>
+        <dl class="info-grid">
+          ${row('ABN', d.abn)}${row('업종', d.industry)}${row('CEO / Manager', d.contact)}${row('Phone', d.phone)}${row('E-mail', d.email, true)}${row('주소', d.address, true)}${row('웹사이트', d.web)}${row('계약 상태', d.status)}${row('메모', d.memo, true)}
+        </dl>
+        ${hostClients.length ? `<div><h3 class="sec-t">Host Company로 연결된 고객 ${hostClients.length}명</h3><div class="chips">${hostClients.map((c) => `<button type="button" class="chip" data-open-client="${esc(c.id)}" style="border:0">${esc(c.name)}</button>`).join('')}</div></div>` : ''}
+      </div>`;
+      fillNames();
+    },
+  };
   V.hosts = companyView('hosts');
 
   /* ---------- roster (총 고객) ---------- */
@@ -1554,7 +1626,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
   }
 
   /* ================= data writes ================= */
-  function persistLocal() { try { localStorage.setItem(LOCAL_KEY, JSON.stringify({ clients: state.clients, ohla: state.ohla, hosts: state.hosts, invoices: state.invoices })); } catch (e) {} }
+  function persistLocal() { try { localStorage.setItem(LOCAL_KEY, JSON.stringify({ clients: state.clients, ohla: state.ohla, hosts: state.hosts, partners: state.partners, invoices: state.invoices })); } catch (e) {} }
   async function retryOnce(fn) {
     try { return await fn(); }
     catch (e) {
@@ -1706,8 +1778,9 @@ svg.ic { width: 18px; height: 18px; flex: none; }
     $('pfTitle').textContent = x ? x.name : `${K.label} 등록`;
     $('pfSub').textContent = x ? `${K.label} · 연결된 고객 ${x.clients.length}명` : `새 ${K.label} 정보를 등록해요.`;
     $('c-name').value = x ? x.name : '';
-    ['contact', 'phone', 'email', 'address', 'abn', 'industry', 'memo'].forEach((f) => { $('c-' + f).value = d[f] || ''; });
-    document.querySelectorAll('[data-host-only]').forEach((el) => { el.hidden = kind !== 'hosts'; });
+    ['contact', 'phone', 'email', 'address', 'abn', 'industry', 'web', 'status', 'memo'].forEach((f) => { $('c-' + f).value = d[f] || ''; });
+    document.querySelectorAll('[data-host-only]').forEach((el) => { el.hidden = kind === 'ohla'; });
+    document.querySelectorAll('[data-partner-only]').forEach((el) => { el.hidden = kind !== 'partners'; });
     $('pfHint').hidden = !(x && x.clients.length);
     $('pfHint').textContent = x && x.clients.length ? `업체명을 바꾸면 연결된 고객 ${x.clients.length}명의 ${K.label} 이름도 함께 바뀌어요.` : '';
     $('pfDel').hidden = !(x && x.doc);
@@ -1729,7 +1802,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
     const { kind, docId, oldName } = compCtx;
     const K = KIND[kind];
     const data = { name: $('c-name').value.trim() };
-    ['contact', 'phone', 'email', 'address', 'memo'].concat(kind === 'hosts' ? ['abn', 'industry'] : []).forEach((f) => { data[f] = $('c-' + f).value.trim(); });
+    ['contact', 'phone', 'email', 'address', 'memo'].concat(kind !== 'ohla' ? ['abn', 'industry'] : [], kind === 'partners' ? ['web', 'status'] : []).forEach((f) => { data[f] = $('c-' + f).value.trim(); });
     const err = (m) => { $('pfErr').textContent = m; $('pfErr').hidden = false; };
     if (!data.name) { err('업체명을 입력해 주세요.'); $('c-name').focus(); return; }
     const clash = companies(kind).find((x) => x.key === keyOf(data.name) && keyOf(oldName) !== x.key);
@@ -2184,12 +2257,13 @@ svg.ic { width: 18px; height: 18px; flex: none; }
     if (t.id === 'pipeClosed') { state.pipe.showClosed = t.checked; savePrefs(); refresh(); return; }
     if (t.id === 'rosterStatus') { state.roster.status = t.value; savePrefs(); refresh(); return; }
     if (t.id === 'rosterOhla') { state.roster.ohla = t.value; savePrefs(); refresh(); return; }
+    if (t.id === 'partnersCat') { state.comp.partners.cat = t.value; refresh(); return; }
   });
   let qT = 0;
   document.addEventListener('input', (ev) => {
     const t = ev.target;
     if (!(t instanceof HTMLInputElement)) return;
-    const map = { pipeQ: () => { state.pipe.q = t.value.trim(); }, rosterQ: () => { state.roster.q = t.value.trim(); }, ohlaQ: () => { state.comp.ohla.q = t.value; }, hostsQ: () => { state.comp.hosts.q = t.value; }, moneyQ: () => { state.money.q = t.value; } };
+    const map = { pipeQ: () => { state.pipe.q = t.value.trim(); }, rosterQ: () => { state.roster.q = t.value.trim(); }, ohlaQ: () => { state.comp.ohla.q = t.value; }, hostsQ: () => { state.comp.hosts.q = t.value; }, partnersQ: () => { state.comp.partners.q = t.value; }, moneyQ: () => { state.money.q = t.value; } };
     if (!map[t.id]) return;
     clearTimeout(qT);
     qT = setTimeout(() => { map[t.id](); savePrefs(); refresh(); }, 120);
@@ -2235,7 +2309,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
   /* ================= boot ================= */
   function startLocal() {
     state.mode = 'local';
-    try { const d = JSON.parse(localStorage.getItem(LOCAL_KEY) || '{}'); state.clients = d.clients || []; state.ohla = d.ohla || []; state.hosts = d.hosts || []; state.invoices = d.invoices || []; } catch (e) {}
+    try { const d = JSON.parse(localStorage.getItem(LOCAL_KEY) || '{}'); state.clients = d.clients || []; state.ohla = d.ohla || []; state.hosts = d.hosts || []; state.partners = d.partners || []; state.invoices = d.invoices || []; } catch (e) {}
     const n = $('notice');
     n.textContent = '로컬 미리보기예요. 이 브라우저에만 저장되고, claude.ai에서 포털을 열면 직원 모두와 실시간으로 공유돼요.';
     n.hidden = false;
@@ -2270,7 +2344,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
       n.textContent = err && err.code === 'revoked' ? '이 포털에 접근할 수 없게 되었어요.' : '데이터 연결이 끊겼어요. 페이지를 새로고침해 주세요.';
       n.hidden = false;
     });
-    sub('clients'); sub('ohla'); sub('hosts'); sub('invoices');
+    sub('clients'); sub('ohla'); sub('hosts'); sub('partners'); sub('invoices');
   }
   function refreshSoft() {
     const a = document.activeElement;
