@@ -1468,10 +1468,11 @@ svg.ic { width: 18px; height: 18px; flex: none; }
       $('partnersAdd').hidden = !state.canWrite || state.mode === 'loading';
       const isFO = (x) => !!x.doc.familyOffice || (x.doc.industry || '').trim() === 'Family Office';
       const every = companies('partners').sort((a, b) => a.name.localeCompare(b.name));
-      const nFO = every.filter(isFO).length;
-      $('pTabs').innerHTML = [['all', '전체', every.length], ['general', '일반 업체', every.length - nFO], ['family', 'Family Office', nFO]]
+      const grpOf = (x) => (isFO(x) ? 'family' : x.doc.external ? 'external' : 'general');
+      const cnt = (g) => every.filter((x) => grpOf(x) === g).length;
+      $('pTabs').innerHTML = [['all', '전체', every.length], ['general', '일반 업체', cnt('general')], ['family', 'Family Office', cnt('family')], ['external', 'External Partners', cnt('external')]]
         .map(([k, l, n]) => `<button type="button" data-ptab="${k}" aria-pressed="${cs.grp === k}">${l} ${n}</button>`).join('');
-      const all = every.filter((x) => cs.grp === 'all' || (cs.grp === 'family') === isFO(x));
+      const all = every.filter((x) => cs.grp === 'all' || grpOf(x) === cs.grp);
       const cats = [...new Set(all.map((x) => (x.doc.industry || '').trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b));
       if (cs.cat !== 'all' && !cats.includes(cs.cat)) cs.cat = 'all';
       $('partnersCat').innerHTML = `<option value="all">업종 전체</option>` + cats.map((c) => `<option value="${esc(c)}">${esc(c)}</option>`).join('');
@@ -1502,6 +1503,9 @@ svg.ic { width: 18px; height: 18px; flex: none; }
         <dl class="info-grid">
           ${row('ABN', d.abn)}${row('업종', d.industry)}${row('CEO / Manager', d.contact)}${row('Phone', d.phone)}${row('E-mail', d.email, true)}${row('주소', d.address, true)}${row('웹사이트', d.web)}${row('계약 상태', d.status)}${row('메모', d.memo, true)}
         </dl>
+        <div><h3 class="sec-t">서류 ${(d.docs || []).length}건${state.canWrite && assetsNs ? ` <button class="btn soft sm" type="button" data-pdoc-up="${esc(d.id)}" style="margin-left:8px">${icon('i-plus')}파일 추가</button>` : ''}</h3>
+          ${(d.docs || []).length ? `<div class="chips">${d.docs.map((f) => `<a class="chip" href="${esc(f.url || ('/_blob/' + f.id))}" target="_blank" rel="noopener" style="text-decoration:none" title="${esc(f.section || '')}">${esc(f.name)}</a>`).join('')}</div>` : '<p class="muted" style="margin:0">첨부된 서류가 없어요.</p>'}
+        </div>
         ${hostClients.length ? `<div><h3 class="sec-t">Host Company로 연결된 고객 ${hostClients.length}명</h3><div class="chips">${hostClients.map((c) => `<button type="button" class="chip" data-open-client="${esc(c.id)}" style="border:0">${esc(c.name)}</button>`).join('')}</div></div>` : ''}
       </div>`;
       fillNames();
@@ -1640,6 +1644,8 @@ svg.ic { width: 18px; height: 18px; flex: none; }
       throw e;
     }
   }
+  let assetsNs = null;
+  if (window.claude && claude.use) claude.use('assets').then((a) => { assetsNs = a; if (a) refresh(); }).catch(() => {});
   const store = {
     newId(col) { return state.mode === 'live' ? db.collection(col).doc().id : 'l' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); },
     async set(col, id, data) {
@@ -2176,6 +2182,19 @@ svg.ic { width: 18px; height: 18px; flex: none; }
     if (pay) { markPaid(pay.dataset.pay); return; }
     const bl = t.closest('[data-biller]');
     if (bl) { state.money.biller = state.money.biller === bl.dataset.biller ? 'all' : bl.dataset.biller; refresh(); return; }
+    const pu = t.closest('[data-pdoc-up]');
+    if (pu) {
+      const inp = document.createElement('input'); inp.type = 'file'; inp.multiple = true;
+      inp.onchange = async () => {
+        const id = pu.dataset.pdocUp; const cur = state.partners.find((x) => x.id === id); if (!cur) return;
+        const docs = [...(cur.docs || [])];
+        try {
+          for (const f of inp.files) { const r = await assetsNs.upload(f); docs.push({ name: f.name, id: r.id, url: r.url, size: r.sizeBytes }); }
+          await store.update('partners', id, { docs, ...stamp() }); toast('서류를 추가했어요.');
+        } catch (e) { toast('파일을 올리지 못했어요. 20MB 이하 파일인지 확인해 주세요.'); }
+      };
+      inp.click(); return;
+    }
     const pt = t.closest('[data-ptab]');
     if (pt) { state.comp.partners.grp = pt.dataset.ptab; state.comp.partners.sel = null; state.comp.partners.cat = 'all'; refresh(); return; }
     const mt = t.closest('[data-mtab]');
