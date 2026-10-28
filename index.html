@@ -1504,7 +1504,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
           ${row('ABN', d.abn)}${row('업종', d.industry)}${row('CEO / Manager', d.contact)}${row('Phone', d.phone)}${row('E-mail', d.email, true)}${row('주소', d.address, true)}${row('웹사이트', d.web)}${row('계약 상태', d.status)}${row('메모', d.memo, true)}
         </dl>
         <div><h3 class="sec-t">서류 ${(d.docs || []).length}건${state.canWrite && assetsNs ? ` <button class="btn soft sm" type="button" data-pdoc-up="${esc(d.id)}" style="margin-left:8px">${icon('i-plus')}파일 추가</button>` : ''}</h3>
-          ${(d.docs || []).length ? `<div class="chips">${d.docs.map((f) => `<a class="chip" href="${esc(f.url || ('/_blob/' + f.id))}" target="_blank" rel="noopener" style="text-decoration:none" title="${esc(f.section || '')}">${esc(f.name)}</a>`).join('')}</div>` : '<p class="muted" style="margin:0">첨부된 서류가 없어요.</p>'}
+          ${(d.docs || []).length ? `<div class="chips">${d.docs.map((f) => `<button type="button" class="chip" style="border:0" data-pdoc-open="${esc(f.url || ('/_blob/' + f.id))}" data-name="${esc(f.name)}" title="${esc(f.section || '')}">${esc(f.name)}</button>`).join('')}</div>` : '<p class="muted" style="margin:0">첨부된 서류가 없어요.</p>'}
         </div>
         ${hostClients.length ? `<div><h3 class="sec-t">Host Company로 연결된 고객 ${hostClients.length}명</h3><div class="chips">${hostClients.map((c) => `<button type="button" class="chip" data-open-client="${esc(c.id)}" style="border:0">${esc(c.name)}</button>`).join('')}</div></div>` : ''}
       </div>`;
@@ -1645,6 +1645,26 @@ svg.ic { width: 18px; height: 18px; flex: none; }
     }
   }
   let assetsNs = null;
+  async function openDoc(url, name) {
+    let blob;
+    try { const r = await fetch(url); if (!r.ok) throw new Error(r.status); blob = await r.blob(); }
+    catch (e) { toast('파일을 불러오지 못했어요. 잠시 후 다시 시도해 주세요.'); return; }
+    const u = URL.createObjectURL(blob);
+    const ov = document.createElement('div');
+    ov.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.6);display:flex;flex-direction:column;padding:16px;gap:10px';
+    const isImg = (blob.type || '').startsWith('image/');
+    ov.innerHTML = `<div style="display:flex;gap:8px;align-items:center;color:#fff"><b style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(name)}</b><button class="btn soft sm" type="button" data-dl>다운로드</button><button class="btn soft sm" type="button" data-x>닫기</button></div>` +
+      (isImg ? `<div style="flex:1;overflow:auto;background:#fff;border-radius:8px;text-align:center"><img src="${u}" style="max-width:100%"></div>` : `<iframe src="${u}" style="flex:1;border:0;border-radius:8px;background:#fff"></iframe>`);
+    const close = () => { ov.remove(); URL.revokeObjectURL(u); };
+    ov.addEventListener('click', async (ev) => {
+      if (ev.target === ov || ev.target.closest('[data-x]')) close();
+      else if (ev.target.closest('[data-dl]')) {
+        if (!downloads) { toast('이 화면에서는 다운로드할 수 없어요.'); return; }
+        try { await downloads.save({ filename: name, data: blob }); } catch (e) {}
+      }
+    });
+    document.body.appendChild(ov);
+  }
   if (window.claude && claude.use) claude.use('assets').then((a) => { assetsNs = a; if (a) refresh(); }).catch(() => {});
   const store = {
     newId(col) { return state.mode === 'live' ? db.collection(col).doc().id : 'l' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); },
@@ -2182,6 +2202,8 @@ svg.ic { width: 18px; height: 18px; flex: none; }
     if (pay) { markPaid(pay.dataset.pay); return; }
     const bl = t.closest('[data-biller]');
     if (bl) { state.money.biller = state.money.biller === bl.dataset.biller ? 'all' : bl.dataset.biller; refresh(); return; }
+    const po = t.closest('[data-pdoc-open]');
+    if (po) { openDoc(po.dataset.pdocOpen, po.dataset.name); return; }
     const pu = t.closest('[data-pdoc-up]');
     if (pu) {
       const inp = document.createElement('input'); inp.type = 'file'; inp.multiple = true;
