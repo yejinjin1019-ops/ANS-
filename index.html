@@ -970,7 +970,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
     const a = (sur.trim()[0] || ''), b = (given.trim()[0] || sur.trim()[1] || '');
     return (a + b).toUpperCase();
   }
-  const avatar = (name) => `<span class="av av${(hash(name) % 5) + 1}" aria-hidden="true">${esc(initials(name))}</span>`;
+  const avatar = (name, photo) => photo ? `<span class="av" aria-hidden="true" style="overflow:hidden;padding:0"><img src="${esc(photo)}" alt="" style="width:100%;height:100%;object-fit:cover"></span>` : `<span class="av av${(hash(name) % 5) + 1}" aria-hidden="true">${esc(initials(name))}</span>`;
   const coMark = (name) => `<span class="co-mark av${(hash(name) % 5) + 1}" aria-hidden="true">${esc(String(name || '?').replace(/[^A-Za-z0-9가-힣]/g, '').slice(0, 2).toUpperCase() || '?')}</span>`;
   const pill = (status) => { const s = SM[status]; return `<span class="pill ${s ? s.c : 't-plan'}">${esc(status || '미정')}</span>`; };
   const ptag = (p) => `<span class="ptag ${PCLS[p] || 'p1'}">${esc(p)}</span>`;
@@ -999,7 +999,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
     ? `<button type="button" class="copy" data-copy="${esc(v)}" data-copy-label="${esc(label)}" title="클릭해서 ${esc(label)} 복사">${icon('i-copy', '')}<span>${esc(v)}</span></button>`
     : '<span class="none">—</span>');
   const DATE_FIELDS = [['nomiApplied', '노미 신청'], ['nomiGranted', '노미 승인'], ['visaApplied', '비자 신청'], ['visaGranted', '비자 승인']];
-  const whoCell = (c) => `<div class="who">${avatar(c.name)}<div style="min-width:0"><b>${esc(c.name)}</b><small>${esc(c.job || '직군 미입력')}</small></div></div>`;
+  const whoCell = (c) => `<div class="who">${avatar(c.name, c.photo)}<div style="min-width:0"><b>${esc(c.name)}</b><small>${esc(c.job || '직군 미입력')}</small></div></div>`;
 
   async function fillNames() {
     if (!user) return;
@@ -1173,7 +1173,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
       }).join('') || '<li class="muted" style="border:0">미수금이 없어요.</li>';
 
       const feed = all.filter(touched).sort((a, b) => String(b.updatedAt || '').localeCompare(String(a.updatedAt || ''))).slice(0, 6);
-      $('dFeed').innerHTML = feed.length ? feed.map((c) => `<li><button type="button" data-open-client="${esc(c.id)}">${avatar(c.name)}<span style="min-width:0"><b style="display:block;font-size:13px;color:var(--ink-h)">${esc(c.name)}</b>${pill(c.status)}</span>
+      $('dFeed').innerHTML = feed.length ? feed.map((c) => `<li><button type="button" data-open-client="${esc(c.id)}">${avatar(c.name, c.photo)}<span style="min-width:0"><b style="display:block;font-size:13px;color:var(--ink-h)">${esc(c.name)}</b>${pill(c.status)}</span>
         <span class="meta">${esc(timeAgo(c.updatedAt))}<br>${who(c)}</span></button></li>`).join('')
         : '<li class="muted" style="border:0">아직 수정 내역이 없어요. 직원이 고객 정보를 저장하면 여기에 쌓여요.</li>';
     },
