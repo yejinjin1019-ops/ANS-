@@ -1115,9 +1115,9 @@ svg.ic { width: 18px; height: 18px; flex: none; }
         <span class="lbl">${icon(ic)}${l}</span><strong>${v}<small>명</small></strong><span class="sub">${esc(sub)}</span></button>`).join('');
 
       // recent table with tabs
-      const tabs = [['all', '전체'], ['진행', '진행'], ['대기', '대기'], ['노미승인', '노미승인'], ['482비자승인', '482비자승인']];
+      const tabs = [['all', '전체'], ['진행', '진행'], ['대기', '대기'], ['노미승인', '노미승인'], ['482비자승인', '482비자승인'], ['g:drop', '철회'], ['보류', '보류']];
       $('dTabs').innerHTML = tabs.map(([k, l]) => `<button type="button" data-dtab="${esc(k)}" aria-pressed="${state.dashTab === k}">${l}</button>`).join('');
-      const recent = all.filter((c) => state.dashTab === 'all' || c.status === state.dashTab)
+      const recent = all.filter((c) => state.dashTab === 'all' || c.status === state.dashTab || (state.dashTab === 'g:drop' && grp(c) === 'drop'))
         .sort((a, b) => String(b.updatedAt || '').localeCompare(String(a.updatedAt || '')) || (b.no || 0) - (a.no || 0)).slice(0, 6);
       $('dRecent').innerHTML = `<thead><tr><th>고객명</th><th>담당</th><th>OHLA → Host</th><th>진행 상태</th><th>최근 수정</th><th></th></tr></thead><tbody>` +
         (recent.length ? recent.map((c) => `<tr data-open-client="${esc(c.id)}" tabindex="0"><td>${whoCell(c)}</td><td>${ptag(partnerOf(c))}</td>
@@ -1149,7 +1149,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
       bars('ohla', 5, 'dOhla', 't-nomi');
       bars('hosts', 6, 'dHost', 't-visa');
 
-      const stageKeys = ['진행', '대기', '노미승인', '482비자승인'];
+      const stageKeys = ['진행', '대기', '노미승인', '482비자승인', '보류', '482철회', '노미네이션철회'];
       $('dStages').innerHTML = stageKeys.map((k) => `<li class="${SM[k].c}"><button type="button" data-roster-status="${esc(k)}"><span class="n">${countBy(all, k)}</span><span class="dot"></span><span class="tx"><b>${esc(k)}</b><small>${esc(SM[k].d)}</small></span></button></li>`).join('');
 
       const attn = all.filter((c) => grp(c) === 'active').map((c) => {
