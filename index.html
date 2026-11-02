@@ -1185,7 +1185,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
       return `
       <div class="pagehead">
         <div><div class="eyebrow">Pipeline</div><h1>진행고객 관리</h1><p>카드를 다른 단계로 끌어다 놓으면 진행 상태가 바뀌어요. 카드를 누르면 상세 정보를 수정할 수 있어요.</p></div>
-        <div class="acts"><button class="btn primary" type="button" data-act="add-client" id="pipeAdd">${icon('i-plus')}새 고객 등록</button></div>
+        <div class="acts"><button class="btn soft" type="button" id="pipePdf" hidden>${icon('i-file')}<span id="pipePdfLbl">진행고객 PDF</span></button><button class="btn primary" type="button" data-act="add-client" id="pipeAdd">${icon('i-plus')}새 고객 등록</button></div>
       </div>
       <section class="panel">
         <div class="toolbar">
@@ -1201,6 +1201,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
     update() {
       const f = state.pipe;
       $('pipeAdd').hidden = !state.canWrite || state.mode === 'loading';
+      $('pipePdf').hidden = !downloads || state.mode === 'loading';
       const base = state.clients.filter((c) => matchText(c, f.q));
       $('pipePartners').innerHTML = partnerChecks('pipe', f.partners, base);
       const shown = base.filter((c) => f.partners.includes(partnerOf(c)));
@@ -2006,11 +2007,11 @@ svg.ic { width: 18px; height: 18px; flex: none; }
   function pageShell(inner, pageNo, total, agentLabel, ymd) {
     return `<div style="width:794px;height:1123px;box-sizing:border-box;padding:46px 44px 40px;background:#fff;color:${R.ink};font-family:'Noto Sans KR','Malgun Gothic',sans-serif;font-size:11px;display:flex;flex-direction:column;gap:16px">
       <div style="display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid ${R.pink};padding-bottom:10px">
-        <div><div style="font-family:Fraunces,Georgia,serif;font-style:italic;color:${R.pink};font-size:13px">ANS Visa Desk · ${agentLabel.includes('배정 고객') ? 'Host company report' : agentLabel.includes('승인 현황') ? 'OHLA report' : agentLabel.includes('진행') ? 'Agent report' : 'Accounts receivable'}</div>
+        <div><div style="font-family:Fraunces,Georgia,serif;font-style:italic;color:${R.pink};font-size:13px">ANS Visa Desk · ${agentLabel.includes('배정 고객') ? 'Host company report' : agentLabel.includes('승인 현황') ? 'OHLA report' : agentLabel.includes('진행고객 현황') ? 'Pipeline report' : agentLabel.includes('진행') ? 'Agent report' : 'Accounts receivable'}</div>
         <div style="font-family:'Gowun Batang',serif;font-size:22px;font-weight:700;margin-top:2px">${esc(agentLabel)}</div></div>
         <div style="text-align:right;color:${R.mute};font-size:10.5px">기준일 ${ymd}<br>${pageNo} / ${total}</div>
       </div>${inner}
-      <div style="margin-top:auto;color:${R.mute};font-size:9.5px;border-top:1px solid ${R.line};padding-top:8px">${agentLabel.includes('승인 현황') ? '날짜는 YY.MM.DD · 승인일이 있는 고객만 승인으로 집계 · 내부용 자료' : '금액은 AUD · 청구 금액은 GST 포함 · 미수 잔액은 아직 입금되지 않은 금액 · 내부용 자료'}</div></div>`;
+      <div style="margin-top:auto;color:${R.mute};font-size:9.5px;border-top:1px solid ${R.line};padding-top:8px">${agentLabel.includes('승인 현황') || agentLabel.includes('진행고객 현황') ? '날짜는 YY.MM.DD · 승인일이 있는 고객만 승인으로 집계 · 내부용 자료' : '금액은 AUD · 청구 금액은 GST 포함 · 미수 잔액은 아직 입금되지 않은 금액 · 내부용 자료'}</div></div>`;
   }
   function buildPages(keys) {
     const now = new Date(); const ymd = `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')}`;
@@ -2134,10 +2135,35 @@ svg.ic { width: 18px; height: 18px; flex: none; }
     });
     return sections.map((sec, n) => pageShell(sec.inner, n + 1, sections.length, sec.lbl, ymd));
   }
+  function buildPipePages() {
+    const now = new Date(); const ymd = `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')}`;
+    const f = state.pipe;
+    const shown = state.clients.filter((c) => matchText(c, f.q) && f.partners.includes(partnerOf(c)));
+    const cols = STATUS.filter((z) => f.showClosed || z.g === 'active');
+    const sections = [];
+    const th = (t) => `<th style="background:${R.head};text-align:left;padding:6px;font-weight:500;font-size:9.5px;color:${R.mute};white-space:nowrap">${t}</th>`;
+    const head = `<tr>${th('No.')}${th('고객')}${th('담당')}${th('OHLA → Host')}${th('범위')}${th('노미 신청')}${th('노미 승인')}${th('비자 신청')}${th('비자 승인')}${th('다음 할 일')}</tr>`;
+    const td = (v, x2 = '') => `<td style="padding:6px;border-bottom:1px solid ${R.line};vertical-align:top;${x2}">${v}</td>`;
+    const cut = (t, n) => (t && t.length > n ? t.slice(0, n - 1) + '…' : t || '');
+    const rowHtml = (c) => `<tr>${td(esc(c.no ?? '–'), `color:${R.mute}`)}${td(`<b>${esc(c.name)}</b><div style="color:${R.mute};font-size:9.5px">${esc(c.job || '')}</div>`)}${td(esc(partnerOf(c)), 'white-space:nowrap')}${td(`<div>${esc(c.ohla || 'OHLA 미확인')}</div><div style="color:${R.mute};font-size:9.5px">→ ${esc(c.host || 'Host 미정')}</div>`, 'max-width:130px')}${td(c.scope === 'NOMI' ? 'NOMI' : 'N+V', 'white-space:nowrap')}${td(sd(c.nomiApplied), 'white-space:nowrap')}${td(c.nomiGranted ? `<b style="color:${R.pink}">${sd(c.nomiGranted)}</b>` : '—', 'white-space:nowrap')}${td(sd(c.visaApplied), 'white-space:nowrap')}${td(c.scope === 'NOMI' ? '<span style="color:#BBA9B1">해당 없음</span>' : c.visaGranted ? `<b style="color:${R.pink}">${sd(c.visaGranted)}</b>` : '—', 'white-space:nowrap')}${td(esc(cut(c.next, 40)), `font-size:9.5px;color:${R.mute};max-width:150px`)}</tr>`;
+    const counts = cols.map((z) => [z.k, shown.filter((c) => c.status === z.k).length]);
+    const summary = `<div style="display:grid;grid-template-columns:repeat(${Math.min(counts.length, 4)},1fr);gap:10px">${counts.slice(0, 4).map(([k, v]) => `<div style="background:#FAF7F9;border-radius:10px;padding:10px 12px"><div style="color:${R.mute};font-size:10px">${esc(k)}</div><div style="font-family:Fraunces,Georgia,serif;font-style:italic;font-size:19px">${v}명</div></div>`).join('')}</div>
+      ${counts.length > 4 ? `<div style="background:#FAF7F9;border-radius:10px;padding:9px 12px;font-size:10.5px">${counts.slice(4).map(([k, v]) => `${esc(k)} ${v}명`).join(' · ')}</div>` : ''}`;
+    let first = true;
+    cols.forEach((z) => {
+      const list = shown.filter((c) => c.status === z.k).sort((a, b) => (a.no || 9999) - (b.no || 9999));
+      if (!list.length) return;
+      const firstN = first ? 12 : 20, nextN = 20;
+      const chunks = [list.slice(0, firstN)];
+      for (let n = firstN; n < list.length; n += nextN) chunks.push(list.slice(n, n + nextN));
+      chunks.forEach((ch, n) => { sections.push({ lbl: `진행고객 현황 · ${z.k} ${list.length}명`, inner: `${first ? summary : ''}<div style="font-weight:700;color:${R.pink}">${esc(z.k)} <span style="color:${R.mute};font-weight:400">${esc(z.d)}</span></div><table style="width:100%;border-collapse:collapse">${head}${ch.map(rowHtml).join('')}</table>` }); first = false; });
+    });
+    return sections.map((sec, n) => pageShell(sec.inner, n + 1, sections.length, sec.lbl, ymd));
+  }
   let pdfBusy = false;
   async function exportPdf(kind, keys, fileLabel, lblId) {
     if (!downloads || pdfBusy) return;
-    const pages = kind === 'money' ? buildInvPages(keys) : kind === 'ohla' ? buildOhlaPages(keys) : kind === 'hosts' ? buildHostPages(keys) : buildPages(keys);
+    const pages = kind === 'pipe' ? buildPipePages() : kind === 'money' ? buildInvPages(keys) : kind === 'ohla' ? buildOhlaPages(keys) : kind === 'hosts' ? buildHostPages(keys) : buildPages(keys);
     if (!pages.length) { toast(kind === 'money' ? '미수 인보이스가 없어요' : (kind === 'ohla' || kind === 'hosts') ? '이 업체에 연결된 고객이 없어요' : '리포트에 넣을 고객이 없어요'); return; }
     pdfBusy = true; const lbl = $(lblId) || { textContent: '' }; const old = lbl.textContent; lbl.textContent = 'PDF 만드는 중…';
     toast('최신 데이터로 PDF를 만드는 중이에요…');
@@ -2155,7 +2181,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
         pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, 210, 297);
       }
       const d = new Date(); const ymd = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-      await downloads.save({ filename: `ANS_${fileLabel}_${kind === 'money' ? '수금현황' : kind === 'ohla' ? 'OHLA_노미비자승인현황' : kind === 'hosts' ? 'HostCompany_배정고객현황' : '고객진행수금리포트'}_${ymd}.pdf`, data: pdf.output('blob') });
+      await downloads.save({ filename: `ANS_${fileLabel}_${kind === 'money' ? '수금현황' : kind === 'ohla' ? 'OHLA_노미비자승인현황' : kind === 'hosts' ? 'HostCompany_배정고객현황' : kind === 'pipe' ? '진행고객현황' : '고객진행수금리포트'}_${ymd}.pdf`, data: pdf.output('blob') });
       toast('PDF를 저장했어요');
     } catch (e) {
       if (!(e && e.code === 'declined')) toast('PDF를 만들지 못했어요. 잠시 후 다시 시도해 주세요.');
@@ -2237,6 +2263,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
       const kd = op1.dataset.pdfOne, k = op1.dataset.key; const x = companies(kd).find((y) => y.key === k);
       exportPdf(kd, [k], (x ? x.name : KIND[kd].none).replace(/[^A-Za-z0-9가-힣]+/g, ''), kd + 'PdfOneLbl'); return;
     }
+    if (t.closest('#pipePdf')) { exportPdf('pipe', [], '진행고객', 'pipePdfLbl'); return; }
     if (t.closest('#rosterPdf')) {
       const ps = state.roster.partners;
       const all = ps.length === PARTNERS.length;
