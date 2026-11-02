@@ -1185,7 +1185,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
       return `
       <div class="pagehead">
         <div><div class="eyebrow">Pipeline</div><h1>진행고객 관리</h1><p>카드를 다른 단계로 끌어다 놓으면 진행 상태가 바뀌어요. 카드를 누르면 상세 정보를 수정할 수 있어요.</p></div>
-        <div class="acts"><button class="btn soft" type="button" id="pipePdf" hidden>${icon('i-file')}<span id="pipePdfLbl">진행고객 PDF</span></button><button class="btn primary" type="button" data-act="add-client" id="pipeAdd">${icon('i-plus')}새 고객 등록</button></div>
+        <div class="acts"><button class="btn soft" type="button" id="pipePdf" hidden>${icon('i-file')}<span id="pipePdfLbl">진행고객 PDF</span></button><select class="selbox" id="pipePdfAgent" hidden aria-label="에이전트별 PDF"><option value="">에이전트별 PDF</option>${PARTNERS.map((p) => `<option value="${esc(p)}">${esc(PLABEL[p] || p)} PDF</option>`).join('')}</select><button class="btn primary" type="button" data-act="add-client" id="pipeAdd">${icon('i-plus')}새 고객 등록</button></div>
       </div>
       <section class="panel">
         <div class="toolbar">
@@ -1201,7 +1201,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
     update() {
       const f = state.pipe;
       $('pipeAdd').hidden = !state.canWrite || state.mode === 'loading';
-      $('pipePdf').hidden = !downloads || state.mode === 'loading';
+      $('pipePdf').hidden = $('pipePdfAgent').hidden = !downloads || state.mode === 'loading';
       const base = state.clients.filter((c) => matchText(c, f.q));
       $('pipePartners').innerHTML = partnerChecks('pipe', f.partners, base);
       const shown = base.filter((c) => f.partners.includes(partnerOf(c)));
@@ -2135,10 +2135,11 @@ svg.ic { width: 18px; height: 18px; flex: none; }
     });
     return sections.map((sec, n) => pageShell(sec.inner, n + 1, sections.length, sec.lbl, ymd));
   }
-  function buildPipePages() {
+  function buildPipePages(only) {
     const now = new Date(); const ymd = `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')}`;
     const f = state.pipe;
-    const shown = state.clients.filter((c) => matchText(c, f.q) && f.partners.includes(partnerOf(c)));
+    const shown = state.clients.filter((c) => (only ? partnerOf(c) === only : matchText(c, f.q) && f.partners.includes(partnerOf(c))));
+    const who = only ? `${PLABEL[only] || only} · ` : '';
     const cols = STATUS.filter((z) => f.showClosed || z.g === 'active');
     const sections = [];
     const th = (t) => `<th style="background:${R.head};text-align:left;padding:6px;font-weight:500;font-size:9.5px;color:${R.mute};white-space:nowrap">${t}</th>`;
@@ -2156,14 +2157,14 @@ svg.ic { width: 18px; height: 18px; flex: none; }
       const firstN = first ? 12 : 20, nextN = 20;
       const chunks = [list.slice(0, firstN)];
       for (let n = firstN; n < list.length; n += nextN) chunks.push(list.slice(n, n + nextN));
-      chunks.forEach((ch, n) => { sections.push({ lbl: `진행고객 현황 · ${z.k} ${list.length}명`, inner: `${first ? summary : ''}<div style="font-weight:700;color:${R.pink}">${esc(z.k)} <span style="color:${R.mute};font-weight:400">${esc(z.d)}</span></div><table style="width:100%;border-collapse:collapse">${head}${ch.map(rowHtml).join('')}</table>` }); first = false; });
+      chunks.forEach((ch, n) => { sections.push({ lbl: `${who}진행고객 현황 · ${z.k} ${list.length}명`, inner: `${first ? summary : ''}<div style="font-weight:700;color:${R.pink}">${esc(z.k)} <span style="color:${R.mute};font-weight:400">${esc(z.d)}</span></div><table style="width:100%;border-collapse:collapse">${head}${ch.map(rowHtml).join('')}</table>` }); first = false; });
     });
     return sections.map((sec, n) => pageShell(sec.inner, n + 1, sections.length, sec.lbl, ymd));
   }
   let pdfBusy = false;
   async function exportPdf(kind, keys, fileLabel, lblId) {
     if (!downloads || pdfBusy) return;
-    const pages = kind === 'pipe' ? buildPipePages() : kind === 'money' ? buildInvPages(keys) : kind === 'ohla' ? buildOhlaPages(keys) : kind === 'hosts' ? buildHostPages(keys) : buildPages(keys);
+    const pages = kind === 'pipe' ? buildPipePages(keys[0]) : kind === 'money' ? buildInvPages(keys) : kind === 'ohla' ? buildOhlaPages(keys) : kind === 'hosts' ? buildHostPages(keys) : buildPages(keys);
     if (!pages.length) { toast(kind === 'money' ? '미수 인보이스가 없어요' : (kind === 'ohla' || kind === 'hosts') ? '이 업체에 연결된 고객이 없어요' : '리포트에 넣을 고객이 없어요'); return; }
     pdfBusy = true; const lbl = $(lblId) || { textContent: '' }; const old = lbl.textContent; lbl.textContent = 'PDF 만드는 중…';
     toast('최신 데이터로 PDF를 만드는 중이에요…');
@@ -2331,6 +2332,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
     if (t.id === 'pipeClosed') { state.pipe.showClosed = t.checked; savePrefs(); refresh(); return; }
     if (t.id === 'rosterStatus') { state.roster.status = t.value; savePrefs(); refresh(); return; }
     if (t.id === 'rosterOhla') { state.roster.ohla = t.value; savePrefs(); refresh(); return; }
+    if (t.id === 'pipePdfAgent') { const a = t.value; t.value = ''; if (a) exportPdf('pipe', [a], (PLABEL[a] || a).replace(/[^A-Za-z0-9가-힣]+/g, ''), 'pipePdfLbl'); return; }
     if (t.id === 'partnersCat') { state.comp.partners.cat = t.value; refresh(); return; }
   });
   let qT = 0;
