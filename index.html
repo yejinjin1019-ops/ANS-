@@ -373,6 +373,8 @@ svg.ic { width: 18px; height: 18px; flex: none; }
 /* ---------- companies ---------- */
 .split { display: grid; grid-template-columns: minmax(0, 430px) minmax(0, 1fr); gap: 22px; align-items: start; }
 .split .list { max-height: calc(100vh - 260px); overflow: auto; border-radius: 0 0 24px 24px; }
+.co-logo { background: #fff; box-shadow: inset 0 0 0 1px var(--line); overflow: hidden; padding: 2px; }
+.co-logo img { width: 100%; height: 100%; object-fit: contain; border-radius: inherit; }
 .co-mark { width: 36px; height: 36px; border-radius: 12px; display: grid; place-items: center; font-family: var(--f-it); font-style: italic; font-weight: 500; font-size: 13px; flex: none; }
 .tag { font-size: 11px; border-radius: 999px; padding: 2px 9px; white-space: nowrap; font-weight: 600; background: var(--grey-bg); color: var(--grey-fg); }
 .tag.ok { background: var(--mint-bg); color: var(--mint-fg); }
@@ -971,7 +973,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
     return (a + b).toUpperCase();
   }
   const avatar = (name, photo) => photo ? `<span class="av" aria-hidden="true" style="overflow:hidden;padding:0"><img src="${esc(photo)}" alt="" style="width:100%;height:100%;object-fit:cover"></span>` : `<span class="av av${(hash(name) % 5) + 1}" aria-hidden="true">${esc(initials(name))}</span>`;
-  const coMark = (name) => `<span class="co-mark av${(hash(name) % 5) + 1}" aria-hidden="true">${esc(String(name || '?').replace(/[^A-Za-z0-9가-힣]/g, '').slice(0, 2).toUpperCase() || '?')}</span>`;
+  const coMark = (name, logo) => logo ? `<span class="co-mark co-logo" aria-hidden="true"><img src="${esc(logo)}" alt="" loading="lazy"></span>` : `<span class="co-mark av${(hash(name) % 5) + 1}" aria-hidden="true">${esc(String(name || '?').replace(/[^A-Za-z0-9가-힣]/g, '').slice(0, 2).toUpperCase() || '?')}</span>`;
   const pill = (status) => { const s = SM[status]; return `<span class="pill ${s ? s.c : 't-plan'}">${esc(status || '미정')}</span>`; };
   const ptag = (p) => `<span class="ptag ${PCLS[p] || 'p1'}">${esc(p)}</span>`;
   const dash = (v, none) => (v ? esc(v) : `<span class="none">${esc(none || '—')}</span>`);
@@ -1260,7 +1262,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
         $(kind + 'PdfAll').hidden = !downloads || state.mode === 'loading';
         $(kind + 'List').innerHTML = `<thead><tr><th>업체명</th><th class="r">고객</th><th class="r">진행</th><th>정보</th></tr></thead><tbody>` +
           list.map((x) => { const t = stats(x.clients);
-            return `<tr data-sel-comp="${kind}" data-key="${esc(x.key)}" class="${cs.sel === x.key ? 'is-sel' : ''}"><td><div class="who">${coMark(x.name)}<div style="min-width:0"><b style="white-space:normal">${esc(x.name)}</b><small>${esc((x.doc && (x.doc.contact || x.doc.industry)) || (isHost ? 'Host Company' : 'OHLA'))}</small></div></div></td>
+            return `<tr data-sel-comp="${kind}" data-key="${esc(x.key)}" class="${cs.sel === x.key ? 'is-sel' : ''}"><td><div class="who">${coMark(x.name, x.doc && x.doc.logo)}<div style="min-width:0"><b style="white-space:normal">${esc(x.name)}</b><small>${esc((x.doc && (x.doc.contact || x.doc.industry)) || (isHost ? 'Host Company' : 'OHLA'))}</small></div></div></td>
               <td class="r nm">${t.total}</td><td class="r">${t.active}</td><td>${x.doc ? '<span class="tag ok">등록됨</span>' : '<span class="tag">미등록</span>'}</td></tr>`;
           }).join('') +
           (none.length && !q ? `<tr data-sel-comp="${kind}" data-key="${NONE_KEY}" class="${cs.sel === NONE_KEY ? 'is-sel' : ''}"><td><div class="who"><span class="co-mark" style="background:var(--grey-bg);color:var(--grey-fg)">?</span><div><b>${K.none}</b><small>업체가 지정되지 않은 고객</small></div></div></td><td class="r nm">${none.length}</td><td class="r">${stats(none).active}</td><td><span class="tag warn">확인 필요</span></td></tr>` : '') +
@@ -1284,7 +1286,7 @@ svg.ic { width: 18px; height: 18px; flex: none; }
       const row = (label, v, full) => `<div class="${full ? 'full' : ''}"><dt>${label}</dt><dd class="${v ? '' : 'empty'}">${v ? esc(v) : '미입력'}</dd></div>`;
       el.innerHTML = `<div class="panel-b stack" style="padding-top:22px">
         <div class="detail-h">
-          ${sel === NONE_KEY ? '<span class="co-mark" style="background:var(--grey-bg);color:var(--grey-fg);width:48px;height:48px;border-radius:15px 15px 15px 6px">?</span>' : coMark(name)}
+          ${sel === NONE_KEY ? '<span class="co-mark" style="background:var(--grey-bg);color:var(--grey-fg);width:48px;height:48px;border-radius:15px 15px 15px 6px">?</span>' : coMark(name, d.logo)}
           <div style="min-width:0"><h2>${esc(name)}</h2>
             <div class="meta-line">${sel === NONE_KEY ? '고객 정보에서 업체를 지정해 주세요.' : doc ? `정보 등록됨${doc.updatedAt ? ' · ' + esc(timeAgo(doc.updatedAt)) + ' 수정' : ''}${doc.updatedBy ? ' · ' + who(doc) : ''}` : '업체 정보가 아직 등록되지 않았어요.'}</div></div>
           <div class="r">${downloads && clients.length ? `<button class="btn sm" type="button" id="${kind}PdfOne" data-pdf-one="${kind}" data-key="${esc(sel)}">${icon('i-file')}<span id="${kind}PdfOneLbl">이 업체 PDF</span></button>` : ''}${sel !== NONE_KEY && state.canWrite ? `<button class="btn soft sm" type="button" data-edit-comp="${kind}" data-key="${esc(sel)}">${icon('i-edit')}${doc ? '정보 수정' : '정보 등록'}</button>` : ''}</div>
