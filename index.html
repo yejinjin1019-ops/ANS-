@@ -1,9 +1,9 @@
 <title>ANS 진행고객</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Pacifico&family=Jua&family=Poppins:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&family=Noto+Sans+KR:wght@400;500;700&display=swap">
 <style>
-/* Layout: stationery desk — stitched white sidebar, blush ground, gingham hero with taped stat cards; serif titles (Gowun Batang + Fraunces italic) over a clean sans body */
+/* Layout: dream-house pop — hot-pink sidebar, polka-dot hero, white cards with hard pink shadows; script brand (Pacifico), rounded titles (Jua), Poppins numerals over a clean sans body. Theme overrides live at the end of this stylesheet. */
 :root {
   --bg: #FFF8F9; --surface: #FFFFFF; --surface-2: #FFF5F7; --line: #F6E3E9; --line-2: #FBEEF2; --line-strong: #EFCFDA;
   --ink: #4A3B42; --ink-h: #3E2F37; --ink-2: #6B5A62; --muted: #9A8790; --faint: #BBA9B1;
@@ -535,6 +535,76 @@ svg.ic { width: 18px; height: 18px; flex: none; }
   .hero-card .bow { left: auto; right: 22px; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } .stat { transform: none !important; } }
+
+[hidden] { display: none !important; }
+/* ---------- dream-house pop theme ---------- */
+:root {
+  --bg: #FFEAF4; --surface: #FFFFFF; --surface-2: #FFF0F7; --line: #FFC9E3; --line-2: #FFDFEE; --line-strong: #FF9CCB;
+  --ink: #4A0F33; --ink-h: #3A0727; --ink-2: #6E2150; --muted: #92507A; --faint: #B5779D;
+  --primary: #D6117F; --primary-ink: #B00D68; --primary-soft: #FFD6EA; --primary-line: #FF8FC5; --on-primary: #FFFFFF;
+  --eyebrow: #C4107A; --stitch: #FF9CCB;
+  --rose-bg: #FFD6EA; --rose-bd: #FF9CCB; --rose-fg: #B00D68;
+  --lav-bg: #F0E0FF; --lav-bd: #D9B8FF; --lav-fg: #7A2FC4;
+  --sky-bg: #D8F4FF; --sky-bd: #9BE2FF; --sky-fg: #0B72A8;
+  --mint-bg: #D9F8EA; --mint-bd: #A0E9C8; --mint-fg: #0E7F57;
+  --cream-bg: #FFF4C2; --cream-bd: #FFE27A; --cream-fg: #8F6A00;
+  --shadow: 5px 5px 0 #FFB3D9; --shadow-sm: 3px 3px 0 #FFC9E3; --shadow-btn: 3px 3px 0 #8E0A55;
+  --side-a: #E5198F; --side-b: #A80D68; --dot: rgba(255,255,255,.34); --hero-a: #FF5FB2; --hero-b: #D6117F;
+  --f-title: 'Jua', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+  --f-it: 'Poppins', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+  --f-brand: 'Pacifico', 'Jua', cursive;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+  --bg: #24061A; --surface: #370B29; --surface-2: #451035; --line: #6A1A50; --line-2: #561342; --line-strong: #8E2A6C;
+  --ink: #FFE6F3; --ink-h: #FFF5FA; --ink-2: #FFC4E2; --muted: #E092BE; --faint: #B56A98;
+  --primary: #FF4FAE; --primary-ink: #FF8CC8; --primary-soft: #5C1344; --primary-line: #A82A7C; --on-primary: #2A0519;
+  --eyebrow: #FF8CC8; --stitch: #8E2A6C;
+  --rose-bg: #5C1344; --rose-bd: #8E2A6C; --rose-fg: #FF9CD0;
+  --shadow: 5px 5px 0 #6A1A50; --shadow-sm: 3px 3px 0 #561342; --shadow-btn: 3px 3px 0 #000;
+  --side-a: #8E0A5A; --side-b: #4F0737; --dot: rgba(255,255,255,.14); --hero-a: #A81571; --hero-b: #5C0A42;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #24061A; --surface: #370B29; --surface-2: #451035; --line: #6A1A50; --line-2: #561342; --line-strong: #8E2A6C;
+  --ink: #FFE6F3; --ink-h: #FFF5FA; --ink-2: #FFC4E2; --muted: #E092BE; --faint: #B56A98;
+  --primary: #FF4FAE; --primary-ink: #FF8CC8; --primary-soft: #5C1344; --primary-line: #A82A7C; --on-primary: #2A0519;
+  --eyebrow: #FF8CC8; --stitch: #8E2A6C;
+  --rose-bg: #5C1344; --rose-bd: #8E2A6C; --rose-fg: #FF9CD0;
+  --shadow: 5px 5px 0 #6A1A50; --shadow-sm: 3px 3px 0 #561342; --shadow-btn: 3px 3px 0 #000;
+  --side-a: #8E0A5A; --side-b: #4F0737; --dot: rgba(255,255,255,.14); --hero-a: #A81571; --hero-b: #5C0A42;
+}
+.sidebar { background: linear-gradient(175deg, var(--side-a), var(--side-b)); border-right: 0; }
+.brand b { font-family: var(--f-brand); font-style: normal; font-weight: 400; font-size: 30px; line-height: 1.25; color: #fff; }
+.brand small, .sidebar .eyebrow { color: #FFD6EA; }
+.mark { background: #fff; border: 0; color: #D6117F; }
+.sidebar .eyebrow { font-weight: 600; font-style: normal; font-size: 12px; letter-spacing: .08em; }
+.nav a, .nav a .cnt { color: #FFEAF4; }
+.nav a svg { color: #FFC2E0; }
+.nav a:hover { background: rgba(255,255,255,.18); }
+.nav a[aria-current="page"], .nav a[aria-current="page"] .cnt { background: #fff; color: #B00D68; }
+.nav a[aria-current="page"] svg { color: #D6117F; }
+.profile { border-top-color: rgba(255,255,255,.4); }
+.profile b { color: #fff; }
+.profile small { color: #FFD6EA; }
+.help-card { background: rgba(255,255,255,.16); }
+.help-card .in::before { display: none; }
+.hero {
+  background-color: var(--hero-b);
+  background-image: radial-gradient(var(--dot) 3.5px, transparent 4px), linear-gradient(120deg, var(--hero-a), var(--hero-b));
+  background-size: 26px 26px, 100% 100%;
+}
+.hero-card { box-shadow: 6px 6px 0 rgba(90, 5, 55, .35); }
+.hero h1 .it { font-family: var(--f-brand); font-style: normal; font-weight: 400; }
+.hero h1, .panel-h h2, .pagehead h1, .detail-h h2, .drawer-h h2, .sec-t, .help-card b, .empty-state b { font-weight: 400; letter-spacing: 0; }
+.stat, .stat:nth-child(odd), .stat:nth-child(even) { transform: none; border: 2px solid var(--line-strong); box-shadow: var(--shadow); }
+.stat:hover { transform: translate(-2px, -2px); }
+.stat::before { display: none; }
+.stat strong { font-weight: 700; font-style: italic; }
+.panel { border: 2px solid var(--line); }
+.btn.primary:hover { transform: translate(-1px, -1px); }
+.linkbtn:hover { text-decoration-style: solid; }
+@media (max-width: 960px) { .sidebar { border-bottom: 0; } }
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
